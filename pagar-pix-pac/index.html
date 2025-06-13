@@ -418,12 +418,10 @@
                     const errorText = await response.text();
                     console.error('Erro da API:', errorText);
                     throw new Error(`Erro na API: ${response.status} - ${errorText}`);
-                }
-
-                const data = await response.json();
+                }                const data = await response.json();
                 console.log('Resposta da API:', data);
                 
-                if (data.status === 'OK' && data.pix && data.pix.code) {
+                if ((data.status === 'OK' || data.status === 'PENDING') && data.pix && data.pix.code) {
                     document.getElementById('pixCode').textContent = data.pix.code;
                     document.getElementById('pixCode').classList.remove('loading');
                     document.getElementById('copyButton').disabled = false;
@@ -438,7 +436,7 @@
                         localStorage.setItem('orderId', data.order.id);
                     }
                 } else {
-                    throw new Error('Código PIX não encontrado na resposta ou status não é OK');
+                    throw new Error(`Status da resposta: ${data.status}. Código PIX não encontrado na resposta.`);
                 }
 
             } catch (error) {
