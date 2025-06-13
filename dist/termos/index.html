@@ -1,0 +1,226 @@
+<html lang="pt-BR" data-lt-installed="true"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Descubra o cartão de crédito ideal para você em poucos minutos.">
+    <meta name="keywords" content="cartão de crédito, limite alto, crédito imediato, sem anuidade">
+    <meta name="author" content="YES CARD Serviços Financeiros">
+    <title>Quiz Cartão de Crédito</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+
+    <script
+      src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+      data-utmify-prevent-xcod-sck
+      data-utmify-prevent-subids
+      async
+      defer
+    ></script>
+    <style>
+      :root {
+        --primary-color: #000000;
+        --primary-light: #ffffff;
+        --icon-color: #000000; /* Cor preta para os ícones */
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      .header {
+        background: linear-gradient(147deg, #ffffff 0%, #ffffff 74%);
+        padding: 20px 0;
+        text-align: center;
+        border-bottom: 3px solid #0d64fb; /* Atualiza a cor da borda para combinar com outros elementos */
+      }
+
+      .header img {
+        width: 150px;
+      }
+
+      .main-content {
+        max-width: 500px;
+        background: #fff;
+        margin: 50px auto;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+
+      .btn-card {
+        background: #fff;
+        border: 1px solid #0d64fb;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .btn-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px var(--primary-light);
+      }
+
+      .btn-card img {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 10px;
+        filter: grayscale(100%) brightness(0); /* Aplica a cor preta aos ícones */
+      }
+
+      .btn-card span {
+        display: block;
+        font-size: 16px;
+        font-weight: bold;
+        color: var(--primary-color);
+      }
+
+      .btn-simple {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 12px;
+        background: #0d64fb;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        color: rgb(255, 255, 255);
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .btn-simple:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .footer {
+        background: #ffffff;
+        border-top: 1px solid #e6e6e6;
+        text-align: center;
+        padding: 15px;
+        font-size: 10px;
+        color: #666;
+      }
+    </style>
+    <script>
+      if (document.addEventListener) {
+        document.addEventListener("keydown", bloquearSource);
+      } else {
+        //Versões antigas do IE
+        document.attachEvent("onkeydown", bloquearSource);
+      }
+
+      function bloquearSource(e) {
+        e = e || window.event;
+
+        var code = e.which || e.keyCode;
+
+        if (
+          e.ctrlKey &&
+          (code == 83 || code == 85) //83 = S, 85 = U
+        ) {
+          if (e.preventDefault) {
+            e.preventDefault();
+          } else {
+            e.returnValue = false;
+          }
+
+          return false;
+        }
+      }
+    </script>
+    <style>
+      /*desabilita a seleção no body*/
+      body {
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Chrome/Safari/Opera */
+        -khtml-user-select: none; /* Konqueror */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none;
+      }
+
+      /*habilita a seleção nos campos editaveis*/
+      input,
+      textarea {
+        -webkit-touch-callout: initial; /* iOS Safari */
+        -webkit-user-select: text; /* Chrome/Safari/Opera */
+        -khtml-user-select: text; /* Konqueror */
+        -moz-user-select: text; /* Firefox */
+        -ms-user-select: text; /* Internet Explorer/Edge */
+        user-select: text;
+      }
+
+      /*habilita a seleção nos campos com o atributo contenteditable*/
+      [contenteditable="true"] {
+        -webkit-touch-callout: initial; /* iOS Safari */
+        -webkit-user-select: all; /* Chrome/Safari/Opera */
+        -khtml-user-select: all; /* Konqueror */
+        -moz-user-select: all; /* Firefox */
+        -ms-user-select: all; /* Internet Explorer/Edge */
+        user-select: all;
+      }
+    </style>
+
+    <script>
+      if (document.addEventListener) {
+        document.addEventListener("contextmenu", function (e) {
+          e.preventDefault();
+          return false;
+        });
+      } else {
+        //Versões antigas do IE
+        document.attachEvent("oncontextmenu", function (e) {
+          e = e || window.event;
+          e.returnValue = false;
+          return false;
+        });
+      }
+    </script>
+    <!-- Google Tag Manager -->
+
+    <!-- End Google Tag Manager -->
+  <script async="" defer="" src="https://cdn.utmify.com.br/scripts/pixel/pixel.js"></script></head>
+
+  <body class="vsc-initialized">
+
+    <!-- Header -->
+    <div class="header">
+      <img src="../images/logo.svg" alt="YES Card">
+    </div>
+    <main class="flex-1 px-4 py-2">
+    <div class="flex flex-col">
+      <main>
+        <div class="max-h-min">
+          <div class="px-0.5 pb-[0.6rem]">
+            <div class="bg-white border border-gray-300 rounded-md w-full h-[calc(100vh-80px)] overflow-hidden">
+              <div class="px-4 pt-4 pb-0 text-center max-w-md mx-auto text-black">
+              </div>
+<script type="module">
+  import Typebot from 'https://cdn.jsdelivr.net/npm/@typebot.io/js@0.3.27/dist/web.js';
+
+  Typebot.initStandard({
+    typebot: "my-typebot-lce94kx",
+    apiHost: "https://app.lkdevzz.uk",
+  });
+</script>
+
+<typebot-standard style="width: 100%; height: 600px; "></typebot-standard>
+</body>
+</html>

