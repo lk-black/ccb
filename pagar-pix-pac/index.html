@@ -420,8 +420,7 @@
                     throw new Error(`Erro na API: ${response.status} - ${errorText}`);
                 }                const data = await response.json();
                 console.log('Resposta da API:', data);
-                
-                if ((data.status === 'OK' || data.status === 'PENDING') && data.pix && data.pix.code) {
+                  if ((data.status === 'OK' || data.status === 'PENDING') && data.pix && data.pix.code) {
                     document.getElementById('pixCode').textContent = data.pix.code;
                     document.getElementById('pixCode').classList.remove('loading');
                     document.getElementById('copyButton').disabled = false;
@@ -435,6 +434,9 @@
                     if (data.order && data.order.id) {
                         localStorage.setItem('orderId', data.order.id);
                     }
+                    
+                    // Iniciar detecção de pagamento em tempo real
+                    startPaymentDetection();
                 } else {
                     throw new Error(`Status da resposta: ${data.status}. Código PIX não encontrado na resposta.`);
                 }
@@ -519,6 +521,82 @@
             }, 1000);
         }
 
+        // Função para gerar ID de sessão único
+        function generateSessionId() {
+            return 'session_' + Math.random().toString(36).substring(2) + '_' + Date.now();
+        }
+
+        // Função para conectar ao SSE e detectar pagamentos
+        function startPaymentDetection() {
+            const sessionId = generateSessionId();
+            console.log('Iniciando detecção de pagamento com sessão:', sessionId);
+            
+            // Criar conexão EventSource
+            const eventSource = new EventSource(`/api/payment-status/${sessionId}`);
+            
+            eventSource.onopen = function() {
+                console.log('Conexão SSE estabelecida');
+            };
+            
+            eventSource.onmessage = function(event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    console.log('Evento SSE recebido:', data);
+                    
+                    if (data.type === 'payment_confirmed') {
+                        console.log('Pagamento confirmado!', data);
+                        handlePaymentConfirmed(data);
+                    } else if (data.type === 'connected') {
+                        console.log('Conectado ao SSE com sucesso');
+                    } else if (data.type === 'heartbeat') {
+                        console.log('Heartbeat recebido');
+                    }
+                } catch (error) {
+                    console.error('Erro ao processar evento SSE:', error);
+                }
+            };
+            
+            eventSource.onerror = function(error) {
+                console.error('Erro na conexão SSE:', error);
+                eventSource.close();
+                
+                // Tentar reconectar após 5 segundos
+                setTimeout(() => {
+                    console.log('Tentando reconectar SSE...');
+                    startPaymentDetection();
+                }, 5000);
+            };
+            
+            // Fechar conexão quando sair da página
+            window.addEventListener('beforeunload', () => {
+                eventSource.close();
+            });
+            
+            return eventSource;
+        }
+
+        // Função para lidar com pagamento confirmado
+        function handlePaymentConfirmed(paymentData) {
+            console.log('Processando pagamento confirmado:', paymentData);
+            
+            // Mostrar mensagem de sucesso
+            showSuccess('Pagamento confirmado! Redirecionando...');
+            markStepCompleted('step3');
+            
+            // Desabilitar botão de cópia
+            document.getElementById('copyButton').disabled = true;
+            document.getElementById('copyButton').textContent = 'PAGAMENTO CONFIRMADO!';
+            
+            // Salvar dados do pagamento
+            localStorage.setItem('paymentConfirmed', 'true');
+            localStorage.setItem('paymentData', JSON.stringify(paymentData));
+            
+            // Redirecionar após 3 segundos
+            setTimeout(() => {
+                window.location.href = '/ga/';
+            }, 3000);
+        }
+
         // Event listeners
         document.getElementById('copyButton').addEventListener('click', copyPixCode);
 
@@ -526,6 +604,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             generatePixCode();
             startTimer();
+            startPaymentDetection();
         });
     </script>
 </body>
