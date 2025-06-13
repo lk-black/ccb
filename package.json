@@ -4,8 +4,8 @@
   "description": "CCB PIX Payment Pages",
   "main": "quiz.html",
   "scripts": {
-    "start": "serve -s .",
-    "dev": "serve -s . -p 3000"
+    "start": "serve . --single",
+    "dev": "serve . -p 3000"
   },
   "dependencies": {
     "serve": "^14.0.0"
