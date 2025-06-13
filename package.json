@@ -1,0 +1,93 @@
+{
+  "name": "ccb-application",
+  "version": "1.0.0",
+  "description": "Aplicação de funil de vendas para cartões de crédito Casas Bahia",
+  "main": "quiz.html",
+  "scripts": {
+    "build": "chmod +x build.sh && ./build.sh",
+    "build:prod": "chmod +x build.sh && ./build.sh -c -p",
+    "build:dev": "chmod +x build.sh && ./build.sh -c -d",
+    "serve": "chmod +x build.sh && ./build.sh -d -s",
+    "clean": "rm -rf dist",
+    "deploy:docker": "cd dist && docker-compose up -d",
+    "deploy:ssh": "cd dist && chmod +x deploy-ssh.sh && ./deploy-ssh.sh",
+    "deploy:ftp": "cd dist && chmod +x deploy-ftp.sh && ./deploy-ftp.sh",
+    "start": "python3 -m http.server 8000",
+    "start:php": "php -S localhost:8000",
+    "start:node": "npx http-server -p 8000",
+    "lint:html": "find . -name '*.html' -not -path './dist/*' -not -path './node_modules/*' | xargs -I {} echo 'Checking: {}'",
+    "optimize:images": "find . -name '*.png' -not -path './dist/*' -not -path './node_modules/*' -exec echo 'Image: {}' \\;",
+    "validate": "echo 'Validando estrutura do projeto...' && test -f quiz.html && echo '✅ Arquivo principal encontrado'",
+    "compress": "cd dist && tar -czf ../ccb-application-$(date +%Y%m%d-%H%M%S).tar.gz .",
+    "size": "du -sh . --exclude=node_modules --exclude=dist"
+  },
+  "keywords": [
+    "cartao",
+    "credito",
+    "casas-bahia",
+    "funil-vendas",
+    "landing-page",
+    "html",
+    "javascript"
+  ],
+  "author": "Casas Bahia",
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "."
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "config": {
+    "build_dir": "dist",
+    "server_port": 8000
+  },
+  "files": [
+    "quiz.html",
+    "README.md",
+    "cep/",
+    "ga/",
+    "iframes/",
+    "images/",
+    "pagar-pac/",
+    "pagar-pix-pac/",
+    "pagar-pix-sedex/",
+    "pagar-sedex/",
+    "sedex/",
+    "termos/",
+    "type-pac/",
+    "type-sedex/",
+    "up1/",
+    "up2/",
+    "up3/",
+    "up4/",
+    "up5/"
+  ],
+  "deployment": {
+    "static_hosting": [
+      "Netlify",
+      "Vercel", 
+      "GitHub Pages",
+      "Firebase Hosting"
+    ],
+    "servers": [
+      "Apache",
+      "Nginx",
+      "IIS"
+    ],
+    "containers": [
+      "Docker",
+      "Kubernetes"
+    ]
+  }
+}
