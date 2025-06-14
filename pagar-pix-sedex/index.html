@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
+<head>    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finalize o pagamento - PIX</title>
+    
+    <!-- Facebook Pixel -->
+    <script src="../js/facebook-pixel.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -509,13 +512,19 @@
                     throw new Error(`Erro na API: ${response.status} - ${errorText}`);
                 }                const data = await response.json();
                 console.log('Resposta da API:', data);
-                
-                if ((data.status === 'OK' || data.status === 'PENDING') && data.pix && data.pix.code) {
+                  if ((data.status === 'OK' || data.status === 'PENDING') && data.pix && data.pix.code) {
                     document.getElementById('pixCode').textContent = data.pix.code;
                     document.getElementById('pixCode').classList.remove('loading');
                     document.getElementById('copyButton').disabled = false;
                     showSuccess('Código PIX gerado com sucesso!');
-                    markStepCompleted('step1');                      // Salvar dados da transação para consulta posterior
+                    markStepCompleted('step1');
+                    
+                    // 🎯 Facebook Pixel: Rastrear geração do PIX como AddPaymentInfo
+                    if (typeof trackAddPaymentInfo === 'function') {
+                        trackAddPaymentInfo('Frete SEDEX', 28.9);
+                    }
+                    
+                    // Salvar dados da transação para consulta posterior
                     if (data.transactionId) {
                         localStorage.setItem('transactionId', data.transactionId);
                         // Iniciar detecção robusta de pagamento
@@ -752,9 +761,14 @@
             }
             
             console.log('🎊 Processando pagamento confirmado:', paymentData);
-            
-            // Parar toda detecção primeiro
+              // Parar toda detecção primeiro
             stopPaymentDetection();
+            
+            // 🎯 Facebook Pixel: Rastrear compra concluída
+            const transactionId = paymentData.transactionId || localStorage.getItem('transactionId') || 'unknown';
+            if (typeof trackPurchase === 'function') {
+                trackPurchase(transactionId, 'Frete SEDEX', 28.9);
+            }
             
             // Atualizar interface
             showSuccess('🎉 Pagamento confirmado! Redirecionando em 3 segundos...');

@@ -295,8 +295,6 @@ setInterval(() => {
     });
 }, 5 * 60 * 1000);
 
-// ...existing code...
-
 // Servir arquivos estáticos e rotas
 app.get('/quiz', (req, res) => {
     res.sendFile(path.join(__dirname, 'quiz.html'));
@@ -329,4 +327,92 @@ app.get('/', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
+});
+
+// Endpoint para Facebook Conversions API (server-side tracking)
+app.post('/api/facebook-conversion', async (req, res) => {
+    try {
+        console.log('📊 Recebendo evento de conversão Facebook:', req.body);
+        
+        const { 
+            event_name, 
+            event_time, 
+            user_data = {}, 
+            custom_data = {}, 
+            event_source_url = '',
+            action_source = 'website'
+        } = req.body;
+
+        // Validar dados obrigatórios
+        if (!event_name) {
+            return res.status(400).json({ error: 'event_name é obrigatório' });
+        }
+
+        // Preparar dados para a Facebook Conversions API
+        const conversionData = {
+            data: [{
+                event_name: event_name,
+                event_time: event_time || Math.floor(Date.now() / 1000),
+                action_source: action_source,
+                event_source_url: event_source_url,
+                user_data: {
+                    client_ip_address: req.ip || req.connection.remoteAddress,
+                    client_user_agent: req.headers['user-agent'],
+                    fbc: user_data.fbc || '',
+                    fbp: user_data.fbp || '',
+                    em: user_data.em || '', // email hasheado
+                    ph: user_data.ph || '', // telefone hasheado
+                },
+                custom_data: {
+                    currency: custom_data.currency || 'BRL',
+                    value: custom_data.value || 0,
+                    content_name: custom_data.content_name || '',
+                    content_category: custom_data.content_category || 'frete',
+                    transaction_id: custom_data.transaction_id || '',
+                    utm_source: custom_data.utm_source || '',
+                    utm_medium: custom_data.utm_medium || '',
+                    utm_campaign: custom_data.utm_campaign || '',
+                    utm_content: custom_data.utm_content || '',
+                    utm_term: custom_data.utm_term || ''
+                }
+            }],
+            access_token: 'EAARfjYp6gD4BOZBnSxVPIcZCeF3ZCvXe1NnrgWO6lfHidEaHvJf9trVPGZA0lZA1V1w6fa1YSMyMdrbqs6WQuYPzghSk3SljrrKp77FqaE7G4oqVMsUKMMv0sagpJBh4waxtNZBmK0YtdzZA4qyEwSJInMI0QuDout9wOvsccDdGdFM4DiRZACMIs2fRnvwuTxkEPAZDZD'
+        };
+
+        // Enviar para Facebook Conversions API
+        const facebookResponse = await fetch('https://graph.facebook.com/v21.0/1249534570141968/events', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(conversionData)
+        });
+
+        const responseData = await facebookResponse.json();
+        
+        if (facebookResponse.ok) {
+            console.log('✅ Conversão enviada para Facebook:', responseData);
+            res.json({ 
+                success: true, 
+                facebook_response: responseData,
+                event_name: event_name,
+                pixel_id: '1249534570141968'
+            });
+        } else {
+            console.error('❌ Erro ao enviar conversão para Facebook:', responseData);
+            res.status(400).json({ 
+                success: false, 
+                error: responseData,
+                event_name: event_name
+            });
+        }
+        
+    } catch (error) {
+        console.error('❌ Erro no endpoint Facebook:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Erro interno do servidor',
+            message: error.message 
+        });
+    }
 });
