@@ -300,9 +300,7 @@
             
             // Se não conseguir formatar, retorna apenas os números
             return cleanPhone;
-        }
-
-        // Função para limpar telefone para API (apenas números)
+        }        // Função para limpar telefone para API (apenas números)
         function cleanPhoneForAPI(phone) {
             // Remove todos os caracteres não numéricos
             let cleanPhone = phone.replace(/\D/g, '');
@@ -316,8 +314,10 @@
             if (cleanPhone.length === 10 || cleanPhone.length === 11) {
                 return cleanPhone;
             }
-              // Se não estiver no formato correto, retorna como está
-            return cleanPhone;
+            
+            // Se não estiver no formato correto, usar telefone padrão
+            console.warn('Telefone inválido:', phone, 'Usando padrão: 17992666990');
+            return '17992666990';
         }
 
         // Função para validar CPF
@@ -459,15 +459,23 @@
                 const params = getUrlParams();
                 const email = generateRandomEmail();
                 const utmParams = getUtmParams();
+                  console.log('Telefone limpo para API:', params.phone);
+                console.log('Telefone formatado para exibição:', params.phoneDisplay);
+                console.log('🔍 Validando dados antes de enviar:');
+                console.log('- Nome:', params.name);
+                console.log('- Email:', email);
+                console.log('- Telefone (limpo):', params.phone);
+                console.log('- CPF:', params.cpf);
                 
-                console.log('Telefone limpo para API:', params.phone);
-                console.log('Telefone formatado para exibição:', params.phoneDisplay);                const requestData = {
+                // Validar se todos os campos obrigatórios estão presentes
+                if (!params.name || !email || !params.phone || !params.cpf) {
+                    throw new Error('Dados obrigatórios estão faltando');
+                }const requestData = {
                     identifier: generateRandomId(),
-                    amount: 28.9,
-                    client: {
+                    amount: 28.9,                    client: {
                         name: params.name,
                         email: email,
-                        phone: params.phoneDisplay,
+                        phone: params.phone, // Usar telefone limpo (apenas números)
                         document: params.cpf
                     },
                     products: [
