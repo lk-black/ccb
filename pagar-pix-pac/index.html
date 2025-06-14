@@ -332,9 +332,7 @@
                 phoneDisplay: formatPhoneForDisplay(rawPhone), // Formatado para exibição
                 cpf: urlParams.get('cpf') || '44746461856'
             };
-        }
-
-        // Função para capturar parâmetros UTM
+        }        // Função para capturar parâmetros UTM
         function getUtmParams() {
             const urlParams = new URLSearchParams(window.location.search);
             const utmParams = {};
@@ -347,15 +345,11 @@
                 if (value) {
                     utmParams[key] = value;
                 }
-            });
+            });            // Retorna o objeto com os parâmetros UTM ou null se vazio
+            return Object.keys(utmParams).length > 0 ? utmParams : null;
+        }
 
-            // Se houver parâmetros UTM, retorna como string de query
-            if (Object.keys(utmParams).length > 0) {
-                return new URLSearchParams(utmParams).toString();
-            }
-            
-            return null;
-        }        // Função para gerar identificador aleatório
+        // Função para gerar identificador aleatório
         function generateRandomId(length = 10) {
             const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
             let result = '';
@@ -363,26 +357,17 @@
                 result += chars.charAt(Math.floor(Math.random() * chars.length));
             }
             return result;
-        }
-
-        // Função para gerar código PIX
+        }        // Função para gerar código PIX
         async function generatePixCode() {
             try {
                 const params = getUrlParams();
                 const email = generateRandomEmail();
-                const utmQuery = getUtmParams();
+                const utmParams = getUtmParams();
                 
                 console.log('Telefone limpo para API:', params.phone);
                 console.log('Telefone formatado para exibição:', params.phoneDisplay);
                 
-                // Preparar metadata com parâmetros UTM
-                const metadata = {};
-                if (utmQuery) {
-                    const utmParams = new URLSearchParams(utmQuery);
-                    for (const [key, value] of utmParams) {
-                        metadata[key] = value;
-                    }
-                }                const requestData = {
+                const requestData = {
                     identifier: generateRandomId(),
                     amount: 23.9,
                     client: {
@@ -398,10 +383,16 @@
                             quantity: 1,
                             price: 23.9
                         }
-                    ],
-                    metadata: metadata
-                };                console.log('Dados sendo enviados:', requestData);
-                console.log('Metadata UTM:', metadata);                const response = await fetch('/api/pix', {
+                    ]
+                };
+
+                // Adicionar trackProps com parâmetros UTM se existirem
+                if (utmParams) {
+                    requestData.trackProps = utmParams;
+                }
+
+                console.log('Dados sendo enviados:', requestData);
+                console.log('TrackProps UTM:', utmParams);const response = await fetch('/api/pix', {
                     method: 'POST',
                     headers: {
                         "Content-Type": "application/json"

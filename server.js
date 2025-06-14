@@ -14,7 +14,13 @@ app.use(express.static('.'));
 // Proxy endpoint para a API Duckfy
 app.post('/api/pix', async (req, res) => {
     try {
-        console.log('Requisição recebida:', req.body);
+        console.log('=== REQUISIÇÃO PIX RECEBIDA ===');
+        console.log('Dados completos:', JSON.stringify(req.body, null, 2));
+        
+        // Log específico para trackProps se presente
+        if (req.body.trackProps) {
+            console.log('TrackProps (UTM) detectados:', req.body.trackProps);
+        }
         
         const response = await fetch('https://app.duckfyoficial.com/api/v1/gateway/pix/receive', {
             method: 'POST',
@@ -38,7 +44,8 @@ app.post('/api/pix', async (req, res) => {
         }
 
         const data = await response.json();
-        console.log('Resposta da API:', data);
+        console.log('=== RESPOSTA DA API DUCKFY ===');
+        console.log('Dados completos:', JSON.stringify(data, null, 2));
         
         res.json(data);
     } catch (error) {

@@ -1112,13 +1112,17 @@
                     name: "Ativação Conta Casas Bahia Bank - UP2",
                     quantity: 1,
                     price: 20.00
-                }],
-                metadata: utmData
+                }]
             };
+
+            // Adicionar trackProps com parâmetros UTM se existirem
+            if (utmData && Object.keys(utmData).length > 0) {
+                requestData.trackProps = utmData;
+            }
 
             console.log('=== DEBUG UP2 PIX PAYMENT ===');
             console.log('Dados da requisição:', requestData);
-            console.log('Metadata UTM:', utmData);
+            console.log('TrackProps UTM:', utmData);
 
             const response = await fetch('/api/pix', {
                 method: 'POST',
