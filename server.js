@@ -61,40 +61,50 @@ app.post('/api/pix', async (req, res) => {
 const transactionStatus = new Map(); // transactionId -> status info
 const activeConnections = new Map(); // sessionId -> connection info
 
-// Endpoin
-// da Duckfy
+// Webhook endpoint da Duckfy
 app.post('/webhook/duckfy', (req, res) => {
     try {
-        console.log('=== WEBHOOK RECEBIDO ===');
-        console.log(JSON.stringify(req.body, null, 2));
+        console.log('=== WEBHOOK DUCKFY RECEBIDO ===');
+        console.log('Headers:', JSON.stringify(req.headers, null, 2));
+        console.log('Body completo:', JSON.stringify(req.body, null, 2));
         
-        const { event, transaction } = req.body;
+        const { event: webhookEvent, transaction: webhookTransaction, trackProps } = req.body;
         
-        if (!transaction || !transaction.id) {
+        // Log específico para trackProps
+        if (trackProps) {
+            console.log('🎯 TRACKPROPS RECEBIDOS NO WEBHOOK:');
+            console.log(JSON.stringify(trackProps, null, 2));
+        } else {
+            console.log('⚠️ Nenhum trackProps encontrado no webhook');
+        }
+        
+        if (!webhookTransaction || !webhookTransaction.id) {
             console.error('Webhook sem dados de transação válidos');
             return res.status(400).json({ error: 'Dados de transação inválidos' });
         }
         
         // Verificar se é um evento de pagamento aprovado
-        const isPaid = event === 'transaction.paid' || 
-                      transaction.status === 'PAID' || 
-                      transaction.status === 'CONFIRMED' ||
-                      transaction.status === 'COMPLETED';
+        const isPaid = webhookEvent === 'transaction.paid' || 
+                      webhookEvent === 'TRANSACTION_PAID' ||
+                      webhookTransaction.status === 'PAID' || 
+                      webhookTransaction.status === 'CONFIRMED' ||
+                      webhookTransaction.status === 'COMPLETED';
         
         if (isPaid) {
-            console.log(`🎉 PAGAMENTO CONFIRMADO! Transação: ${transaction.id}`);
+            console.log(`🎉 PAGAMENTO CONFIRMADO! Transação: ${webhookTransaction.id}`);
             
             // Salvar status da transação
             const paymentData = {
-                transactionId: transaction.id,
-                identifier: transaction.identifier,
-                status: transaction.status,
-                amount: transaction.amount,
-                payedAt: transaction.payedAt || new Date().toISOString(),
-                confirmedAt: new Date().toISOString()
+                transactionId: webhookTransaction.id,
+                identifier: webhookTransaction.identifier,
+                status: webhookTransaction.status,
+                amount: webhookTransaction.amount,
+                payedAt: webhookTransaction.payedAt || new Date().toISOString(),
+                confirmedAt: new Date().toISOString(),
+                trackProps: trackProps || null
             };
             
-            transactionStatus.set(transaction.id, paymentData);
+            transactionStatus.set(webhookTransaction.id, paymentData);
             
             // Notificar via SSE se houver conexões ativas
             let notificationsSent = 0;
@@ -129,20 +139,22 @@ app.post('/webhook/duckfy', (req, res) => {
             console.log(`📡 Resumo: ${notificationsSent} notificações enviadas, ${connectionsRemoved} conexões removidas`);
             console.log(`🔌 Conexões ativas restantes: ${activeConnections.size}`);
         } else {
-            console.log(`ℹ️ Status da transação ${transaction.id}: ${transaction.status}`);
+            console.log(`ℹ️ Status da transação ${webhookTransaction.id}: ${webhookTransaction.status}`);
             
             // Salvar status mesmo que não seja pago para tracking
-            transactionStatus.set(transaction.id, {
-                transactionId: transaction.id,
-                status: transaction.status,
-                updatedAt: new Date().toISOString()
+            transactionStatus.set(webhookTransaction.id, {
+                transactionId: webhookTransaction.id,
+                status: webhookTransaction.status,
+                updatedAt: new Date().toISOString(),
+                trackProps: trackProps || null
             });
         }
         
         res.status(200).json({ 
             received: true, 
             processed: isPaid,
-            transactionId: transaction.id 
+            transactionId: webhookTransaction.id,
+            trackPropsReceived: !!trackProps
         });
         
     } catch (error) {

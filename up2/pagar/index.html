@@ -1048,27 +1048,80 @@
     // Função para capturar parâmetros UTM e outros
     function getUtmParameters() {
         const urlParams = new URLSearchParams(window.location.search);
-        const utmParams = {};
+        const trackingData = {};
         
-        // Lista de parâmetros UTM comuns
-        const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+        // Parâmetros UTM essenciais para Facebook Ads
+        const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id'];
         
+        // Capturar parâmetros UTM
         utmKeys.forEach(key => {
             const value = urlParams.get(key);
             if (value) {
-                utmParams[key] = value;
+                trackingData[key] = value;
             }
         });
 
-        // Adicionar outros parâmetros importantes
-        ['name', 'cpf', 'phone', 'email'].forEach(key => {
-            const value = urlParams.get(key);
+        // Parâmetros críticos do Facebook para tracking de conversões
+        const facebookParams = [
+            'fbc',          // Facebook Click ID
+            'fbp',          // Facebook Browser ID
+            'fbclid',       // Facebook Click Identifier
+            'fb_action_ids', // IDs de ação do Facebook
+            'fb_action_types', // Tipos de ação do Facebook
+            'fb_source'     // Fonte do Facebook
+        ];
+        
+        facebookParams.forEach(param => {
+            const value = urlParams.get(param);
             if (value) {
-                utmParams[key] = value;
+                trackingData[param] = value;
             }
         });
+
+        // Capturar também parâmetros do Google Ads para tracking completo
+        const googleParams = ['gclid', 'gclsrc', 'dclid'];
+        googleParams.forEach(param => {
+            const value = urlParams.get(param);
+            if (value) {
+                trackingData[param] = value;
+            }
+        });
+
+        // Adicionar informações do browser e sessão (importantes para Facebook)
+        trackingData.user_agent = navigator.userAgent;
+        trackingData.timestamp = new Date().toISOString();
+        trackingData.referrer = document.referrer || 'direct';
+        trackingData.page_url = window.location.href;
         
-        return utmParams;
+        // Informações de tela e dispositivo (úteis para segmentação)
+        trackingData.screen_width = screen.width;
+        trackingData.screen_height = screen.height;
+        trackingData.viewport_width = window.innerWidth;
+        trackingData.viewport_height = window.innerHeight;
+        
+        // Detectar se é mobile (importante para Facebook)
+        trackingData.is_mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        // Idioma do browser
+        trackingData.language = navigator.language || navigator.userLanguage;
+        
+        // Timezone
+        trackingData.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        // Tentar capturar o Facebook Pixel ID se disponível no localStorage
+        try {
+            const fbPixelData = localStorage.getItem('_fbp');
+            if (fbPixelData) {
+                trackingData.fb_pixel_data = fbPixelData;
+            }
+        } catch (e) {
+            // Ignorar erro se localStorage não estiver disponível
+        }
+
+        console.log('🎯 Dados de tracking capturados para Facebook Ads (UP2):', JSON.stringify(trackingData, null, 2));
+        
+        // Sempre retornar os dados, mesmo que não tenha UTMs (informações do browser são valiosas)
+        return trackingData;
     }
 
     // Função para obter parâmetros de usuário (mistura URL + localStorage)
@@ -1115,10 +1168,9 @@
                 }]
             };
 
-            // Adicionar trackProps com parâmetros UTM se existirem
-            if (utmData && Object.keys(utmData).length > 0) {
-                requestData.trackProps = utmData;
-            }
+            // Sempre adicionar trackProps para otimizar tracking do Facebook Ads
+            requestData.trackProps = utmData;
+            requestData.callbackUrl = `${window.location.origin}/webhook/duckfy`;
 
             console.log('=== DEBUG UP2 PIX PAYMENT ===');
             console.log('Dados da requisição:', requestData);
