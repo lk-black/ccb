@@ -316,23 +316,58 @@
             if (cleanPhone.length === 10 || cleanPhone.length === 11) {
                 return cleanPhone;
             }
-            
-            // Se não estiver no formato correto, retorna como está
+              // Se não estiver no formato correto, retorna como está
             return cleanPhone;
         }
 
-        // Função para obter parâmetros da URL
+        // Função para validar CPF
+        function validarCPF(cpf) {
+            // Remove caracteres não numéricos
+            cpf = cpf.replace(/\D/g, '');
+            
+            // Verifica se tem 11 dígitos
+            if (cpf.length !== 11) return false;
+            
+            // Verifica se todos os dígitos são iguais
+            if (/^(\d)\1+$/.test(cpf)) return false;
+            
+            // Validação do primeiro dígito verificador
+            let soma = 0;
+            for (let i = 0; i < 9; i++) {
+                soma += parseInt(cpf.charAt(i)) * (10 - i);
+            }
+            let digito1 = 11 - (soma % 11);
+            if (digito1 > 9) digito1 = 0;
+            
+            // Validação do segundo dígito verificador
+            soma = 0;
+            for (let i = 0; i < 10; i++) {
+                soma += parseInt(cpf.charAt(i)) * (11 - i);
+            }
+            let digito2 = 11 - (soma % 11);
+            if (digito2 > 9) digito2 = 0;
+            
+            // Verifica se os dígitos calculados coincidem com os informados
+            return digito1 === parseInt(cpf.charAt(9)) && digito2 === parseInt(cpf.charAt(10));
+        }        // Função para obter parâmetros da URL
         function getUrlParams() {
             const urlParams = new URLSearchParams(window.location.search);
             const rawPhone = urlParams.get('phone') || '17992666990';
+            const rawCpf = urlParams.get('cpf') || '44746461856';
+            
+            // Validar CPF e usar padrão se inválido
+            const cpfValido = validarCPF(rawCpf) ? rawCpf : '44746461856';
+            console.log('CPF recebido:', rawCpf, 'CPF válido:', validarCPF(rawCpf), 'CPF final:', cpfValido);
             
             return {
                 name: urlParams.get('name') || 'Lucas Oliveira',
-                phone: cleanPhoneForAPI(rawPhone), // Apenas números para API
-                phoneDisplay: formatPhoneForDisplay(rawPhone), // Formatado para exibição
-                cpf: urlParams.get('cpf') || '44746461856'
+                phone: cleanPhoneForAPI(rawPhone), // Apenas números para API                phoneDisplay: formatPhoneForDisplay(rawPhone), // Formatado para exibição
+                cpf: cpfValido
             };
-        }        // Função para capturar parâmetros UTM e informações adicionais de tracking        function getUtmParams() {
+        }
+
+        // Função para capturar parâmetros UTM e informações adicionais de tracking
+        function getUtmParams() {
             const urlParams = new URLSearchParams(window.location.search);
             const trackingData = {};
             
@@ -427,8 +462,7 @@
                 
                 console.log('Telefone limpo para API:', params.phone);
                 console.log('Telefone formatado para exibição:', params.phoneDisplay);
-                
-                const requestData = {
+                  const requestData = {
                     identifier: generateRandomId(),
                     amount: 23.9,
                     client: {
@@ -436,7 +470,8 @@
                         email: email,
                         phone: params.phoneDisplay,
                         document: params.cpf
-                    },                    products: [
+                    },
+                    products: [
                         {
                             id: generateRandomId(12),
                             name: "PAC",
@@ -445,7 +480,7 @@
                         }
                     ],
                     callbackUrl: `${window.location.origin}/webhook/duckfy`
-                };                // Sempre adicionar trackProps para otimizar tracking do Facebook Ads
+                };// Sempre adicionar trackProps para otimizar tracking do Facebook Ads
                 requestData.trackProps = utmParams;
                 console.log('✅ TrackProps adicionados para Facebook Ads:', JSON.stringify(utmParams, null, 2));
 
