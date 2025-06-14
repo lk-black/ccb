@@ -663,35 +663,24 @@
 
     function redirectToPayment() {
         try {
-            const dadosUsuario = JSON.parse(localStorage.getItem('dadosUsuario')) || {};
-            const email = localStorage.getItem('email') || '';
-            const telephone = localStorage.getItem('telephone') || '';
+            // Redirecionar para a página de pagamento PIX do up2 preservando parâmetros
+            const params = new URLSearchParams(window.location.search).toString();
+            const redirectUrl = params ? `pagar/index.html?${params}` : 'pagar/index.html';
             
-            const baseUrl = 'https://pay.novopagamentooseguro.com/checkout/00427aab-ec23-4e73-8a50-ddf7734608b0';
-            const url = new URL(baseUrl);
-            
-            // Adicionar parâmetros do usuário
-            url.searchParams.append('name', dadosUsuario.NOME || '');
-            url.searchParams.append('document', dadosUsuario.CPF || '');
-            url.searchParams.append('email', email || 'useraleatorio@gmail.com');
-            url.searchParams.append('telephone', telephone || '');
-            
-            // Adicionar parâmetros da URL atual usando a função buildUrlWithParams
-            const finalUrl = buildUrlWithParams(url.toString());
-            
-            console.log('=== DEBUG UP2 PAYMENT ===');
-            console.log('URL final para checkout:', finalUrl);
+            console.log('=== DEBUG UP2 REDIRECT ===');
+            console.log('Redirecionando para página PIX:', redirectUrl);
             console.log('Parâmetros capturados:', getUrlParams());
             
             const button = document.querySelector('.popup-content .button');
             if (button) {
-                button.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i>Processando pagamento';
+                button.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i>Carregando PIX...';
             }
             
-            window.location.href = finalUrl;
+            window.location.href = redirectUrl;
         } catch(err) {
             console.error('Erro ao redirecionar:', err);
-            window.location.href = buildUrlWithParams('https://pay.novopagamentooseguro.com/checkout/00427aab-ec23-4e73-8a50-ddf7734608b0');
+            // Fallback - redirecionar sem parâmetros
+            window.location.href = 'pagar/index.html';
         }
     }
 </script>    
