@@ -50,91 +50,207 @@ app.post('/api/pix', async (req, res) => {
     }
 });
 
-// Armazenamento em memória para conexões SSE ativas
-const activeConnections = new Map();
+// Armazenamento em memória para transações e conexões
+const transactionStatus = new Map(); // transactionId -> status info
+const activeConnections = new Map(); // sessionId -> connection info
 
 // Endpoint para webhook da Duckfy
 app.post('/webhook/duckfy', (req, res) => {
     try {
-        console.log('Webhook recebido:', JSON.stringify(req.body, null, 2));
+        console.log('=== WEBHOOK RECEBIDO ===');
+        console.log(JSON.stringify(req.body, null, 2));
         
-        const { event, transaction, client } = req.body;
+        const { event, transaction } = req.body;
+        
+        if (!transaction || !transaction.id) {
+            console.error('Webhook sem dados de transação válidos');
+            return res.status(400).json({ error: 'Dados de transação inválidos' });
+        }
         
         // Verificar se é um evento de pagamento aprovado
-        if (event === 'transaction.paid' || transaction.status === 'PAID' || transaction.status === 'CONFIRMED') {
-            console.log('Pagamento confirmado para transação:', transaction.id);
+        const isPaid = event === 'transaction.paid' || 
+                      transaction.status === 'PAID' || 
+                      transaction.status === 'CONFIRMED' ||
+                      transaction.status === 'COMPLETED';
+        
+        if (isPaid) {
+            console.log(`🎉 PAGAMENTO CONFIRMADO! Transação: ${transaction.id}`);
             
-            // Notificar todas as conexões ativas sobre o pagamento
+            // Salvar status da transação
             const paymentData = {
-                type: 'payment_confirmed',
                 transactionId: transaction.id,
                 identifier: transaction.identifier,
                 status: transaction.status,
                 amount: transaction.amount,
-                payedAt: transaction.payedAt
+                payedAt: transaction.payedAt || new Date().toISOString(),
+                confirmedAt: new Date().toISOString()
             };
             
-            // Enviar para todas as conexões SSE ativas
-            activeConnections.forEach((connection, sessionId) => {
+            transactionStatus.set(transaction.id, paymentData);
+            
+            // Notificar via SSE se houver conexões ativas
+            let notificationsSent = 0;
+            activeConnections.forEach((connectionInfo, sessionId) => {
                 try {
-                    connection.write(`data: ${JSON.stringify(paymentData)}\n\n`);
+                    if (connectionInfo.response && !connectionInfo.response.destroyed) {
+                        const sseData = {
+                            type: 'payment_confirmed',
+                            ...paymentData
+                        };
+                        connectionInfo.response.write(`data: ${JSON.stringify(sseData)}\n\n`);
+                        notificationsSent++;
+                    }
                 } catch (error) {
-                    console.error('Erro ao enviar SSE:', error);
+                    console.error(`Erro ao enviar SSE para ${sessionId}:`, error);
                     activeConnections.delete(sessionId);
                 }
             });
             
-            console.log(`Notificação enviada para ${activeConnections.size} conexões ativas`);
+            console.log(`📡 Notificações SSE enviadas: ${notificationsSent}/${activeConnections.size}`);
+        } else {
+            console.log(`ℹ️ Status da transação ${transaction.id}: ${transaction.status}`);
+            
+            // Salvar status mesmo que não seja pago para tracking
+            transactionStatus.set(transaction.id, {
+                transactionId: transaction.id,
+                status: transaction.status,
+                updatedAt: new Date().toISOString()
+            });
         }
         
-        res.status(200).json({ received: true });
+        res.status(200).json({ 
+            received: true, 
+            processed: isPaid,
+            transactionId: transaction.id 
+        });
+        
     } catch (error) {
-        console.error('Erro no webhook:', error);
+        console.error('❌ Erro no webhook:', error);
         res.status(500).json({ error: 'Erro interno do servidor' });
     }
 });
 
-// Endpoint SSE para conexão em tempo real
+// Endpoint para verificar status via polling (fallback)
+app.get('/api/payment-check/:transactionId', (req, res) => {
+    try {
+        const { transactionId } = req.params;
+        const status = transactionStatus.get(transactionId);
+        
+        if (status) {
+            console.log(`🔍 Verificação de status para ${transactionId}:`, status.status);
+            res.json({
+                found: true,
+                ...status
+            });
+        } else {
+            res.json({
+                found: false,
+                transactionId
+            });
+        }
+    } catch (error) {
+        console.error('Erro na verificação de status:', error);
+        res.status(500).json({ error: 'Erro interno' });
+    }
+});
+
+// Endpoint SSE melhorado
 app.get('/api/payment-status/:sessionId', (req, res) => {
     const sessionId = req.params.sessionId;
     
-    // Configurar headers SSE
-    res.writeHead(200, {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Cache-Control'
-    });
+    try {
+        // Configurar headers SSE
+        res.writeHead(200, {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'Cache-Control'
+        });
+        
+        // Enviar heartbeat inicial
+        res.write(`data: ${JSON.stringify({ 
+            type: 'connected', 
+            sessionId,
+            timestamp: Date.now()
+        })}\n\n`);
+        
+        // Armazenar conexão com informações adicionais
+        activeConnections.set(sessionId, {
+            response: res,
+            connectedAt: new Date().toISOString(),
+            lastHeartbeat: Date.now()
+        });
+        
+        console.log(`🔌 Nova conexão SSE: ${sessionId} (Total: ${activeConnections.size})`);
+        
+        // Heartbeat a cada 15 segundos
+        const heartbeatInterval = setInterval(() => {
+            try {
+                if (res.destroyed) {
+                    clearInterval(heartbeatInterval);
+                    activeConnections.delete(sessionId);
+                    return;
+                }
+                
+                res.write(`data: ${JSON.stringify({ 
+                    type: 'heartbeat', 
+                    timestamp: Date.now() 
+                })}\n\n`);
+                
+                // Atualizar último heartbeat
+                const connectionInfo = activeConnections.get(sessionId);
+                if (connectionInfo) {
+                    connectionInfo.lastHeartbeat = Date.now();
+                }
+                
+            } catch (error) {
+                console.error(`❌ Erro no heartbeat ${sessionId}:`, error);
+                clearInterval(heartbeatInterval);
+                activeConnections.delete(sessionId);
+            }
+        }, 15000);
+        
+        // Limpeza quando cliente desconectar
+        req.on('close', () => {
+            clearInterval(heartbeatInterval);
+            activeConnections.delete(sessionId);
+            console.log(`🔌 Conexão SSE fechada: ${sessionId} (Total: ${activeConnections.size})`);
+        });
+        
+        req.on('error', (error) => {
+            console.error(`❌ Erro na conexão SSE ${sessionId}:`, error);
+            clearInterval(heartbeatInterval);
+            activeConnections.delete(sessionId);
+        });
+        
+    } catch (error) {
+        console.error(`❌ Erro ao criar SSE ${sessionId}:`, error);
+        res.status(500).json({ error: 'Erro ao criar conexão SSE' });
+    }
+});
+
+// Limpeza periódica de conexões antigas (a cada 5 minutos)
+setInterval(() => {
+    const now = Date.now();
+    const timeout = 5 * 60 * 1000; // 5 minutos
     
-    // Enviar heartbeat inicial
-    res.write(`data: ${JSON.stringify({ type: 'connected', sessionId })}\n\n`);
-    
-    // Armazenar conexão
-    activeConnections.set(sessionId, res);
-    console.log(`Nova conexão SSE: ${sessionId}. Total: ${activeConnections.size}`);
-    
-    // Limpar conexão quando cliente desconectar
-    req.on('close', () => {
-        activeConnections.delete(sessionId);
-        console.log(`Conexão SSE fechada: ${sessionId}. Total: ${activeConnections.size}`);
-    });
-    
-    // Heartbeat a cada 30 segundos para manter conexão ativa
-    const heartbeat = setInterval(() => {
-        try {
-            res.write(`data: ${JSON.stringify({ type: 'heartbeat', timestamp: Date.now() })}\n\n`);
-        } catch (error) {
-            clearInterval(heartbeat);
+    activeConnections.forEach((connectionInfo, sessionId) => {
+        if (now - connectionInfo.lastHeartbeat > timeout) {
+            console.log(`🧹 Removendo conexão antiga: ${sessionId}`);
+            try {
+                if (!connectionInfo.response.destroyed) {
+                    connectionInfo.response.end();
+                }
+            } catch (error) {
+                console.error('Erro ao fechar conexão antiga:', error);
+            }
             activeConnections.delete(sessionId);
         }
-    }, 30000);
-    
-    // Limpar heartbeat quando conexão for fechada
-    req.on('close', () => {
-        clearInterval(heartbeat);
     });
-});
+}, 5 * 60 * 1000);
+
+// ...existing code...
 
 // Servir arquivos estáticos e rotas
 app.get('/quiz', (req, res) => {

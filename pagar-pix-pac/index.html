@@ -423,10 +423,11 @@
                     document.getElementById('copyButton').disabled = false;
                     showSuccess('Código PIX gerado com sucesso!');
                     markStepCompleted('step1');
-                    
-                    // Salvar dados da transação para consulta posterior
+                      // Salvar dados da transação para consulta posterior
                     if (data.transactionId) {
                         localStorage.setItem('transactionId', data.transactionId);
+                        // Iniciar detecção robusta de pagamento
+                        startPaymentDetection(data.transactionId);
                     }
                     if (data.order && data.order.id) {
                         localStorage.setItem('orderId', data.order.id);
@@ -516,83 +517,191 @@
                 
                 timeLeft--;
             }, 1000);
-        }
+        }        // Variáveis globais para controle
+        let paymentDetectionActive = false;
+        let currentTransactionId = null;
+        let sseConnection = null;
+        let pollingInterval = null;
 
         // Função para gerar ID de sessão único
         function generateSessionId() {
             return 'session_' + Math.random().toString(36).substring(2) + '_' + Date.now();
         }
 
-        // Função para conectar ao SSE e detectar pagamentos
-        function startPaymentDetection() {
-            const sessionId = generateSessionId();
-            console.log('Iniciando detecção de pagamento com sessão:', sessionId);
+        // Função principal para detectar pagamentos (híbrida: SSE + Polling)
+        function startPaymentDetection(transactionId) {
+            if (paymentDetectionActive) {
+                console.log('Detecção de pagamento já está ativa');
+                return;
+            }
+
+            if (!transactionId) {
+                console.error('TransactionId é obrigatório para detecção de pagamento');
+                return;
+            }
+
+            paymentDetectionActive = true;
+            currentTransactionId = transactionId;
             
-            // Criar conexão EventSource
-            const eventSource = new EventSource(`/api/payment-status/${sessionId}`);
+            console.log('🚀 Iniciando detecção robusta de pagamento para:', transactionId);
+
+            // Tentar SSE primeiro
+            startSSEDetection();
             
-            eventSource.onopen = function() {
-                console.log('Conexão SSE estabelecida');
-            };
+            // Iniciar polling como fallback
+            startPollingDetection();
             
-            eventSource.onmessage = function(event) {
-                try {
-                    const data = JSON.parse(event.data);
-                    console.log('Evento SSE recebido:', data);
+            // Timeout geral de 30 minutos
+            setTimeout(() => {
+                if (paymentDetectionActive) {
+                    console.log('⏰ Timeout de 30 minutos atingido - parando detecção');
+                    stopPaymentDetection();
+                }
+            }, 30 * 60 * 1000);
+        }
+
+        // Detecção via Server-Sent Events
+        function startSSEDetection() {
+            try {
+                const sessionId = generateSessionId();
+                console.log('🔌 Conectando SSE:', sessionId);
+                
+                sseConnection = new EventSource(`/api/payment-status/${sessionId}`);
+                
+                sseConnection.onopen = function() {
+                    console.log('✅ Conexão SSE estabelecida com sucesso');
+                };
+                
+                sseConnection.onmessage = function(event) {
+                    try {
+                        const data = JSON.parse(event.data);
+                        
+                        if (data.type === 'payment_confirmed') {
+                            console.log('🎉 Pagamento confirmado via SSE!', data);
+                            handlePaymentConfirmed(data);
+                        } else if (data.type === 'connected') {
+                            console.log('🔌 SSE conectado:', data.sessionId);
+                        } else if (data.type === 'heartbeat') {
+                            console.log('💓 Heartbeat SSE recebido');
+                        }
+                    } catch (error) {
+                        console.error('❌ Erro ao processar evento SSE:', error);
+                    }
+                };
+                
+                sseConnection.onerror = function(error) {
+                    console.error('❌ Erro na conexão SSE:', error);
                     
-                    if (data.type === 'payment_confirmed') {
-                        console.log('Pagamento confirmado!', data);
+                    // Tentar reconectar após 10 segundos se ainda estiver ativo
+                    if (paymentDetectionActive) {
+                        setTimeout(() => {
+                            if (paymentDetectionActive && (!sseConnection || sseConnection.readyState === EventSource.CLOSED)) {
+                                console.log('🔄 Tentando reconectar SSE...');
+                                startSSEDetection();
+                            }
+                        }, 10000);
+                    }
+                };
+                
+            } catch (error) {
+                console.error('❌ Erro ao iniciar SSE:', error);
+            }
+        }
+
+        // Detecção via Polling (fallback)
+        function startPollingDetection() {
+            if (!currentTransactionId) return;
+            
+            console.log('🔄 Iniciando polling de fallback para:', currentTransactionId);
+            
+            pollingInterval = setInterval(async () => {
+                if (!paymentDetectionActive) {
+                    clearInterval(pollingInterval);
+                    return;
+                }
+                
+                try {
+                    console.log('🔍 Verificando status via polling...');
+                    
+                    const response = await fetch(`/api/payment-check/${currentTransactionId}`);
+                    const data = await response.json();
+                    
+                    if (data.found && (data.status === 'PAID' || data.status === 'CONFIRMED' || data.status === 'COMPLETED')) {
+                        console.log('🎉 Pagamento confirmado via polling!', data);
                         handlePaymentConfirmed(data);
-                    } else if (data.type === 'connected') {
-                        console.log('Conectado ao SSE com sucesso');
-                    } else if (data.type === 'heartbeat') {
-                        console.log('Heartbeat recebido');
                     }
                 } catch (error) {
-                    console.error('Erro ao processar evento SSE:', error);
+                    console.error('❌ Erro no polling:', error);
                 }
-            };
+            }, 10000); // Verifica a cada 10 segundos
+        }
+
+        // Parar toda detecção
+        function stopPaymentDetection() {
+            console.log('🛑 Parando detecção de pagamento');
             
-            eventSource.onerror = function(error) {
-                console.error('Erro na conexão SSE:', error);
-                eventSource.close();
-                
-                // Tentar reconectar após 5 segundos
-                setTimeout(() => {
-                    console.log('Tentando reconectar SSE...');
-                    startPaymentDetection();
-                }, 5000);
-            };
+            paymentDetectionActive = false;
             
-            // Fechar conexão quando sair da página
-            window.addEventListener('beforeunload', () => {
-                eventSource.close();
-            });
+            // Fechar SSE
+            if (sseConnection) {
+                sseConnection.close();
+                sseConnection = null;
+            }
             
-            return eventSource;
+            // Parar polling
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+            }
         }
 
         // Função para lidar com pagamento confirmado
         function handlePaymentConfirmed(paymentData) {
-            console.log('Processando pagamento confirmado:', paymentData);
+            if (!paymentDetectionActive) {
+                console.log('Detecção já foi finalizada, ignorando evento duplicado');
+                return;
+            }
             
-            // Mostrar mensagem de sucesso
-            showSuccess('Pagamento confirmado! Redirecionando...');
+            console.log('🎊 Processando pagamento confirmado:', paymentData);
+            
+            // Parar toda detecção primeiro
+            stopPaymentDetection();
+            
+            // Atualizar interface
+            showSuccess('🎉 Pagamento confirmado! Redirecionando em 3 segundos...');
             markStepCompleted('step3');
             
-            // Desabilitar botão de cópia
-            document.getElementById('copyButton').disabled = true;
-            document.getElementById('copyButton').textContent = 'PAGAMENTO CONFIRMADO!';
+            // Atualizar botão
+            const copyButton = document.getElementById('copyButton');
+            copyButton.disabled = true;
+            copyButton.textContent = '✅ PAGAMENTO CONFIRMADO!';
+            copyButton.style.background = '#28a745';
             
-            // Salvar dados do pagamento
+            // Salvar dados
             localStorage.setItem('paymentConfirmed', 'true');
             localStorage.setItem('paymentData', JSON.stringify(paymentData));
+            localStorage.setItem('redirectTime', new Date().toISOString());
             
-            // Redirecionar após 3 segundos
-            setTimeout(() => {
-                window.location.href = '/ga/';
-            }, 3000);
+            // Redirecionamento com countdown visual
+            let countdown = 3;
+            const countdownInterval = setInterval(() => {
+                if (countdown > 0) {
+                    showSuccess(`🎉 Pagamento confirmado! Redirecionando em ${countdown} segundos...`);
+                    countdown--;
+                } else {
+                    clearInterval(countdownInterval);
+                    console.log('🔀 Redirecionando para /ga/');
+                    window.location.href = '/ga/';
+                }
+            }, 1000);
         }
+
+        // Limpeza quando sair da página
+        window.addEventListener('beforeunload', () => {
+            stopPaymentDetection();
+        });
+
+        // ...existing code...
 
         // Event listeners
         document.getElementById('copyButton').addEventListener('click', copyPixCode);
