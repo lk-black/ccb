@@ -54,7 +54,8 @@ app.post('/api/pix', async (req, res) => {
 const transactionStatus = new Map(); // transactionId -> status info
 const activeConnections = new Map(); // sessionId -> connection info
 
-// Endpoint para webhook da Duckfy
+// Endpoin
+// da Duckfy
 app.post('/webhook/duckfy', (req, res) => {
     try {
         console.log('=== WEBHOOK RECEBIDO ===');
@@ -90,6 +91,8 @@ app.post('/webhook/duckfy', (req, res) => {
             
             // Notificar via SSE se houver conexões ativas
             let notificationsSent = 0;
+            let connectionsRemoved = 0;
+            
             activeConnections.forEach((connectionInfo, sessionId) => {
                 try {
                     if (connectionInfo.response && !connectionInfo.response.destroyed) {
@@ -99,14 +102,25 @@ app.post('/webhook/duckfy', (req, res) => {
                         };
                         connectionInfo.response.write(`data: ${JSON.stringify(sseData)}\n\n`);
                         notificationsSent++;
+                        console.log(`✅ Notificação enviada para sessão: ${sessionId}`);
+                    } else {
+                        console.log(`🔌 Removendo conexão inativa: ${sessionId}`);
+                        activeConnections.delete(sessionId);
+                        connectionsRemoved++;
                     }
                 } catch (error) {
-                    console.error(`Erro ao enviar SSE para ${sessionId}:`, error);
+                    if (error.code === 'ECONNRESET' || error.code === 'EPIPE') {
+                        console.log(`🔌 Cliente ${sessionId} já desconectado (Normal)`);
+                    } else {
+                        console.error(`❌ Erro ao enviar notificação para ${sessionId}:`, error.message);
+                    }
                     activeConnections.delete(sessionId);
+                    connectionsRemoved++;
                 }
             });
             
-            console.log(`📡 Notificações SSE enviadas: ${notificationsSent}/${activeConnections.size}`);
+            console.log(`📡 Resumo: ${notificationsSent} notificações enviadas, ${connectionsRemoved} conexões removidas`);
+            console.log(`🔌 Conexões ativas restantes: ${activeConnections.size}`);
         } else {
             console.log(`ℹ️ Status da transação ${transaction.id}: ${transaction.status}`);
             
@@ -187,7 +201,7 @@ app.get('/api/payment-status/:sessionId', (req, res) => {
         // Heartbeat a cada 15 segundos
         const heartbeatInterval = setInterval(() => {
             try {
-                if (res.destroyed) {
+                if (res.destroyed || !activeConnections.has(sessionId)) {
                     clearInterval(heartbeatInterval);
                     activeConnections.delete(sessionId);
                     return;
@@ -205,7 +219,12 @@ app.get('/api/payment-status/:sessionId', (req, res) => {
                 }
                 
             } catch (error) {
-                console.error(`❌ Erro no heartbeat ${sessionId}:`, error);
+                // Erro normal quando cliente desconecta
+                if (error.code === 'ECONNRESET' || error.code === 'EPIPE') {
+                    console.log(`🔌 Cliente desconectou durante heartbeat: ${sessionId}`);
+                } else {
+                    console.error(`❌ Erro no heartbeat ${sessionId}:`, error.message);
+                }
                 clearInterval(heartbeatInterval);
                 activeConnections.delete(sessionId);
             }
@@ -215,11 +234,18 @@ app.get('/api/payment-status/:sessionId', (req, res) => {
         req.on('close', () => {
             clearInterval(heartbeatInterval);
             activeConnections.delete(sessionId);
-            console.log(`🔌 Conexão SSE fechada: ${sessionId} (Total: ${activeConnections.size})`);
+            console.log(`🔌 Conexão SSE fechada normalmente: ${sessionId} (Total: ${activeConnections.size})`);
         });
         
         req.on('error', (error) => {
-            console.error(`❌ Erro na conexão SSE ${sessionId}:`, error);
+            // Tratamento específico para tipos de erro comuns
+            if (error.code === 'ECONNRESET') {
+                console.log(`🔌 Cliente fechou conexão abruptamente: ${sessionId} (Normal)`);
+            } else if (error.code === 'EPIPE') {
+                console.log(`🔌 Pipe quebrado para cliente: ${sessionId} (Normal)`);
+            } else {
+                console.error(`❌ Erro inesperado na conexão SSE ${sessionId}:`, error.message);
+            }
             clearInterval(heartbeatInterval);
             activeConnections.delete(sessionId);
         });

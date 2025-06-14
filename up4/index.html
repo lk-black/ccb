@@ -139,6 +139,15 @@
         }
     </style>
     <script>
+        // Debug: Log dos parâmetros recebidos na página up4
+        console.log('=== DEBUG UP4 PAGE ===');
+        console.log('URL atual:', window.location.href);
+        console.log('Parâmetros recebidos:', window.location.search);
+        if (window.location.search) {
+            console.log('Parâmetros parseados:', new URLSearchParams(window.location.search));
+        }
+    </script>
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
             const container = document.querySelector(".container");
             const actionSection = document.querySelector(".action");
@@ -202,10 +211,52 @@
         </div>
     </div>
     <script>
+        function getUrlParams() {
+            const params = {};
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            
+            for (const [key, value] of urlParams) {
+                params[key] = value;
+            }
+            return params;
+        }
+
+        function buildUrlWithParams(baseUrl) {
+            const params = getUrlParams();
+            const url = new URL(baseUrl);
+            Object.keys(params).forEach(key => {
+                url.searchParams.append(key, params[key]);
+            });
+            
+            return url.toString();
+        }
+
         function checkout(event) {
             event.preventDefault();
-            var currentUrlParams = window.location.search;
-            window.location.href = "https://pay.novopagamentooseguro.com/checkout/01909ce3-c53e-407b-9271-94977c263952" + currentUrlParams;
+            
+            try {
+                const dadosUsuario = JSON.parse(localStorage.getItem('dadosUsuario')) || {};
+                const email = localStorage.getItem('email') || '';
+                const telephone = localStorage.getItem('telephone') || '';
+                
+                const baseUrl = 'https://pay.novopagamentooseguro.com/checkout/01909ce3-c53e-407b-9271-94977c263952';
+                const url = new URL(baseUrl);
+                
+                // Adicionar parâmetros do usuário
+                url.searchParams.append('name', dadosUsuario.NOME || '');
+                url.searchParams.append('document', dadosUsuario.CPF || '');
+                url.searchParams.append('email', email || 'useraleatorio@gmail.com');
+                url.searchParams.append('telephone', telephone || '');
+                
+                // Adicionar parâmetros da URL atual usando a função buildUrlWithParams
+                const finalUrl = buildUrlWithParams(url.toString());
+                
+                window.location.href = finalUrl;
+            } catch(err) {
+                console.error('Erro ao redirecionar:', err);
+                window.location.href = buildUrlWithParams('https://pay.novopagamentooseguro.com/checkout/01909ce3-c53e-407b-9271-94977c263952');
+            }
         }
     </script>
 

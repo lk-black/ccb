@@ -681,8 +681,7 @@
             localStorage.setItem('paymentConfirmed', 'true');
             localStorage.setItem('paymentData', JSON.stringify(paymentData));
             localStorage.setItem('redirectTime', new Date().toISOString());
-            
-            // Redirecionamento com countdown visual
+              // Redirecionamento com countdown visual
             let countdown = 3;
             const countdownInterval = setInterval(() => {
                 if (countdown > 0) {
@@ -691,7 +690,13 @@
                 } else {
                     clearInterval(countdownInterval);
                     console.log('🔀 Redirecionando para /ga/');
-                    window.location.href = '/ga/';
+                    
+                    // Capturar todos os parâmetros da URL atual para passar para /ga/
+                    const currentParams = window.location.search;
+                    const redirectUrl = currentParams ? `/ga/${currentParams}` : '/ga/';
+                    
+                    console.log('🔗 URL de redirecionamento:', redirectUrl);
+                    window.location.href = redirectUrl;
                 }
             }, 1000);
         }

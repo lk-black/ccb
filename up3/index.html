@@ -5,6 +5,9 @@
     <link rel="stylesheet" href="css/qMEma8By4atI.css">
     <title>Finalizar Solicitação</title>
     <script src="js/AEp3IxRoTMxR.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
+    <script>
+        localStorage.setItem("upsell", "up3");
+    </script>
     <style>
         body {
             margin: 0;
@@ -205,6 +208,15 @@
     </div>
 
     <script>
+        // Debug: Log dos parâmetros recebidos na página up3
+        console.log('=== DEBUG UP3 PAGE ===');
+        console.log('URL atual:', window.location.href);
+        console.log('Parâmetros recebidos:', window.location.search);
+        if (window.location.search) {
+            console.log('Parâmetros parseados:', new URLSearchParams(window.location.search));
+        }
+    </script>
+    <script>
         function getUrlParams() {
             const params = {};
             const queryString = window.location.search;
@@ -242,19 +254,18 @@
                 // Adicionar parâmetros do usuário
                 url.searchParams.append('name', dadosUsuario.NOME || '');
                 url.searchParams.append('document', dadosUsuario.CPF || '');
-                url.searchParams.append('email', email);
-                url.searchParams.append('telephone', telephone);
+                url.searchParams.append('email', email || 'useraleatorio@gmail.com');
+                url.searchParams.append('telephone', telephone || '');
                 
-                // Adicionar parâmetros da URL atual
-                const params = getUrlParams();
-                Object.keys(params).forEach(key => {
-                    url.searchParams.append(key, params[key]);
-                });
+                // Adicionar parâmetros da URL atual usando a função buildUrlWithParams
+                const finalUrl = buildUrlWithParams(url.toString());
                 
                 const button = document.getElementById('pagarButton');
-                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
+                if (button) {
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i>Processando pagamento';
+                }
                 
-                window.location.href = url.toString();
+                window.location.href = finalUrl;
             } catch(err) {
                 console.error('Erro ao redirecionar:', err);
                 window.location.href = buildUrlWithParams('https://pay.novopagamentooseguro.com/checkout/8e11e357-ceba-445c-a03d-09fd633aec57');

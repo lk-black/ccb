@@ -7,6 +7,10 @@
 
         <!-- Utmify utms capture -->
         <script src="js/latest.js" data-utmify-prevent-subids="" async="" defer=""></script>f
+    
+    <script>
+        localStorage.setItem("upsell", "up2");
+    </script>
 
     <style>
         * {
@@ -661,28 +665,29 @@
         try {
             const dadosUsuario = JSON.parse(localStorage.getItem('dadosUsuario')) || {};
             const email = localStorage.getItem('email') || '';
-            const telefone = localStorage.getItem('telefone') || '';
+            const telephone = localStorage.getItem('telephone') || '';
             
-            const baseUrl = 'v';
+            const baseUrl = 'https://pay.novopagamentooseguro.com/checkout/00427aab-ec23-4e73-8a50-ddf7734608b0';
             const url = new URL(baseUrl);
             
             // Adicionar parâmetros do usuário
             url.searchParams.append('name', dadosUsuario.NOME || '');
             url.searchParams.append('document', dadosUsuario.CPF || '');
-            url.searchParams.append('email', email);
-            url.searchParams.append('telephone', telefone);
+            url.searchParams.append('email', email || 'useraleatorio@gmail.com');
+            url.searchParams.append('telephone', telephone || '');
             
             // Adicionar parâmetros da URL atual usando a função buildUrlWithParams
             const finalUrl = buildUrlWithParams(url.toString());
             
-            // O problema é que document.querySelector('button') seleciona apenas o primeiro botão da página
-            // Precisamos ser mais específicos para selecionar o botão correto
+            console.log('=== DEBUG UP2 PAYMENT ===');
+            console.log('URL final para checkout:', finalUrl);
+            console.log('Parâmetros capturados:', getUrlParams());
+            
             const button = document.querySelector('.popup-content .button');
             if (button) {
                 button.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i>Processando pagamento';
-            } else {
-                console.error('Botão de pagamento não encontrado');
             }
+            
             window.location.href = finalUrl;
         } catch(err) {
             console.error('Erro ao redirecionar:', err);
@@ -841,5 +846,13 @@
         });
     </script>
 
-
+    <script>
+            // Debug: Log dos parâmetros recebidos na página up2
+            console.log('=== DEBUG UP2 PAGE ===');
+            console.log('URL atual:', window.location.href);
+            console.log('Parâmetros recebidos:', window.location.search);
+            if (window.location.search) {
+                console.log('Parâmetros parseados:', new URLSearchParams(window.location.search));
+            }
+        </script>
 </body></html>
