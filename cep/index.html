@@ -386,62 +386,118 @@
         }
       }      // Salvar dados do usuário no localStorage quando a página carregar
       document.addEventListener('DOMContentLoaded', function() {
-        // Capturar parâmetros da URL e salvar no localStorage
-        const urlParams = new URLSearchParams(window.location.search);
-        const userData = {};
-        
-        // Capturar dados essenciais do usuário
-        const name = urlParams.get('name');
-        const cpf = urlParams.get('cpf');
-        const phone = urlParams.get('phone');
-        
-        if (name) {
-          userData.name = name;
-          localStorage.setItem('userName', name);
-          console.log('✅ Nome salvo no localStorage:', name);
-        }
-        
-        if (cpf) {
-          userData.cpf = cpf;
-          localStorage.setItem('userCPF', cpf);
-          console.log('✅ CPF salvo no localStorage:', cpf);
-        }
-        
-        if (phone) {
-          userData.phone = phone;
-          localStorage.setItem('userPhone', phone);
-          console.log('✅ Telefone salvo no localStorage:', phone);
-        }
-        
-        // Salvar todos os dados em um objeto consolidado
-        if (Object.keys(userData).length > 0) {
-          localStorage.setItem('userData', JSON.stringify(userData));
-          console.log('✅ Dados do usuário salvos no localStorage:', userData);
-        }
-        
-        // Capturar e preservar parâmetros UTM para tracking
-        const utmParams = {};
-        const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id'];
-        
-        utmKeys.forEach(key => {
-          const value = urlParams.get(key);
-          if (value) {
-            utmParams[key] = value;
+        // Função para salvar dados do usuário vindos do Typebot
+        function saveUserDataFromURL() {
+          const urlParams = new URLSearchParams(window.location.search);
+          const userData = {};
+          
+          // Lista de parâmetros de dados do usuário vindos do Typebot
+          const userDataKeys = [
+            'name', 'nome', 'full_name', 'fullname',
+            'cpf', 'documento', 'doc',
+            'phone', 'telefone', 'celular', 'whatsapp',
+            'email', 'e_mail',
+            'birthdate', 'nascimento', 'data_nascimento',
+            'mother_name', 'nome_mae'
+          ];
+          
+          // Capturar todos os dados do usuário
+          userDataKeys.forEach(key => {
+            const value = urlParams.get(key);
+            if (value && value.trim()) {
+              // Normalizar chaves para padrão consistente
+              let normalizedKey = key;
+              if (['nome', 'full_name', 'fullname'].includes(key)) normalizedKey = 'name';
+              if (['documento', 'doc'].includes(key)) normalizedKey = 'cpf';
+              if (['telefone', 'celular', 'whatsapp'].includes(key)) normalizedKey = 'phone';
+              if (['e_mail'].includes(key)) normalizedKey = 'email';
+              if (['nascimento', 'data_nascimento'].includes(key)) normalizedKey = 'birthdate';
+              if (['nome_mae'].includes(key)) normalizedKey = 'mother_name';
+              
+              userData[normalizedKey] = value.trim();
+            }
+          });
+          
+          // Salvar dados individuais para compatibilidade
+          if (userData.name) {
+            localStorage.setItem('userName', userData.name);
+            console.log('✅ Nome salvo no localStorage:', userData.name);
           }
-        });
-        
-        // Salvar parâmetros de tracking importantes
-        const trackingKeys = ['fbclid', 'fbc', 'fbp', 'gclid', 'gclsrc'];
-        trackingKeys.forEach(key => {
-          const value = urlParams.get(key);
-          if (value) {
-            utmParams[key] = value;
+          
+          if (userData.cpf) {
+            localStorage.setItem('userCPF', userData.cpf);
+            console.log('✅ CPF salvo no localStorage:', userData.cpf);
           }
-        });
-          if (Object.keys(utmParams).length > 0) {
-          localStorage.setItem('trackingParams', JSON.stringify(utmParams));
-          console.log('✅ Parâmetros de tracking salvos:', utmParams);
-        }        // Facebook Pixel tracking
+          
+          if (userData.phone) {
+            localStorage.setItem('userPhone', userData.phone);
+            console.log('✅ Telefone salvo no localStorage:', userData.phone);
+          }
+          
+          if (userData.email) {
+            localStorage.setItem('userEmail', userData.email);
+            console.log('✅ Email salvo no localStorage:', userData.email);
+          }
+          
+          // Salvar objeto consolidado
+          if (Object.keys(userData).length > 0) {
+            localStorage.setItem('userData', JSON.stringify(userData));
+            console.log('✅ Dados completos do usuário salvos no localStorage:', userData);
+          }
+          
+          return userData;
+        }
+        
+        // Função para salvar parâmetros de tracking
+        function saveTrackingParams() {
+          const urlParams = new URLSearchParams(window.location.search);
+          const trackingParams = {};
+          
+          // Lista completa de parâmetros de tracking
+          const trackingKeys = [
+            // UTM padrão
+            'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id',
+            // Facebook
+            'fbclid', 'fbc', 'fbp', 'fb_action_ids', 'fb_action_types', 'fb_source',
+            // Google
+            'gclid', 'gclsrc', 'gbraid', 'wbraid',
+            // Outros tracking
+            'mc_cid', 'mc_eid', // Mailchimp
+            'msclkid', // Microsoft
+            'ttclid', // TikTok
+            'li_fat_id', // LinkedIn
+            'twclid', // Twitter
+            'referrer', 'ref', 'source',
+            // Parâmetros customizados que podem vir do Typebot
+            'campaign_id', 'ad_id', 'creative_id', 'keyword'
+          ];
+          
+          trackingKeys.forEach(key => {
+            const value = urlParams.get(key);
+            if (value && value.trim()) {
+              trackingParams[key] = value.trim();
+            }
+          });
+          
+          if (Object.keys(trackingParams).length > 0) {
+            localStorage.setItem('trackingParams', JSON.stringify(trackingParams));
+            console.log('✅ Parâmetros de tracking salvos:', trackingParams);
+          }
+          
+          return trackingParams;
+        }
+        
+        // Executar salvamento
+        const savedUserData = saveUserDataFromURL();
+        const savedTrackingParams = saveTrackingParams();
+        
+        // Limpar URL se dados foram salvos
+        if (Object.keys(savedUserData).length > 0 || Object.keys(savedTrackingParams).length > 0) {
+          // Aguardar um pouco para garantir que tudo foi salvo
+          setTimeout(() => {
+            cleanURLParams();
+          }, 500);
+        }// Facebook Pixel tracking
         if (typeof fbq !== 'undefined') {
           fbq('track', 'ViewContent', {
             content_name: 'Página de Endereço CEP',
@@ -545,23 +601,40 @@
             showLoading(false);
             cepInput.classList.add('error');
             console.error("Erro ao buscar o CEP.");
-            alert("Erro ao buscar o CEP. Verifique sua conexão com a internet.");
-          });      }      // Função para redirecionar preservando apenas parâmetros de tracking
+            alert("Erro ao buscar o CEP. Verifique sua conexão com a internet.");          });      }      
+      
+      // Função para limpar parâmetros da URL mantendo apenas a URL base
+      function cleanURLParams() {
+        try {
+          const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+          
+          // Usar replaceState para não adicionar nova entrada no histórico
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState({}, document.title, cleanUrl);
+            console.log('🧹 URL limpa. Dados preservados no localStorage.');
+          }
+        } catch (error) {
+          console.warn('Não foi possível limpar a URL:', error);
+        }
+      }
+      
+      // Função para redirecionar preservando apenas parâmetros de tracking
       function redirectWithTrackingParams(targetUrl) {
         try {
           // Recuperar apenas parâmetros de tracking do localStorage
           const trackingParams = JSON.parse(localStorage.getItem('trackingParams') || '{}');
           
-          // Se há parâmetros de tracking
           if (Object.keys(trackingParams).length > 0) {
             const url = new URL(targetUrl, window.location.origin);
             
-            // Adicionar apenas parâmetros de tracking à URL
+            // Adicionar apenas parâmetros de tracking à URL de destino
             Object.keys(trackingParams).forEach(key => {
-              url.searchParams.append(key, trackingParams[key]);
+              if (trackingParams[key]) {
+                url.searchParams.append(key, trackingParams[key]);
+              }
             });
             
-            console.log('🔗 Redirecionando com parâmetros de tracking:', url.toString());
+            console.log('🔗 Redirecionando com parâmetros de tracking preservados:', url.toString());
             window.location.href = url.toString();
           } else {
             // Se não há parâmetros de tracking, redirecionar normalmente
@@ -574,8 +647,31 @@
           window.location.href = targetUrl;
         }
       }
+      
+      // Função para validar se dados essenciais estão salvos
+      function validateSavedData() {
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        const requiredFields = ['name', 'cpf'];
+        
+        for (let field of requiredFields) {
+          if (!userData[field]) {
+            console.warn(`⚠️ Campo obrigatório '${field}' não encontrado no localStorage`);
+            return false;
+          }
+        }
+        
+        console.log('✅ Dados essenciais validados no localStorage');
+        return true;
+      }
 
+      // Função para redirecionar preservando apenas parâmetros de tracking (VERSÃO ANTIGA - REMOVIDA)      
       function salvarEndereco() {
+        // Validar se dados do usuário estão salvos antes de prosseguir
+        if (!validateSavedData()) {
+          alert("Erro: Dados do usuário não foram salvos corretamente. Por favor, recarregue a página.");
+          return;
+        }
+
         const semNumeroChecked = document.getElementById("sem-numero").checked;
         
         const endereco = {
@@ -616,12 +712,21 @@
           if (firstErrorField) {
             firstErrorField.focus();
           }
-          return;
-        }        // Mostrar loading no botão
+          return;        }        // Mostrar loading no botão
         showLoading(true);
-          // Simular um pequeno delay para melhor UX
+        
+        // Simular um pequeno delay para melhor UX e salvar dados
         setTimeout(() => {
+          // Salvar endereço no localStorage
           localStorage.setItem("enderecoCliente", JSON.stringify(endereco));
+          console.log('✅ Endereço salvo no localStorage:', endereco);
+          
+          // Log final do estado do localStorage antes do redirecionamento
+          console.log('📊 Estado final do localStorage:');
+          console.log('- userData:', localStorage.getItem('userData'));
+          console.log('- trackingParams:', localStorage.getItem('trackingParams'));
+          console.log('- enderecoCliente:', localStorage.getItem('enderecoCliente'));
+          
           // Redirecionar preservando apenas parâmetros de tracking
           redirectWithTrackingParams("../sedex/index.html");
         }, 500);
