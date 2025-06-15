@@ -1051,13 +1051,17 @@
 
     // Função para capturar parâmetros UTM e outros
     function getUtmParameters() {
+        // Primeiro, tentar buscar parâmetros de tracking do localStorage
+        const trackingParams = JSON.parse(localStorage.getItem('trackingParams') || '{}');
+        
+        // Também capturar da URL atual (para casos onde o usuário venha diretamente)
         const urlParams = new URLSearchParams(window.location.search);
-        const trackingData = {};
+        const trackingData = { ...trackingParams }; // Começar com dados do localStorage
         
         // Parâmetros UTM essenciais para Facebook Ads
         const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id'];
         
-        // Capturar parâmetros UTM
+        // Capturar parâmetros UTM (URL tem prioridade)
         utmKeys.forEach(key => {
             const value = urlParams.get(key);
             if (value) {
@@ -1128,19 +1132,39 @@
         return trackingData;
     }
 
-    // Função para obter parâmetros de usuário (mistura URL + localStorage)
+    // Função para obter parâmetros de usuário (mistura localStorage + URL params)
     function getUserParams() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const dadosUsuario = JSON.parse(localStorage.getItem('dadosUsuario')) || {};
+        // Primeiro, tentar buscar do localStorage
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        const userName = localStorage.getItem('userName');
+        const userCPF = localStorage.getItem('userCPF');
+        const userPhone = localStorage.getItem('userPhone');
         
-        const rawPhone = urlParams.get('phone') || localStorage.getItem('telephone') || localStorage.getItem('telefone') || '17992666990';
+        // Também buscar dados antigos para compatibilidade
+        const dadosUsuario = JSON.parse(localStorage.getItem('dadosUsuario')) || {};
+        const legacyEmail = localStorage.getItem('email');
+        const legacyTelefone = localStorage.getItem('telephone') || localStorage.getItem('telefone');
+        
+        // Usar dados do localStorage como prioridade, fallback para URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        const rawPhone = userData.phone || userPhone || legacyTelefone || urlParams.get('phone') || '17992666990';
+        const name = userData.name || userName || dadosUsuario.NOME || urlParams.get('name') || 'Lucas Oliveira';
+        const cpf = userData.cpf || userCPF || dadosUsuario.CPF || urlParams.get('cpf') || '44746461856';
+        const email = legacyEmail || urlParams.get('email') || generateRandomEmail();
+        
+        console.log('📋 Dados do usuário UP2 recuperados:');
+        console.log('- Nome:', name, '(localStorage)');
+        console.log('- CPF:', cpf);
+        console.log('- Telefone original:', rawPhone);
+        console.log('- Email:', email);
         
         return {
-            name: urlParams.get('name') || dadosUsuario.NOME || 'Lucas Oliveira',
+            name: name,
             phone: cleanPhoneForAPI(rawPhone), // Apenas números para API
             phoneDisplay: formatPhoneForDisplay(rawPhone), // Formatado para exibição
-            cpf: urlParams.get('cpf') || dadosUsuario.CPF || '44746461856',
-            email: urlParams.get('email') || localStorage.getItem('email') || generateRandomEmail()
+            cpf: cpf,
+            email: email
         };
     }
 

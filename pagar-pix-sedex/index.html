@@ -352,32 +352,46 @@
             
             // Verifica se os dígitos calculados coincidem com os informados
             return digito1 === parseInt(cpf.charAt(9)) && digito2 === parseInt(cpf.charAt(10));
-        }        // Função para obter parâmetros da URL
+        }        // Função para obter parâmetros do usuário do localStorage
         function getUrlParams() {
+            // Primeiro, tentar buscar do localStorage
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            const userName = localStorage.getItem('userName');
+            const userCPF = localStorage.getItem('userCPF');
+            const userPhone = localStorage.getItem('userPhone');
+            
+            // Usar dados do localStorage como prioridade, fallback para URL params
             const urlParams = new URLSearchParams(window.location.search);
-            const rawPhone = urlParams.get('phone') || '17992666990';
-            const rawCpf = urlParams.get('cpf') || '44746461856';
+            
+            const rawPhone = userData.phone || userPhone || urlParams.get('phone') || '17992666990';
+            const rawCpf = userData.cpf || userCPF || urlParams.get('cpf') || '44746461856';
+            const name = userData.name || userName || urlParams.get('name') || 'Lucas Oliveira';
             
             // Validar CPF e usar padrão se inválido
             const cpfValido = validarCPF(rawCpf) ? rawCpf : '44746461856';
-            console.log('CPF recebido:', rawCpf, 'CPF válido:', validarCPF(rawCpf), 'CPF final:', cpfValido);
+            console.log('📋 Dados do usuário recuperados:');
+            console.log('- Nome:', name, '(localStorage)');
+            console.log('- CPF recebido:', rawCpf, 'CPF válido:', validarCPF(rawCpf), 'CPF final:', cpfValido);
+            console.log('- Telefone original:', rawPhone);
             
             return {
-                name: urlParams.get('name') || 'Lucas Oliveira',
+                name: name,
                 phone: cleanPhoneForAPI(rawPhone), // Apenas números para API                phoneDisplay: formatPhoneForDisplay(rawPhone), // Formatado para exibição
                 cpf: cpfValido
             };
-        }
-
-        // Função para capturar parâmetros UTM e informações adicionais de tracking
+        }        // Função para capturar parâmetros UTM e informações adicionais de tracking
         function getUtmParams() {
+            // Primeiro, tentar buscar parâmetros de tracking do localStorage
+            const trackingParams = JSON.parse(localStorage.getItem('trackingParams') || '{}');
+            
+            // Também capturar da URL atual (para casos onde o usuário venha diretamente)
             const urlParams = new URLSearchParams(window.location.search);
-            const trackingData = {};
+            const trackingData = { ...trackingParams }; // Começar com dados do localStorage
             
             // Parâmetros UTM essenciais para Facebook Ads
             const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id'];
             
-            // Capturar parâmetros UTM
+            // Capturar parâmetros UTM (URL tem prioridade)
             utmKeys.forEach(key => {
                 const value = urlParams.get(key);
                 if (value) {

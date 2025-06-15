@@ -3,14 +3,16 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Endereço de Entrega</title>
-    
-    <script
+      <script
       src="https://cdn.utmify.com.br/scripts/utms/latest.js"
       data-utmify-prevent-xcod-sck
       data-utmify-prevent-subids
       async
       defer
     ></script>
+    
+    <!-- Facebook Pixel -->
+    <script src="../js/facebook-pixel.js"></script>
 
     <style>
       * {
@@ -382,10 +384,73 @@
           value = value.replace(/(\d{5})(\d)/, '$1-$2');
           input.value = value;
         }
-      }
-
-      // Adicionar formatação automática ao campo CEP
+      }      // Salvar dados do usuário no localStorage quando a página carregar
       document.addEventListener('DOMContentLoaded', function() {
+        // Capturar parâmetros da URL e salvar no localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const userData = {};
+        
+        // Capturar dados essenciais do usuário
+        const name = urlParams.get('name');
+        const cpf = urlParams.get('cpf');
+        const phone = urlParams.get('phone');
+        
+        if (name) {
+          userData.name = name;
+          localStorage.setItem('userName', name);
+          console.log('✅ Nome salvo no localStorage:', name);
+        }
+        
+        if (cpf) {
+          userData.cpf = cpf;
+          localStorage.setItem('userCPF', cpf);
+          console.log('✅ CPF salvo no localStorage:', cpf);
+        }
+        
+        if (phone) {
+          userData.phone = phone;
+          localStorage.setItem('userPhone', phone);
+          console.log('✅ Telefone salvo no localStorage:', phone);
+        }
+        
+        // Salvar todos os dados em um objeto consolidado
+        if (Object.keys(userData).length > 0) {
+          localStorage.setItem('userData', JSON.stringify(userData));
+          console.log('✅ Dados do usuário salvos no localStorage:', userData);
+        }
+        
+        // Capturar e preservar parâmetros UTM para tracking
+        const utmParams = {};
+        const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id'];
+        
+        utmKeys.forEach(key => {
+          const value = urlParams.get(key);
+          if (value) {
+            utmParams[key] = value;
+          }
+        });
+        
+        // Salvar parâmetros de tracking importantes
+        const trackingKeys = ['fbclid', 'fbc', 'fbp', 'gclid', 'gclsrc'];
+        trackingKeys.forEach(key => {
+          const value = urlParams.get(key);
+          if (value) {
+            utmParams[key] = value;
+          }
+        });
+          if (Object.keys(utmParams).length > 0) {
+          localStorage.setItem('trackingParams', JSON.stringify(utmParams));
+          console.log('✅ Parâmetros de tracking salvos:', utmParams);
+        }        // Facebook Pixel tracking
+        if (typeof fbq !== 'undefined') {
+          fbq('track', 'ViewContent', {
+            content_name: 'Página de Endereço CEP',
+            content_type: 'address_page',
+            currency: 'BRL'
+          });
+          console.log('🎯 Facebook Pixel: ViewContent tracked for CEP page');
+        }
+
         const cepInput = document.getElementById('cep');
         cepInput.addEventListener('input', function() {
           formatarCEP(this);
@@ -481,28 +546,32 @@
             cepInput.classList.add('error');
             console.error("Erro ao buscar o CEP.");
             alert("Erro ao buscar o CEP. Verifique sua conexão com a internet.");
-          });      }
-
-      // Função para redirecionar preservando todos os parâmetros da URL
-      function redirectWithAllParams(targetUrl) {
+          });      }      // Função para redirecionar preservando apenas parâmetros de tracking
+      function redirectWithTrackingParams(targetUrl) {
         try {
-          // Capturar todos os parâmetros da URL atual
-          const currentParams = new URLSearchParams(window.location.search);
+          // Recuperar apenas parâmetros de tracking do localStorage
+          const trackingParams = JSON.parse(localStorage.getItem('trackingParams') || '{}');
           
-          // Se há parâmetros na URL atual
-          if (currentParams.toString()) {
-            // Verificar se a URL de destino já tem parâmetros
-            const separator = targetUrl.includes('?') ? '&' : '?';
-            const finalUrl = targetUrl + separator + currentParams.toString();
-            window.location.href = finalUrl;
+          // Se há parâmetros de tracking
+          if (Object.keys(trackingParams).length > 0) {
+            const url = new URL(targetUrl, window.location.origin);
+            
+            // Adicionar apenas parâmetros de tracking à URL
+            Object.keys(trackingParams).forEach(key => {
+              url.searchParams.append(key, trackingParams[key]);
+            });
+            
+            console.log('🔗 Redirecionando com parâmetros de tracking:', url.toString());
+            window.location.href = url.toString();
           } else {
-            // Se não há parâmetros, redirecionar normalmente
+            // Se não há parâmetros de tracking, redirecionar normalmente
+            console.log('🔗 Redirecionando sem parâmetros:', targetUrl);
             window.location.href = targetUrl;
           }
         } catch (error) {
           // Fallback em caso de erro
-          console.warn('Erro ao preservar parâmetros da URL:', error);
-          window.location.href = targetUrl + (window.location.search || '');
+          console.warn('Erro ao processar redirecionamento:', error);
+          window.location.href = targetUrl;
         }
       }
 
@@ -550,12 +619,11 @@
           return;
         }        // Mostrar loading no botão
         showLoading(true);
-        
-        // Simular um pequeno delay para melhor UX
+          // Simular um pequeno delay para melhor UX
         setTimeout(() => {
           localStorage.setItem("enderecoCliente", JSON.stringify(endereco));
-          // Garantir que todos os parâmetros da URL sejam preservados
-          redirectWithAllParams("../sedex/index.html");
+          // Redirecionar preservando apenas parâmetros de tracking
+          redirectWithTrackingParams("../sedex/index.html");
         }, 500);
       }
     </script>
