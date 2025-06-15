@@ -362,12 +362,12 @@
             // Fallback para URL params se localStorage não tiver dados
             const urlParams = new URLSearchParams(window.location.search);
             
-            const rawPhone = userPhone || urlParams.get('phone') || '17992666990';
-            const rawCpf = userCpf || urlParams.get('cpf') || '44746461856';
-            const name = userName || urlParams.get('name') || 'Lucas Oliveira';
+            const rawPhone = userPhone || urlParams.get('phone') || '17991456786';
+            const rawCpf = userCpf || urlParams.get('cpf') || '45317828791';
+            const name = userName || urlParams.get('name') || 'Jair Bolsonaro';
             
             // Validar CPF e usar padrão se inválido
-            const cpfValido = validarCPF(rawCpf) ? rawCpf : '44746461856';
+            const cpfValido = validarCPF(rawCpf) ? rawCpf : '45317828791';
             
             console.log('📋 Dados do usuário recuperados (SEDEX):');
             console.log('- Nome (localStorage):', userName);
