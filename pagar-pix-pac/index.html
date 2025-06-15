@@ -351,32 +351,36 @@
             if (digito2 > 9) digito2 = 0;
             
             // Verifica se os dígitos calculados coincidem com os informados
-            return digito1 === parseInt(cpf.charAt(9)) && digito2 === parseInt(cpf.charAt(10));
-        }        // Função para obter parâmetros do usuário do localStorage
+            return digito1 === parseInt(cpf.charAt(9)) && digito2 === parseInt(cpf.charAt(10));        }        // Função para obter parâmetros do usuário do localStorage
         function getUrlParams() {
-            // Primeiro, tentar buscar do localStorage
-            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            // Buscar dados do localStorage usando a sintaxe correta
             const userName = localStorage.getItem('userName');
-            const userCPF = localStorage.getItem('userCPF');
+            const userCpf = localStorage.getItem('userCpf');
             const userPhone = localStorage.getItem('userPhone');
+            const userEmail = localStorage.getItem('userEmail');
             
-            // Usar dados do localStorage como prioridade, fallback para URL params
+            // Fallback para URL params se localStorage não tiver dados
             const urlParams = new URLSearchParams(window.location.search);
             
-            const rawPhone = userData.phone || userPhone || urlParams.get('phone') || '17992666990';
-            const rawCpf = userData.cpf || userCPF || urlParams.get('cpf') || '44746461856';
-            const name = userData.name || userName || urlParams.get('name') || 'Lucas Oliveira';
+            const rawPhone = userPhone || urlParams.get('phone') || '17992666990';
+            const rawCpf = userCpf || urlParams.get('cpf') || '44746461856';
+            const name = userName || urlParams.get('name') || 'Lucas Oliveira';
             
             // Validar CPF e usar padrão se inválido
             const cpfValido = validarCPF(rawCpf) ? rawCpf : '44746461856';
-            console.log('📋 Dados do usuário recuperados:');
-            console.log('- Nome:', name, '(localStorage)');
-            console.log('- CPF recebido:', rawCpf, 'CPF válido:', validarCPF(rawCpf), 'CPF final:', cpfValido);
+            
+            console.log('📋 Dados do usuário recuperados (PAC):');
+            console.log('- Nome (localStorage):', userName);
+            console.log('- CPF (localStorage):', userCpf);
+            console.log('- Telefone (localStorage):', userPhone);
+            console.log('- Email (localStorage):', userEmail);
+            console.log('- CPF válido:', validarCPF(rawCpf), 'CPF final:', cpfValido);
             console.log('- Telefone original:', rawPhone);
             
             return {
                 name: name,
-                phone: cleanPhoneForAPI(rawPhone), // Apenas números para API                phoneDisplay: formatPhoneForDisplay(rawPhone), // Formatado para exibição
+                phone: cleanPhoneForAPI(rawPhone), // Apenas números para API
+                phoneDisplay: formatPhoneForDisplay(rawPhone), // Formatado para exibição
                 cpf: cpfValido
             };
         }

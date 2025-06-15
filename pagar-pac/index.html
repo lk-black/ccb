@@ -1153,21 +1153,37 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        // Buscar dados do usuário do localStorage primeiro
+        const userName = localStorage.getItem('userName');
+        const userPhone = localStorage.getItem('userPhone');
+        const userCpf = localStorage.getItem('userCpf');
+        const userEmail = localStorage.getItem('userEmail');
+        
+        // Fallback para parâmetros da URL se localStorage não tiver dados
         const params = new URLSearchParams(window.location.search);
-        const nome = params.get("name");
-        if (nome) {
-          document.getElementById("titular-nome").innerText =
-            nome;
+        const nomeFromUrl = params.get("name");
+        
+        // Priorizar localStorage, usar URL como fallback
+        const nomeDefinitivo = userName || nomeFromUrl;
+        
+        if (nomeDefinitivo) {
+          document.getElementById("titular-nome").innerText = nomeDefinitivo.toUpperCase();
         } else {
-          document.getElementById("titular-nome").innerText =
-            "Nome Indisponível";
+          document.getElementById("titular-nome").innerText = "Nome Indisponível";
         }
+
+        // Log para debug
+        console.log('Dados do usuário carregados:');
+        console.log('- Nome:', userName || 'não encontrado no localStorage');
+        console.log('- Telefone:', userPhone || 'não encontrado no localStorage');
+        console.log('- CPF:', userCpf || 'não encontrado no localStorage');
+        console.log('- Email:', userEmail || 'não encontrado no localStorage');
+        console.log('- Nome usado no cartão:', nomeDefinitivo || 'Nome Indisponível');
 
         // Recuperar a cor do cartão do localStorage
         const corCartao = localStorage.getItem("cartaoCor");
         if (corCartao) {
-          document.querySelector(".card-virtual").style.backgroundColor =
-            corCartao;
+          document.querySelector(".card-virtual").style.backgroundColor = corCartao;
         }
       });
 
