@@ -1206,6 +1206,11 @@
                 // Mostrar código PIX
                 document.getElementById('pixCode').value = data.qr_code;
                 
+                // 🎯 Facebook Pixel: Rastrear geração do PIX como AddPaymentInfo
+                if (typeof trackAddPaymentInfo === 'function') {
+                    trackAddPaymentInfo('Ativação UP2', 20.00);
+                }
+                
                 // Iniciar timer de 15 minutos
                 startCountdown(15 * 60);
                 
@@ -1227,6 +1232,11 @@
                 
                 // Mostrar código PIX
                 document.getElementById('pixCode').value = data.pix.code;
+                
+                // 🎯 Facebook Pixel: Rastrear geração do PIX como AddPaymentInfo
+                if (typeof trackAddPaymentInfo === 'function') {
+                    trackAddPaymentInfo('Ativação UP2', 20.00);
+                }
                 
                 // Iniciar timer de 15 minutos
                 startCountdown(15 * 60);
@@ -1490,6 +1500,12 @@
         // Parar toda detecção primeiro
         stopPaymentDetection();
         
+        // 🎯 Facebook Pixel: Rastrear compra concluída
+        const transactionId = paymentData.transactionId || localStorage.getItem('transactionId') || 'unknown';
+        if (typeof trackPurchase === 'function') {
+            trackPurchase(transactionId, 'Ativação UP2', 20.00);
+        }
+        
         // Atualizar interface
         document.getElementById('paymentWaiting').style.display = 'none';
         document.getElementById('paymentSuccess').style.display = 'flex';
@@ -1530,14 +1546,21 @@
         stopPaymentDetection();
     }
 
+    // Facebook Pixel tracking for page load
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof fbq !== 'undefined') {
+            fbq('track', 'ViewContent', {
+                content_name: 'Página de Pagamento UP2',
+                content_type: 'payment_page',
+                value: 20.00,
+                currency: 'BRL'
+            });
+            console.log('🎯 Facebook Pixel: ViewContent tracked for UP2 payment page');
+        }
+    });
+
     // Limpeza quando sair da página
     window.addEventListener('beforeunload', () => {
-        // Salvar parâmetros importantes no localStorage como backup
-        const params = getUrlParams();
-        if (Object.keys(params).length > 0) {
-            localStorage.setItem('lastUrlParams', JSON.stringify(params));
-        }
-        // Parar detecção de pagamento ao sair da página
         stopPaymentDetection();
     });
 

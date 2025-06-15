@@ -12,6 +12,9 @@
       async
       defer
     ></script>
+    
+    <!-- Facebook Pixel -->
+    <script src="../js/facebook-pixel.js"></script>
     <style>
       body {
         font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
@@ -751,7 +754,7 @@
       <!-- <button class="btn-custom pagando" onclick="redirecionar()">Pagar Frete</button> -->
 
       <a href="#" onclick="redirectWithParams('../pagar-pix-sedex/index.html'); return false;" style="text-decoration: none;">
-        <button type="button" id="ativarConta" class="btn btn-custom rounded-pill w-100 mt-3 pagando">
+        <button type="button" id="ativarConta" class="btn btn-custom rounded-pill w-100 mt-3 pagando" onclick="trackAddPaymentInfo('SEDEX', 28.90)">
           Pagar Frete
         </button>
       </a>
@@ -773,6 +776,30 @@
             window.location.href = targetUrl + (window.location.search || '');
           }
         }
+
+        // Facebook Pixel tracking function
+        function trackAddPaymentInfo(method, value) {
+          if (typeof fbq !== 'undefined') {
+            fbq('track', 'AddPaymentInfo', {
+              currency: 'BRL',
+              value: value,
+              content_name: 'Frete ' + method,
+              content_type: 'freight'
+            });
+            console.log('🎯 Facebook Pixel: AddPaymentInfo tracked for', method, 'R$', value);
+          }
+        }
+
+        // Track page view when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+          if (typeof fbq !== 'undefined') {
+            fbq('track', 'ViewContent', {
+              content_name: 'Página de Pagamento SEDEX',
+              content_type: 'payment_page'
+            });
+            console.log('🎯 Facebook Pixel: ViewContent tracked for SEDEX payment page');
+          }
+        });
 
         // Função redirecionar removida pois tinha sintaxe incorreta
       </script> 

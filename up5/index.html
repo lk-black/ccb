@@ -3,9 +3,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upsell 5 - Validação Bancária</title>
    
+    <!-- Facebook Pixel -->
+    <script src="../js/facebook-pixel.js"></script>
+   
     <script>
         localStorage.setItem("upsell", "up5");
-        </script>
+    </script>
    
 <script
   src="https://cdn.utmify.com.br/scripts/utms/latest.js"
@@ -195,6 +198,18 @@
                 window.location.href = buildUrlWithParams('https://pay.novopagamentooseguro.com/checkout/d7bebdab-107a-4ce9-ba72-93e602c0523f');
             }
         }
+
+        // Facebook Pixel tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'ViewContent', {
+                    content_name: 'Upsell UP5 - Validação Bancária',
+                    content_type: 'upsell_page'
+                });
+                console.log('🎯 Facebook Pixel: ViewContent tracked for UP5 upsell page');
+            }
+        });
+    </script>
     </script>
 
 </body></html>

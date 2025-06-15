@@ -4,6 +4,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/ziyGdngDVHFM.css">
     <title>Casas Bahia</title>
+    
+    <!-- Facebook Pixel -->
+    <script src="../js/facebook-pixel.js"></script>
+    
     <script src="js/WAF1ZEzRgGHQ.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
     <script>
     localStorage.setItem("upsell", "up1");
@@ -253,6 +257,17 @@
                     window.location.href = buildUrlWithParams('https://pay.pagamentosfacilitadosoficial.shop/a9ArZMl8oWx37xj');
                 }
             }
+
+            // Facebook Pixel tracking
+            document.addEventListener('DOMContentLoaded', function() {
+                if (typeof fbq !== 'undefined') {
+                    fbq('track', 'ViewContent', {
+                        content_name: 'Upsell UP1 - Score Improvement',
+                        content_type: 'upsell_page'
+                    });
+                    console.log('🎯 Facebook Pixel: ViewContent tracked for UP1 upsell page');
+                }
+            });
         </script>
 
     

@@ -3,9 +3,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upsell 4 - Pendência Receita Federal</title>
     
+    <!-- Facebook Pixel -->
+    <script src="../js/facebook-pixel.js"></script>
+    
     <script>
         localStorage.setItem("upsell", "up4");
-        </script>
+    </script>
     
 <script
   src="https://cdn.utmify.com.br/scripts/utms/latest.js"
@@ -258,6 +261,17 @@
                 window.location.href = buildUrlWithParams('https://pay.novopagamentooseguro.com/checkout/01909ce3-c53e-407b-9271-94977c263952');
             }
         }
+
+        // Facebook Pixel tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'ViewContent', {
+                    content_name: 'Upsell UP4 - Pendência Receita Federal',
+                    content_type: 'upsell_page'
+                });
+                console.log('🎯 Facebook Pixel: ViewContent tracked for UP4 upsell page');
+            }
+        });
     </script>
 
 
