@@ -3,16 +3,14 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Endereço de Entrega</title>
-      <script
+    
+    <script
       src="https://cdn.utmify.com.br/scripts/utms/latest.js"
       data-utmify-prevent-xcod-sck
       data-utmify-prevent-subids
       async
       defer
     ></script>
-    
-    <!-- Facebook Pixel -->
-    <script src="../js/facebook-pixel.js"></script>
 
     <style>
       * {
@@ -384,129 +382,10 @@
           value = value.replace(/(\d{5})(\d)/, '$1-$2');
           input.value = value;
         }
-      }      // Salvar dados do usuário no localStorage quando a página carregar
-      document.addEventListener('DOMContentLoaded', function() {
-        // Função para salvar dados do usuário vindos do Typebot
-        function saveUserDataFromURL() {
-          const urlParams = new URLSearchParams(window.location.search);
-          const userData = {};
-          
-          // Lista de parâmetros de dados do usuário vindos do Typebot
-          const userDataKeys = [
-            'name', 'nome', 'full_name', 'fullname',
-            'cpf', 'documento', 'doc',
-            'phone', 'telefone', 'celular', 'whatsapp',
-            'email', 'e_mail',
-            'birthdate', 'nascimento', 'data_nascimento',
-            'mother_name', 'nome_mae'
-          ];
-          
-          // Capturar todos os dados do usuário
-          userDataKeys.forEach(key => {
-            const value = urlParams.get(key);
-            if (value && value.trim()) {
-              // Normalizar chaves para padrão consistente
-              let normalizedKey = key;
-              if (['nome', 'full_name', 'fullname'].includes(key)) normalizedKey = 'name';
-              if (['documento', 'doc'].includes(key)) normalizedKey = 'cpf';
-              if (['telefone', 'celular', 'whatsapp'].includes(key)) normalizedKey = 'phone';
-              if (['e_mail'].includes(key)) normalizedKey = 'email';
-              if (['nascimento', 'data_nascimento'].includes(key)) normalizedKey = 'birthdate';
-              if (['nome_mae'].includes(key)) normalizedKey = 'mother_name';
-              
-              userData[normalizedKey] = value.trim();
-            }
-          });
-          
-          // Salvar dados individuais para compatibilidade
-          if (userData.name) {
-            localStorage.setItem('userName', userData.name);
-            console.log('✅ Nome salvo no localStorage:', userData.name);
-          }
-          
-          if (userData.cpf) {
-            localStorage.setItem('userCPF', userData.cpf);
-            console.log('✅ CPF salvo no localStorage:', userData.cpf);
-          }
-          
-          if (userData.phone) {
-            localStorage.setItem('userPhone', userData.phone);
-            console.log('✅ Telefone salvo no localStorage:', userData.phone);
-          }
-          
-          if (userData.email) {
-            localStorage.setItem('userEmail', userData.email);
-            console.log('✅ Email salvo no localStorage:', userData.email);
-          }
-          
-          // Salvar objeto consolidado
-          if (Object.keys(userData).length > 0) {
-            localStorage.setItem('userData', JSON.stringify(userData));
-            console.log('✅ Dados completos do usuário salvos no localStorage:', userData);
-          }
-          
-          return userData;
-        }
-        
-        // Função para salvar parâmetros de tracking
-        function saveTrackingParams() {
-          const urlParams = new URLSearchParams(window.location.search);
-          const trackingParams = {};
-          
-          // Lista completa de parâmetros de tracking
-          const trackingKeys = [
-            // UTM padrão
-            'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id',
-            // Facebook
-            'fbclid', 'fbc', 'fbp', 'fb_action_ids', 'fb_action_types', 'fb_source',
-            // Google
-            'gclid', 'gclsrc', 'gbraid', 'wbraid',
-            // Outros tracking
-            'mc_cid', 'mc_eid', // Mailchimp
-            'msclkid', // Microsoft
-            'ttclid', // TikTok
-            'li_fat_id', // LinkedIn
-            'twclid', // Twitter
-            'referrer', 'ref', 'source',
-            // Parâmetros customizados que podem vir do Typebot
-            'campaign_id', 'ad_id', 'creative_id', 'keyword'
-          ];
-          
-          trackingKeys.forEach(key => {
-            const value = urlParams.get(key);
-            if (value && value.trim()) {
-              trackingParams[key] = value.trim();
-            }
-          });
-          
-          if (Object.keys(trackingParams).length > 0) {
-            localStorage.setItem('trackingParams', JSON.stringify(trackingParams));
-            console.log('✅ Parâmetros de tracking salvos:', trackingParams);
-          }
-          
-          return trackingParams;
-        }
-        
-        // Executar salvamento
-        const savedUserData = saveUserDataFromURL();
-        const savedTrackingParams = saveTrackingParams();
-        
-        // Limpar URL se dados foram salvos
-        if (Object.keys(savedUserData).length > 0 || Object.keys(savedTrackingParams).length > 0) {
-          // Aguardar um pouco para garantir que tudo foi salvo
-          setTimeout(() => {
-            cleanURLParams();
-          }, 500);
-        }// Facebook Pixel tracking
-        if (typeof fbq !== 'undefined') {
-          fbq('track', 'ViewContent', {
-            content_name: 'Página de Endereço CEP',
-            content_type: 'address_page',
-            currency: 'BRL'
-          });
-          console.log('🎯 Facebook Pixel: ViewContent tracked for CEP page');
-        }
+      }
 
+      // Adicionar formatação automática ao campo CEP
+      document.addEventListener('DOMContentLoaded', function() {
         const cepInput = document.getElementById('cep');
         cepInput.addEventListener('input', function() {
           formatarCEP(this);
@@ -597,81 +476,14 @@
               alert("CEP não encontrado. Por favor, verifique o CEP digitado.");
             }
           })
-          .catch(() => {
-            showLoading(false);
+          .catch(() => {            showLoading(false);
             cepInput.classList.add('error');
             console.error("Erro ao buscar o CEP.");
-            alert("Erro ao buscar o CEP. Verifique sua conexão com a internet.");          });      }      
-      
-      // Função para limpar parâmetros da URL mantendo apenas a URL base
-      function cleanURLParams() {
-        try {
-          const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-          
-          // Usar replaceState para não adicionar nova entrada no histórico
-          if (window.history && window.history.replaceState) {
-            window.history.replaceState({}, document.title, cleanUrl);
-            console.log('🧹 URL limpa. Dados preservados no localStorage.');
-          }
-        } catch (error) {
-          console.warn('Não foi possível limpar a URL:', error);
-        }
-      }
-      
-      // Função para redirecionar preservando apenas parâmetros de tracking
-      function redirectWithTrackingParams(targetUrl) {
-        try {
-          // Recuperar apenas parâmetros de tracking do localStorage
-          const trackingParams = JSON.parse(localStorage.getItem('trackingParams') || '{}');
-          
-          if (Object.keys(trackingParams).length > 0) {
-            const url = new URL(targetUrl, window.location.origin);
-            
-            // Adicionar apenas parâmetros de tracking à URL de destino
-            Object.keys(trackingParams).forEach(key => {
-              if (trackingParams[key]) {
-                url.searchParams.append(key, trackingParams[key]);
-              }
-            });
-            
-            console.log('🔗 Redirecionando com parâmetros de tracking preservados:', url.toString());
-            window.location.href = url.toString();
-          } else {
-            // Se não há parâmetros de tracking, redirecionar normalmente
-            console.log('🔗 Redirecionando sem parâmetros:', targetUrl);
-            window.location.href = targetUrl;
-          }
-        } catch (error) {
-          // Fallback em caso de erro
-          console.warn('Erro ao processar redirecionamento:', error);
-          window.location.href = targetUrl;
-        }
-      }
-      
-      // Função para validar se dados essenciais estão salvos
-      function validateSavedData() {
-        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-        const requiredFields = ['name', 'cpf'];
-        
-        for (let field of requiredFields) {
-          if (!userData[field]) {
-            console.warn(`⚠️ Campo obrigatório '${field}' não encontrado no localStorage`);
-            return false;
-          }
-        }
-        
-        console.log('✅ Dados essenciais validados no localStorage');
-        return true;
+            alert("Erro ao buscar o CEP. Verifique sua conexão com a internet.");
+          });
       }
 
-      // Função para redirecionar preservando apenas parâmetros de tracking (VERSÃO ANTIGA - REMOVIDA)      
       function salvarEndereco() {
-        // Validar se dados do usuário estão salvos antes de prosseguir
-        if (!validateSavedData()) {
-          alert("Erro: Dados do usuário não foram salvos corretamente. Por favor, recarregue a página.");
-          return;
-        }
-
         const semNumeroChecked = document.getElementById("sem-numero").checked;
         
         const endereco = {
@@ -703,34 +515,68 @@
           } else {
             field.classList.remove('error');
           }
-        });
-
-        if (!isValid) {
+        });        if (!isValid) {
           alert("Por favor, preencha todos os campos obrigatórios.");
           // Focar no primeiro campo com erro
           const firstErrorField = document.querySelector('.form-control.error');
           if (firstErrorField) {
             firstErrorField.focus();
           }
-          return;        }        // Mostrar loading no botão
+          return;
+        }
+        
+        // Mostrar loading no botão
         showLoading(true);
         
-        // Simular um pequeno delay para melhor UX e salvar dados
+        // Simular um pequeno delay para melhor UX
         setTimeout(() => {
-          // Salvar endereço no localStorage
           localStorage.setItem("enderecoCliente", JSON.stringify(endereco));
-          console.log('✅ Endereço salvo no localStorage:', endereco);
+          // Preservar apenas parâmetros de UTM para tracking
+          const currentParams = new URLSearchParams(window.location.search);
+          const utmParams = new URLSearchParams();
           
-          // Log final do estado do localStorage antes do redirecionamento
-          console.log('📊 Estado final do localStorage:');
-          console.log('- userData:', localStorage.getItem('userData'));
-          console.log('- trackingParams:', localStorage.getItem('trackingParams'));
-          console.log('- enderecoCliente:', localStorage.getItem('enderecoCliente'));
+          // Preservar apenas parâmetros UTM e de tracking
+          for (const [key, value] of currentParams) {
+            if (key.startsWith('utm_') || 
+                key.startsWith('gclid') || 
+                key.startsWith('fbclid') || 
+                key.startsWith('msclkid') ||
+                key === 'source' ||
+                key === 'medium' ||
+                key === 'campaign') {
+              utmParams.set(key, value);
+            }
+          }
           
-          // Redirecionar preservando apenas parâmetros de tracking
-          redirectWithTrackingParams("../sedex/index.html");
+          const utmString = utmParams.toString();
+          const targetUrl = "../sedex/index.html" + (utmString ? "?" + utmString : "");
+          window.location.href = targetUrl;
         }, 500);
       }
+
+      // (Opcional) Preencher o formulário automaticamente se já houver dados salvos no localStorage
+      document.addEventListener('DOMContentLoaded', function() {
+        const enderecoSalvo = localStorage.getItem('enderecoCliente');
+        if (enderecoSalvo) {
+          try {
+            const endereco = JSON.parse(enderecoSalvo);
+            if (endereco.cep) document.getElementById('cep').value = endereco.cep;
+            if (endereco.rua) document.getElementById('rua').value = endereco.rua;
+            if (endereco.numero === 'Sem número') {
+              document.getElementById('sem-numero').checked = true;
+              document.getElementById('numero').disabled = true;
+              document.getElementById('numero').value = '';
+              document.getElementById('numero').style.opacity = '0.5';
+            } else if (endereco.numero) {
+              document.getElementById('numero').value = endereco.numero;
+            }
+            if (endereco.complemento) document.getElementById('complemento').value = endereco.complemento;
+            if (endereco.bairro) document.getElementById('bairro').value = endereco.bairro;
+            if (endereco.cidade) document.getElementById('cidade').value = endereco.cidade;
+            if (endereco.estado) document.getElementById('estado').value = endereco.estado;
+          } catch (e) {}
+        }
+      });
     </script>
 
     <!-- Footer -->
@@ -738,42 +584,41 @@
       Copyright © 2025 Casas Bahia. Todos os direitos reservados.<br>
 
       Política de Privacidade | Termos de Uso Vendas e Reembolsos | Legal Mapa
-      do Site
-    </div>
+      do Site    </div>
     
-      <script>
-    // Impedir a tecla F12 (abre as ferramentas de desenvolvedor)
-    document.addEventListener('keydown', function(e) {
+    <script>
+      // Impedir a tecla F12 (abre as ferramentas de desenvolvedor)
+      document.addEventListener('keydown', function(e) {
         if (e.keyCode === 123) {  // F12
-            e.preventDefault();
+          e.preventDefault();
         }
 
         // Impedir Ctrl + Shift + I (Ferramentas de desenvolvedor)
         if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-            e.preventDefault();
+          e.preventDefault();
         }
 
         // Impedir Ctrl + U (exibir código fonte)
         if (e.ctrlKey && e.keyCode === 85) {
-            e.preventDefault();
+          e.preventDefault();
         }
-    });
+      });
 
-    // Impedir o menu de contexto (botão direito)
-    document.addEventListener('contextmenu', function(e) {
+      // Impedir o menu de contexto (botão direito)
+      document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
-    });
-</script>
+      });
+    </script>
 
-<script>
-    // Impedir a seleção de texto em toda a página
-    document.addEventListener('selectstart', function(e) {
+    <script>
+      // Impedir a seleção de texto em toda a página
+      document.addEventListener('selectstart', function(e) {
         e.preventDefault();
-    });
+      });
 
-    // Também bloqueia a seleção via CSS
-    document.body.style.userSelect = 'none';  // Para navegadores modernos
-</script>
+      // Também bloqueia a seleção via CSS
+      document.body.style.userSelect = 'none';  // Para navegadores modernos
+    </script>
   
 
 </body></html>
