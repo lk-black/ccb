@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Método de Entrega</title>
+
+    <script
+      src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+      data-utmify-prevent-xcod-sck
+      data-utmify-prevent-subids
+      async
+      defer
+    ></script>
+
+    <!-- Facebook Pixel -->
+    <script src="../js/facebook-pixel.js"></script>
+  
+    
+    <script>
+      if (document.addEventListener) {
+        document.addEventListener("keydown", bloquearSource);
+      } else {
+        //Versões antigas do IE
+        document.attachEvent("onkeydown", bloquearSource);
+      }
+
+      function bloquearSource(e) {
+        e = e || window.event;
+
+        var code = e.which || e.keyCode;
+
+        if (
+          e.ctrlKey &&
+          (code == 83 || code == 85) //83 = S, 85 = U
+        ) {
+          if (e.preventDefault) {
+            e.preventDefault();
+          } else {
+            e.returnValue = false;
+          }
+
+          return false;
+        }
+      }
+    </script>
+    <style>
+      /*desabilita a seleção no body*/
+      body {
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Chrome/Safari/Opera */
+        -khtml-user-select: none; /* Konqueror */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none;
+      }
+
+      /*habilita a seleção nos campos editaveis*/
+      input,
+      textarea {
+        -webkit-touch-callout: initial; /* iOS Safari */
+        -webkit-user-select: text; /* Chrome/Safari/Opera */
+        -khtml-user-select: text; /* Konqueror */
+        -moz-user-select: text; /* Firefox */
+        -ms-user-select: text; /* Internet Explorer/Edge */
+        user-select: text;
+      }
+
+      /*habilita a seleção nos campos com o atributo contenteditable*/
+      [contenteditable="true"] {
+        -webkit-touch-callout: initial; /* iOS Safari */
+        -webkit-user-select: all; /* Chrome/Safari/Opera */
+        -khtml-user-select: all; /* Konqueror */
+        -moz-user-select: all; /* Firefox */
+        -ms-user-select: all; /* Internet Explorer/Edge */
+        user-select: all;
+      }
+    </style>
+
+    <script>
+      if (document.addEventListener) {
+        document.addEventListener("contextmenu", function (e) {
+          e.preventDefault();
+          return false;
+        });
+      } else {
+        //Versões antigas do IE
+        document.attachEvent("oncontextmenu", function (e) {
+          e = e || window.event;
+          e.returnValue = false;
+          return false;
+        });
+      }
+    </script>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+        color: #1e293b;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        padding: 25px 0;
+        text-align: center;
+        border-bottom: 4px solid #0d64fb;
+        box-shadow: 0 2px 15px rgba(13, 100, 251, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        animation: shimmer 3s infinite;
+      }
+
+      @keyframes shimmer {
+        0% { left: -100%; }
+        100% { left: 100%; }
+      }
+
+      .header img {
+        width: 130px;
+        transition: transform 0.3s ease;
+        position: relative;
+        z-index: 1;
+      }
+
+      .header img:hover {
+        transform: scale(1.05);
+      }
+
+      .main-content {
+        max-width: 520px;
+        background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%);
+        text-align: center;
+        padding: 2.5rem;
+        border-radius: 20px;
+        box-shadow: 
+          0 10px 40px rgba(0, 0, 0, 0.08),
+          0 2px 8px rgba(0, 0, 0, 0.06),
+          inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        margin: 40px auto;
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeInUp 0.8s ease-out;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .main-content:hover {
+        transform: translateY(-2px);
+        box-shadow: 
+          0 20px 60px rgba(0, 0, 0, 0.12),
+          0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .main-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 12px;
+        letter-spacing: -0.025em;
+        line-height: 1.3;
+      }
+
+      .subtitle {
+        color: #64748b;
+        font-size: 15px;
+        margin-bottom: 25px;
+        font-weight: 500;
+      }
+
+      .delivery-option {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin: 30px 0;
+      }
+
+      .option-card {
+        padding: 25px;
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+        text-align: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .option-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(13, 100, 251, 0.05), transparent);
+        transition: left 0.6s ease;
+      }
+
+      .option-card:hover::before {
+        left: 100%;
+      }
+
+      .option-card:hover {
+        border-color: #0d64fb;
+        transform: translateY(-3px);
+        box-shadow: 
+          0 15px 40px rgba(13, 100, 251, 0.15),
+          0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .option-card img {
+        max-width: 60px;
+        height: 60px;
+        margin-bottom: 15px;
+        object-fit: contain;
+        filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+      }
+
+      .option-card h5 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 8px;
+        letter-spacing: -0.025em;
+      }
+
+      .option-card p {
+        color: #64748b;
+        font-size: 14px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+
+      .btn-custom {
+        background: linear-gradient(135deg, #0d64fb 0%, #1e40af 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 16px 24px;
+        width: 100%;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 
+          0 4px 15px rgba(13, 100, 251, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        letter-spacing: 0.025em;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-custom::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+      }
+
+      .btn-custom:hover::before {
+        left: 100%;
+      }
+
+      .btn-custom:hover {
+        background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+        transform: translateY(-2px);
+        box-shadow: 
+          0 8px 25px rgba(13, 100, 251, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      }
+
+      .btn-custom:active {
+        transform: translateY(0);
+        box-shadow: 
+          0 4px 15px rgba(13, 100, 251, 0.3),
+          inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .unavailable {
+        filter: grayscale(100%) blur(1px);
+        opacity: 0.6;
+        pointer-events: none;
+        position: relative;
+      }
+
+      .unavailable::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 16px;
+      }
+
+      .unavailable-text {
+        color: #dc2626;
+        font-size: 13px;
+        font-weight: 500;
+        margin-top: 10px;
+        padding: 12px;
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        border: 1px solid #fca5a5;
+        border-radius: 12px;
+        position: relative;
+      }
+
+      .footer {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        border-top: 1px solid rgba(226, 232, 240, 0.8);
+        text-align: center;
+        padding: 20px;
+        font-size: 11px;
+        color: #64748b;
+        margin-top: auto;
+        backdrop-filter: blur(10px);
+      }
+
+      .footer p {
+        margin: 0;
+      }
+
+      /* Responsividade */
+      @media (max-width: 768px) {
+        .main-content {
+          margin: 20px 15px;
+          padding: 2rem 1.5rem;
+          border-radius: 16px;
+        }
+
+        .header {
+          padding: 20px 0;
+        }
+
+        .header img {
+          width: 100px;
+        }
+
+        .main-title {
+          font-size: 20px;
+        }
+
+        .option-card {
+          padding: 20px;
+        }
+
+        .option-card img {
+          max-width: 50px;
+          height: 50px;
+        }
+
+        .btn-custom {
+          padding: 14px 20px;
+          font-size: 14px;
+        }
+      }
+
+      /* Melhorias de performance */
+      .option-card,
+      .main-content,
+      .btn-custom {
+        will-change: transform;
+      }
+
+      /* Acessibilidade */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      .btn-custom:focus {
+        outline: 2px solid #0d64fb;
+        outline-offset: 2px;
+      }
+    </style>
+    
+    <script>
+      if (document.addEventListener) {
+        document.addEventListener("keydown", bloquearSource);
+      } else {
+        //Versões antigas do IE
+        document.attachEvent("onkeydown", bloquearSource);
+      }
+
+      function bloquearSource(e) {
+        e = e || window.event;
+
+        var code = e.which || e.keyCode;
+
+        if (
+          e.ctrlKey &&
+          (code == 83 || code == 85) //83 = S, 85 = U
+        ) {
+          if (e.preventDefault) {
+            e.preventDefault();
+          } else {
+            e.returnValue = false;
+          }
+
+          return false;
+        }
+      }
+    </script>
+    
+    <style>
+      /*desabilita a seleção no body*/
+      body {
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Chrome/Safari/Opera */
+        -khtml-user-select: none; /* Konqueror */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none;
+      }
+
+      /*habilita a seleção nos campos editaveis*/
+      input,
+      textarea {
+        -webkit-touch-callout: initial; /* iOS Safari */
+        -webkit-user-select: text; /* Chrome/Safari/Opera */
+        -khtml-user-select: text; /* Konqueror */
+        -moz-user-select: text; /* Firefox */
+        -ms-user-select: text; /* Internet Explorer/Edge */
+        user-select: text;
+      }
+
+      /*habilita a seleção nos campos com o atributo contenteditable*/
+      [contenteditable="true"] {
+        -webkit-touch-callout: initial; /* iOS Safari */
+        -webkit-user-select: all; /* Chrome/Safari/Opera */
+        -khtml-user-select: all; /* Konqueror */
+        -moz-user-select: all; /* Firefox */
+        -ms-user-select: all; /* Internet Explorer/Edge */
+        user-select: all;
+      }
+    </style>
+    
+    <script>
+      if (document.addEventListener) {
+        document.addEventListener("contextmenu", function (e) {
+          e.preventDefault();
+          return false;
+        });
+      } else {
+        //Versões antigas do IE
+        document.attachEvent("oncontextmenu", function (e) {
+          e = e || window.event;
+          e.returnValue = false;
+          return false;
+        });
+      }
+    </script>
+    
+</head>
+    <script>
+      if (document.addEventListener) {
+        document.addEventListener("keydown", bloquearSource);
+      } else {
+        //Versões antigas do IE
+        document.attachEvent("onkeydown", bloquearSource);
+      }
+
+      function bloquearSource(e) {
+        e = e || window.event;
+
+        var code = e.which || e.keyCode;
+
+        if (
+          e.ctrlKey &&
+          (code == 83 || code == 85) //83 = S, 85 = U
+        ) {
+          if (e.preventDefault) {
+            e.preventDefault();
+          } else {
+            e.returnValue = false;
+          }
+
+          return false;
+        }
+      }
+    </script>
+    <style>
+      /*desabilita a seleção no body*/
+      body {
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Chrome/Safari/Opera */
+        -khtml-user-select: none; /* Konqueror */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none;
+      }
+
+      /*habilita a seleção nos campos editaveis*/
+      input,
+      textarea {
+        -webkit-touch-callout: initial; /* iOS Safari */
+        -webkit-user-select: text; /* Chrome/Safari/Opera */
+        -khtml-user-select: text; /* Konqueror */
+        -moz-user-select: text; /* Firefox */
+        -ms-user-select: text; /* Internet Explorer/Edge */
+        user-select: text;
+      }
+
+      /*habilita a seleção nos campos com o atributo contenteditable*/
+      [contenteditable="true"] {
+        -webkit-touch-callout: initial; /* iOS Safari */
+        -webkit-user-select: all; /* Chrome/Safari/Opera */
+        -khtml-user-select: all; /* Konqueror */
+        -moz-user-select: all; /* Firefox */
+        -ms-user-select: all; /* Internet Explorer/Edge */
+        user-select: all;
+      }
+    </style>
+    <script>
+      if (document.addEventListener) {
+        document.addEventListener("contextmenu", function (e) {
+          e.preventDefault();
+          return false;
+        });
+      } else {
+        //Versões antigas do IE
+        document.attachEvent("oncontextmenu", function (e) {
+          e = e || window.event;
+          e.returnValue = false;
+          return false;
+        });
+      }
+    </script>
+    
+</head>  <body style="user-select: none;">
+    
+    <div class="header">
+      <img src="images/logo.svg" alt="Logo Casas Bahia">
+    </div>
+
+    <div class="main-content">
+      <h1 class="main-title">Método de Entrega</h1>
+      <p class="subtitle">Escolha como você deseja receber seu novo cartão</p>
+
+      <!-- Opção de entrega -->
+      <div class="delivery-option">
+        <div class="option-card" id="correios-option">
+          <img src="images/45880.png" alt="Ícone de caminhão">
+          <h5>Entrega pelos Correios</h5>
+          <p>Receba seu cartão no conforto da sua casa em até 1 dia útil</p>
+          <button class="btn-custom" onclick="escolherEntrega()">
+            Prefiro receber pelos Correios
+          </button>
+        </div>
+
+        <div class="option-card unavailable" id="agencia-option">
+          <img src="images/2825777.png" alt="Ícone de agência">
+          <h5>Retirada em Agência</h5>
+          <p>Retire seu cartão em uma de nossas agências Casas Bahia</p>
+        </div>
+        
+        <div class="unavailable-text">
+          A opção de retirada na agência está temporariamente indisponível devido à alta demanda. Agradecemos sua compreensão.
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Copyright © 2025 Casas Bahia. Todos os direitos reservados.</p>
+      <p>Política de Privacidade | Termos de Uso | Vendas e Reembolsos | Legal | Mapa do Site</p>
+    </div>
+
+    <script>
+      function escolherEntrega() {
+        // Preservar parâmetros UTM e name
+        const currentParams = new URLSearchParams(window.location.search);
+        const utmParams = new URLSearchParams();
+        
+        // Preservar parâmetros de tracking e name
+        for (const [key, value] of currentParams) {
+          if (key.startsWith('utm_') || 
+              key.startsWith('gclid') || 
+              key.startsWith('fbclid') || 
+              key.startsWith('msclkid') ||
+              key === 'source' ||
+              key === 'medium' ||
+              key === 'campaign' ||
+              key === 'name') {
+            utmParams.set(key, value);
+          }
+        }
+        
+        const utmString = utmParams.toString();
+        const targetUrl = "../sedex/index.html" + (utmString ? "?" + utmString : "");
+        window.location.href = targetUrl;
+      }
+
+      // Pixel pageview event
+      document.addEventListener('DOMContentLoaded', function() {
+        // Dispara evento pageview para o Facebook Pixel
+        if (typeof fbq !== 'undefined') {
+          fbq('track', 'PageView');
+        }
+        
+        // Para Google Analytics se estiver disponível
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'page_view', {
+            page_title: 'Método de Entrega',
+            page_location: window.location.href
+          });
+        }
+      });
+    </script>
+
+    <!-- Utmify utms capture -->
+    <script src="../js/latest.js" data-utmify-prevent-subids="" async="" defer=""></script>
+    
+    <script>
+      // Impedir a tecla F12 (abre as ferramentas de desenvolvedor)
+      document.addEventListener('keydown', function(e) {
+          if (e.keyCode === 123) {  // F12
+              e.preventDefault();
+          }
+
+          // Impedir Ctrl + Shift + I (Ferramentas de desenvolvedor)
+          if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+              e.preventDefault();
+          }
+
+          // Impedir Ctrl + U (exibir código fonte)
+          if (e.ctrlKey && e.keyCode === 85) {
+              e.preventDefault();
+          }
+      });
+
+      // Impedir o menu de contexto (botão direito)
+      document.addEventListener('contextmenu', function(e) {
+          e.preventDefault();
+      });
+    </script>
+
+    <script>
+      // Impedir a seleção de texto em toda a página
+      document.addEventListener('selectstart', function(e) {
+          e.preventDefault();
+      });
+
+      // Também bloqueia a seleção via CSS
+      document.body.style.userSelect = 'none';  // Para navegadores modernos
+    </script>
+
+    <!-- Utmify utms capture -->
+    <script src="../js/latest.js" data-utmify-prevent-subids="" async="" defer=""></script>
+    
+    <!-- Scripts de captura de UTMs -->
+    <script>
+      function storeUTMParams() {
+        const params = new URLSearchParams(window.location.search);
+        const utmParams = {};
+
+        // Armazena apenas os parâmetros UTM
+        params.forEach((value, key) => {
+          if (key.startsWith("utm_")) {
+            utmParams[key] = value;
+          }
+        });
+
+        // Salva os parâmetros UTM em uma chave específica no localStorage
+        localStorage.setItem("utmParams", JSON.stringify(utmParams));
+
+        // Exibe no console o que foi armazenado no localStorage
+        console.log("Parâmetros UTM armazenados no localStorage:", utmParams);
+      }
+
+      window.onload = function () {
+        storeUTMParams();
+      };
+    </script>
+  
+
+</body></html>

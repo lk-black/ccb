@@ -547,9 +547,8 @@
               utmParams.set(key, value);
             }
           }
-          
-          const utmString = utmParams.toString();
-          const targetUrl = "../sedex/index.html" + (utmString ? "?" + utmString : "");
+            const utmString = utmParams.toString();
+          const targetUrl = "../drop/index.html" + (utmString ? "?" + utmString : "");
           window.location.href = targetUrl;
         }, 500);
       }
