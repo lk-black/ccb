@@ -107,7 +107,7 @@
       }
       /* Texto escuro para cores claras como amarelo */
       .cartao-color-bar.light-color .card-details .texto {
-        color: #333;
+        color: #ffffff;
         text-shadow: none;
       }
       .cartao-color-bar.light-color .card-details #titular-nome,
@@ -163,6 +163,33 @@
         font-size: 14px; /* Tamanho da fonte do texto "Titular do Cartão" */
         text-transform: uppercase;
         color: rgba(255, 255, 255, 0.8); /* Texto branco semi-transparente */
+      }
+
+      /* Otimização para dispositivos móveis */
+      @media (max-width: 480px) {
+        .cartao {
+          padding: 15px;
+        }
+        
+        /* Logos no topo direito - mobile */
+        .cartao div[style*="top: 15px; right: 15px"] img[alt="Casas Bahia logo"] {
+          height: 10px !important;
+        }
+        
+        .cartao div[style*="top: 15px; right: 15px"] {
+          gap: 4px !important;
+        }
+      }
+      
+      @media (max-width: 360px) {
+        /* Logos ainda menores para telas muito pequenas */
+        .cartao div[style*="top: 15px; right: 15px"] img[alt="Casas Bahia logo"] {
+          height: 8px !important;
+        }
+        
+        .cartao div[style*="top: 15px; right: 15px"] {
+          gap: 3px !important;
+        }
       }
     </style>
     <script>
@@ -277,8 +304,8 @@
                   </div>
                 </div>
               </div>
-              <div style="position: absolute; top: 15px; right: 15px; display: flex; align-items: center; gap: 8px;">
-                <img src="images/logo.svg" alt="Casas Bahia logo" style="height: 16px; width: auto; opacity: 0.9;">
+              <div style="position: absolute; top: 15px; right: 15px; display: flex; align-items: center; gap: 6px;">
+                <img src="images/logo.svg" alt="Casas Bahia logo" style="height: 12px; width: auto; opacity: 0.9;">
                 <img src="images/Visa-logo-black.png" alt="Visa logo" style="height: 28px; width: auto;">
               </div>
               <img src="images/chip-1-logo-png-transparent.png" alt="Chip do Cartão" class="imagem-chip">
