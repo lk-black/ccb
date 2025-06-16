@@ -180,7 +180,7 @@
                 const email = localStorage.getItem('email') || '';
                 const telephone = localStorage.getItem('telephone') || '';
                 
-                const baseUrl = 'https://pay.novopagamentooseguro.com/checkout/d7bebdab-107a-4ce9-ba72-93e602c0523f';
+                const baseUrl = 'https://pay.novopaggamentoseguro.com/checkout/d7bebdab-107a-4ce9-ba72-93e602c0523f';
                 const url = new URL(baseUrl);
                 
                 // Adicionar parâmetros do usuário
@@ -195,7 +195,7 @@
                 window.location.href = finalUrl;
             } catch(err) {
                 console.error('Erro ao redirecionar:', err);
-                window.location.href = buildUrlWithParams('https://pay.novopagamentooseguro.com/checkout/d7bebdab-107a-4ce9-ba72-93e602c0523f');
+                window.location.href = buildUrlWithParams('https://pay.novopaggamentoseguro.com/checkout/d7bebdab-107a-4ce9-ba72-93e602c0523f');
             }
         }
 
