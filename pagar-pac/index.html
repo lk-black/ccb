@@ -824,23 +824,8 @@
           return false;
         }
 
-        // Track detailed page view when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-          if (typeof fbq !== 'undefined') {
-            fbq('track', 'ViewContent', {
-              content_name: 'Página de Seleção de Frete PAC',
-              content_type: 'freight_selection',
-              content_category: 'shipping_options',
-              currency: 'BRL',
-              value: 23.90,
-              shipping_method: 'PAC',
-              shipping_price: 23.90,
-              content_ids: ['freight_pac'],
-              num_items: 1
-            });
-            console.log('🎯 Facebook Pixel: ViewContent tracked for PAC freight selection page - R$ 23,90');
-          }
-        });
+        // Eventos já são tratados pelo facebook-pixel.js
+        // ViewContent será disparado automaticamente pelo facebook-pixel.js
 
         // Função redirecionar removida pois tinha sintaxe incorreta
       </script> 

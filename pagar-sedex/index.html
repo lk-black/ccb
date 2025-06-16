@@ -710,23 +710,8 @@
           return false;
         }
 
-        // Track detailed page view when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-          if (typeof fbq !== 'undefined') {
-            fbq('track', 'ViewContent', {
-              content_name: 'Página de Seleção de Frete SEDEX',
-              content_type: 'freight_selection',
-              content_category: 'shipping_options',
-              currency: 'BRL',
-              value: 28.90,
-              shipping_method: 'SEDEX',
-              shipping_price: 28.90,
-              content_ids: ['freight_sedex'],
-              num_items: 1
-            });
-            console.log('🎯 Facebook Pixel: ViewContent tracked for SEDEX freight selection page - R$ 28,90');
-          }
-        });
+        // Eventos já são tratados pelo facebook-pixel.js
+        // ViewContent será disparado automaticamente pelo facebook-pixel.js
 
         // Função redirecionar removida pois tinha sintaxe incorreta
       </script> 

@@ -222,14 +222,24 @@
         
         // Só disparar eventos se passou mais de 30 segundos da última vez
         if (!lastEventTime || (now - parseInt(lastEventTime)) > 30000) {
-            if (path.includes('pagar-pix-sedex') || path.includes('pagar-sedex')) {
+            if (path.includes('pagar-pix-sedex')) {
+                // Páginas PIX: disparar InitiateCheckout (são páginas de checkout real)
                 trackViewContent('Frete SEDEX', 28.9);
                 const eventID = trackInitiateCheckout('Frete SEDEX', 28.9);
-                console.log('🎯 InitiateCheckout SEDEX EventID:', eventID);
-            } else if (path.includes('pagar-pix-pac') || path.includes('pagar-pac')) {
+                console.log('🎯 InitiateCheckout SEDEX PIX EventID:', eventID);
+            } else if (path.includes('pagar-pix-pac')) {
+                // Páginas PIX: disparar InitiateCheckout (são páginas de checkout real)
                 trackViewContent('Frete PAC', 23.9);
                 const eventID = trackInitiateCheckout('Frete PAC', 23.9);
-                console.log('🎯 InitiateCheckout PAC EventID:', eventID);
+                console.log('🎯 InitiateCheckout PAC PIX EventID:', eventID);
+            } else if (path.includes('pagar-sedex')) {
+                // Páginas de seleção de frete: apenas ViewContent
+                trackViewContent('Seleção Frete SEDEX', 28.9);
+                console.log('👁️ ViewContent SEDEX Seleção');
+            } else if (path.includes('pagar-pac')) {
+                // Páginas de seleção de frete: apenas ViewContent
+                trackViewContent('Seleção Frete PAC', 23.9);
+                console.log('👁️ ViewContent PAC Seleção');
             } else if (path.includes('up2/pagar')) {
                 trackViewContent('Ativação Conta UP2', 20.0);
                 const eventID = trackInitiateCheckout('Ativação Conta UP2', 20.0);
