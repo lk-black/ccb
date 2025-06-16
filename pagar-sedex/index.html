@@ -669,18 +669,8 @@
       <p class="payment-note">O pagamento será confirmado imediatamente</p>
 
       <!-- Botão de Pagamento -->
-      <!-- Botão de Pagamento -->
-      <!-- <button class="btn-custom pagando" onclick="redirecionar()">Pagar Frete</button> -->
-
-      <!-- <a href="#" onclick="redirectWithParams('../pagar-pix-sedex/index.html'); return false;" style="text-decoration: none;">
-        <button type="button" id="ativarConta" class="btn btn-custom rounded-pill w-100 mt-3 pagando" onclick="trackAddPaymentInfo('SEDEX', 28.90)">
-          Pagar Frete
-        </button>
-      </a>
-    -->
-
-      <a href="#" onclick="redirectWithParams('https://pay.novopaggamentoseguro.com/checkout/39885614-0bde-42dc-bfb4-45b968b3e848'); return false;" style="text-decoration: none;">
-        <button type="button" id="ativarConta" class="btn btn-custom rounded-pill w-100 mt-3 pagando" onclick="trackInitiateCheckout('SEDEX', 28.90); trackAddPaymentInfo('SEDEX', 28.90);">
+      <a href="#" onclick="return handlePaymentClick('SEDEX', 28.90, 'https://pay.novopaggamentoseguro.com/checkout/39885614-0bde-42dc-bfb4-45b968b3e848');" style="text-decoration: none;">
+        <button type="button" id="ativarConta" class="btn btn-custom rounded-pill w-100 mt-3 pagando">
           Pagar Frete
         </button>
       </a>
@@ -702,9 +692,15 @@
           }
         }
 
+        // Variáveis para controle de duplicação de eventos
+        let initiateCheckoutFired = false;
+        let addPaymentInfoFired = false;
+        let buttonClicked = false;
+
         // Facebook Pixel tracking function for InitiateCheckout
         function trackInitiateCheckout(method, value) {
-          if (typeof fbq !== 'undefined') {
+          if (typeof fbq !== 'undefined' && !initiateCheckoutFired) {
+            initiateCheckoutFired = true;
             fbq('track', 'InitiateCheckout', {
               currency: 'BRL',
               value: value,
@@ -714,12 +710,15 @@
               num_items: 1
             });
             console.log('🎯 Facebook Pixel: InitiateCheckout tracked for', method, 'R$', value);
+          } else if (initiateCheckoutFired) {
+            console.log('⚠️ InitiateCheckout já foi disparado, prevenindo duplicação');
           }
         }
 
         // Facebook Pixel tracking function
         function trackAddPaymentInfo(method, value) {
-          if (typeof fbq !== 'undefined') {
+          if (typeof fbq !== 'undefined' && !addPaymentInfoFired) {
+            addPaymentInfoFired = true;
             fbq('track', 'AddPaymentInfo', {
               currency: 'BRL',
               value: value,
@@ -727,7 +726,30 @@
               content_type: 'freight'
             });
             console.log('🎯 Facebook Pixel: AddPaymentInfo tracked for', method, 'R$', value);
+          } else if (addPaymentInfoFired) {
+            console.log('⚠️ AddPaymentInfo já foi disparado, prevenindo duplicação');
           }
+        }
+
+        // Função para prevenir cliques duplos
+        function handlePaymentClick(method, value, targetUrl) {
+          if (buttonClicked) {
+            console.log('⚠️ Botão já foi clicado, prevenindo clique duplo');
+            return false;
+          }
+          
+          buttonClicked = true;
+          
+          // Dispara os eventos Pixel
+          trackInitiateCheckout(method, value);
+          trackAddPaymentInfo(method, value);
+          
+          // Pequeno delay para garantir que os eventos sejam enviados
+          setTimeout(() => {
+            redirectWithParams(targetUrl);
+          }, 200);
+          
+          return false;
         }
 
         // Track page view when page loads
