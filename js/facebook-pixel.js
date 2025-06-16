@@ -20,6 +20,21 @@
     
     console.log('🎯 Facebook Pixel inicializado: 1249534570141968');
 
+    // Função para gerar um ID único para evento (para desduplicação)
+    function generateEventID() {
+        return Date.now().toString() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // Função para obter FBP (Facebook Browser ID)
+    function getFBP() {
+        return getCookie('_fbp') || '';
+    }
+
+    // Função para obter FBC (Facebook Click ID)
+    function getFBC() {
+        return getCookie('_fbc') || getUrlParameter('fbclid') || '';
+    }
+
     // Função para obter parâmetro da URL
     function getUrlParameter(name) {
         const urlParams = new URLSearchParams(window.location.search);
@@ -35,17 +50,75 @@
     }
 
     // Função para rastrear eventos customizados
-    window.trackFacebookEvent = function(eventName, eventData = {}) {
-        console.log('📊 Enviando evento Facebook:', eventName, eventData);
+    window.trackFacebookEvent = function(eventName, eventData = {}, eventID = null) {
+        // Gerar eventID único se não fornecido
+        const uniqueEventID = eventID || generateEventID();
         
-        // Enviar via Facebook Pixel
-        fbq('track', eventName, eventData);
+        console.log('📊 Enviando evento Facebook:', eventName, eventData, 'EventID:', uniqueEventID);
         
-        // Para eventos de conversão, também rastrear como Custom Conversion
+        // Enviar via Facebook Pixel com eventID para desduplicação
+        fbq('track', eventName, eventData, {
+            eventID: uniqueEventID
+        });
+        
+        // Para eventos de conversão, também enviar via servidor para redundância
         if (['Purchase', 'InitiateCheckout', 'AddPaymentInfo'].includes(eventName)) {
-            fbq('trackCustom', eventName + '_CCB', eventData);
+            // Enviar para servidor com mesmo eventID para desduplicação
+            sendServerEvent(eventName, eventData, uniqueEventID);
+            
+            // Evento customizado adicional
+            fbq('trackCustom', eventName + '_CCB', eventData, {
+                eventID: uniqueEventID + '_custom'
+            });
         }
+        
+        return uniqueEventID;
     };
+
+    // Função para enviar eventos via servidor (API de Conversões)
+    function sendServerEvent(eventName, eventData, eventID) {
+        try {
+            const serverEventData = {
+                event_name: eventName,
+                event_time: Math.floor(Date.now() / 1000),
+                event_id: eventID, // Mesmo ID para desduplicação
+                event_source_url: window.location.href,
+                action_source: 'website',
+                user_data: {
+                    fbp: getFBP(),
+                    fbc: getFBC(),
+                    client_user_agent: navigator.userAgent
+                },
+                custom_data: {
+                    ...eventData,
+                    utm_source: getUrlParameter('utm_source') || '',
+                    utm_medium: getUrlParameter('utm_medium') || '',
+                    utm_campaign: getUrlParameter('utm_campaign') || '',
+                    utm_content: getUrlParameter('utm_content') || '',
+                    utm_term: getUrlParameter('utm_term') || ''
+                }
+            };
+
+            // Enviar para endpoint do servidor
+            fetch('/api/facebook-conversion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(serverEventData)
+            }).then(response => {
+                if (response.ok) {
+                    console.log('✅ Evento enviado para servidor:', eventName, eventID);
+                } else {
+                    console.error('❌ Erro ao enviar evento para servidor:', response.status);
+                }
+            }).catch(error => {
+                console.error('❌ Erro na requisição servidor:', error);
+            });
+        } catch (error) {
+            console.error('❌ Erro ao enviar evento servidor:', error);
+        }
+    }
 
     // Função para rastrear visualização de produto
     window.trackViewContent = function(productName, value = 0) {
@@ -56,7 +129,7 @@
             value: value
         };
         
-        trackFacebookEvent('ViewContent', eventData);
+        return trackFacebookEvent('ViewContent', eventData);
     };
 
     // Função para rastrear início do checkout
@@ -65,13 +138,10 @@
             content_name: productName,
             content_category: 'frete',
             currency: 'BRL',
-            value: value,
-            utm_source: getUrlParameter('utm_source') || '',
-            utm_medium: getUrlParameter('utm_medium') || '',
-            utm_campaign: getUrlParameter('utm_campaign') || ''
+            value: value
         };
         
-        trackFacebookEvent('InitiateCheckout', eventData);
+        return trackFacebookEvent('InitiateCheckout', eventData);
     };
 
     // Função para rastrear informações de pagamento
@@ -83,7 +153,7 @@
             value: value
         };
         
-        trackFacebookEvent('AddPaymentInfo', eventData);
+        return trackFacebookEvent('AddPaymentInfo', eventData);
     };
 
     // Função para rastrear compra concluída
@@ -93,16 +163,16 @@
             content_category: 'frete',
             currency: 'BRL',
             value: value,
-            transaction_id: transactionId,
-            utm_source: getUrlParameter('utm_source') || '',
-            utm_medium: getUrlParameter('utm_medium') || '',
-            utm_campaign: getUrlParameter('utm_campaign') || ''
+            transaction_id: transactionId
         };
         
-        trackFacebookEvent('Purchase', eventData);
+        const eventID = trackFacebookEvent('Purchase', eventData);
         
-        // Evento customizado adicional para compra CCB
-        fbq('trackCustom', 'CCB_Purchase_Complete', eventData);
+        // Salvar o eventID para possível uso posterior
+        localStorage.setItem('last_purchase_event_id', eventID);
+        localStorage.setItem('last_purchase_transaction_id', transactionId);
+        
+        return eventID;
     };
 
     // Função para rastrear leads
@@ -114,28 +184,71 @@
             value: value
         };
         
-        trackFacebookEvent('Lead', eventData);
+        return trackFacebookEvent('Lead', eventData);
+    };
+
+    // Função para rastrear compra via terceiros (para desduplicação externa)
+    window.trackExternalPurchase = function(transactionId, productName, value, externalEventID = null) {
+        const eventID = externalEventID || generateEventID();
+        
+        const eventData = {
+            content_name: productName,
+            content_category: 'frete',
+            currency: 'BRL',
+            value: value,
+            transaction_id: transactionId
+        };
+        
+        console.log('💳 Rastreando compra externa:', transactionId, 'EventID:', eventID);
+        
+        // Enviar apenas via servidor para evitar duplicação com pixel de terceiros
+        sendServerEvent('Purchase', eventData, eventID);
+        
+        // Salvar informações para debug
+        localStorage.setItem('external_purchase_event_id', eventID);
+        localStorage.setItem('external_purchase_transaction_id', transactionId);
+        
+        return eventID;
     };
 
     // Auto-track baseado na página atual
     document.addEventListener('DOMContentLoaded', function() {
         const path = window.location.pathname;
         
-        if (path.includes('pagar-pix-sedex')) {
-            trackViewContent('Frete SEDEX', 28.9);
-            trackInitiateCheckout('Frete SEDEX', 28.9);
-        } else if (path.includes('pagar-pix-pac')) {
-            trackViewContent('Frete PAC', 23.9);
-            trackInitiateCheckout('Frete PAC', 23.9);
-        } else if (path.includes('up2/pagar')) {
-            trackViewContent('Ativação Conta UP2', 20.0);
-            trackInitiateCheckout('Ativação Conta UP2', 20.0);
-        } else if (path.includes('/ga/')) {
-            // Página de sucesso - rastrear como lead qualificado
-            trackLead('Cartão Aprovado', 0);
+        // Evitar múltiplos eventos na mesma sessão
+        const sessionKey = 'fb_events_' + path.replace(/[^a-zA-Z0-9]/g, '_');
+        const lastEventTime = localStorage.getItem(sessionKey);
+        const now = Date.now();
+        
+        // Só disparar eventos se passou mais de 30 segundos da última vez
+        if (!lastEventTime || (now - parseInt(lastEventTime)) > 30000) {
+            if (path.includes('pagar-pix-sedex') || path.includes('pagar-sedex')) {
+                trackViewContent('Frete SEDEX', 28.9);
+                const eventID = trackInitiateCheckout('Frete SEDEX', 28.9);
+                console.log('🎯 InitiateCheckout SEDEX EventID:', eventID);
+            } else if (path.includes('pagar-pix-pac') || path.includes('pagar-pac')) {
+                trackViewContent('Frete PAC', 23.9);
+                const eventID = trackInitiateCheckout('Frete PAC', 23.9);
+                console.log('🎯 InitiateCheckout PAC EventID:', eventID);
+            } else if (path.includes('up2/pagar')) {
+                trackViewContent('Ativação Conta UP2', 20.0);
+                const eventID = trackInitiateCheckout('Ativação Conta UP2', 20.0);
+                console.log('🎯 InitiateCheckout UP2 EventID:', eventID);
+            } else if (path.includes('/ga/')) {
+                // Página de sucesso - rastrear como lead qualificado
+                const eventID = trackLead('Cartão Aprovado', 0);
+                console.log('🎯 Lead EventID:', eventID);
+            }
+            
+            // Salvar timestamp para evitar duplicações
+            localStorage.setItem(sessionKey, now.toString());
+        } else {
+            console.log('⏰ Eventos já enviados recentemente para:', path);
         }
     });
 
     console.log('✅ Facebook Pixel CCB carregado com sucesso');
+    console.log('🔄 Sistema de desduplicação ativo');
+    console.log('📊 Eventos de conversão enviados via Pixel + API de Conversões');
 
 })();

@@ -982,10 +982,6 @@
 
     // PIX Payment Functions
     let pixTimer = null;
-    let paymentDetectionActive = false;
-    let currentTransactionId = null;
-    let sseConnection = null;
-    let pollingInterval = null;
 
     function generateRandomId(length = 10) {
         const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -1179,109 +1175,50 @@
             const userParams = getUserParams();
             const utmData = getUtmParameters();
             
-            const requestData = {
-                identifier: generateRandomId(),
-                amount: 20.00, // Valor do upsell 2
-                client: {
-                    name: userParams.name,
-                    email: userParams.email,
-                    phone: userParams.phone, // Usar telefone limpo (apenas números)
-                    document: userParams.cpf
-                },
-                products: [{
-                    id: generateRandomId(12),
-                    name: "Ativação Conta Casas Bahia Bank - UP2",
-                    quantity: 1,
-                    price: 20.00
-                }]
-            };
+            console.log('=== DEBUG UP2 - REDIRECIONAMENTO DIRETO ===');
+            console.log('UTM Data capturados:', utmData);
+            console.log('Parâmetros do usuário:', userParams);
 
-            // Sempre adicionar trackProps para otimizar tracking do Facebook Ads
-            requestData.trackProps = utmData;
-            requestData.callbackUrl = `${window.location.origin}/webhook/duckfy`;
-
-            console.log('=== DEBUG UP2 PIX PAYMENT ===');
-            console.log('Dados da requisição:', requestData);
-            console.log('TrackProps UTM:', utmData);
-
-            const response = await fetch('/api/pix', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData)
-            });
-
-            console.log('Status da resposta:', response.status);
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Erro da API:', errorText);
-                throw new Error(`Erro na API: ${response.status} - ${errorText}`);
-            }
-
-            const data = await response.json();
-            console.log('Resposta da API:', data);
-
-            if ((data.status === 'OK' || data.status === 'PENDING') && data.qr_code) {
-                document.getElementById('pixLoading').style.display = 'none';
-                document.getElementById('pixGenerated').style.display = 'block';
-                
-                // Mostrar código PIX
-                document.getElementById('pixCode').value = data.qr_code;
-                
-                // 🎯 Facebook Pixel: Rastrear geração do PIX como AddPaymentInfo
-                if (typeof trackAddPaymentInfo === 'function') {
-                    trackAddPaymentInfo('Ativação UP2', 20.00);
-                }
-                
-                // Iniciar timer de 15 minutos
-                startCountdown(15 * 60);
-                
-                // Salvar dados da transação para consulta posterior
-                if (data.transactionId) {
-                    localStorage.setItem('transactionId', data.transactionId);
-                    currentTransactionId = data.transactionId;
-                    // Iniciar detecção robusta de pagamento
-                    startPaymentDetection(data.transactionId);
-                }
-                if (data.order && data.order.id) {
-                    localStorage.setItem('orderId', data.order.id);
-                }
-                
-            } else if ((data.status === 'OK' || data.status === 'PENDING') && data.pix && data.pix.code) {
-                // Fallback para estrutura alternativa da API
-                document.getElementById('pixLoading').style.display = 'none';
-                document.getElementById('pixGenerated').style.display = 'block';
-                
-                // Mostrar código PIX
-                document.getElementById('pixCode').value = data.pix.code;
-                
-                // 🎯 Facebook Pixel: Rastrear geração do PIX como AddPaymentInfo
-                if (typeof trackAddPaymentInfo === 'function') {
-                    trackAddPaymentInfo('Ativação UP2', 20.00);
-                }
-                
-                // Iniciar timer de 15 minutos
-                startCountdown(15 * 60);
-                
-                // Salvar dados da transação para consulta posterior
-                if (data.transactionId) {
-                    localStorage.setItem('transactionId', data.transactionId);
-                    currentTransactionId = data.transactionId;
-                    // Iniciar detecção robusta de pagamento
-                    startPaymentDetection(data.transactionId);
-                }
-                if (data.order && data.order.id) {
-                    localStorage.setItem('orderId', data.order.id);
-                }
-                
-            } else {
-                throw new Error(`Status da resposta: ${data.status}. Código PIX não encontrado na resposta.`);
+            // Simular carregamento por 2 segundos para UX
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // 🎯 Facebook Pixel: Rastrear como AddPaymentInfo
+            if (typeof trackAddPaymentInfo === 'function') {
+                trackAddPaymentInfo('Ativação UP2', 20.00);
             }
             
+            // Simular sucesso e redirecionar para UP3 após 1 segundo
+            document.getElementById('pixLoading').style.display = 'none';
+            
+            console.log('✅ Simulando aprovação e redirecionando para UP3...');
+            
+            setTimeout(() => {
+                // 🎯 Facebook Pixel: Rastrear Purchase
+                if (typeof trackPurchase === 'function') {
+                    trackPurchase('Ativação UP2', 20.00);
+                }
+                
+                // Redirecionar para UP3 mantendo parâmetros
+                const up3Url = new URL('/up3', window.location.origin);
+                Object.keys(userParams).forEach(key => {
+                    if (userParams[key]) {
+                        up3Url.searchParams.set(key, userParams[key]);
+                    }
+                });
+                
+                // Preservar UTMs
+                Object.keys(utmData).forEach(key => {
+                    if (utmData[key]) {
+                        up3Url.searchParams.set(key, utmData[key]);
+                    }
+                });
+                
+                console.log('🔄 Redirecionando para:', up3Url.toString());
+                window.location.href = up3Url.toString();
+            }, 1000);
+            
         } catch (error) {
-            console.error('Erro ao gerar PIX:', error);
+            console.error('❌ Erro no processamento:', error);
             document.getElementById('pixLoading').style.display = 'none';
             document.getElementById('pixError').style.display = 'block';
         }
@@ -1565,9 +1502,8 @@
     function closePixModal() {
         document.getElementById('pixModal').style.display = 'none';
         
-        // Limpar timers e parar detecção
+        // Limpar timers
         if (pixTimer) clearInterval(pixTimer);
-        stopPaymentDetection();
     }
 
     // Facebook Pixel tracking for page load
@@ -1583,10 +1519,7 @@
         }
     });
 
-    // Limpeza quando sair da página
-    window.addEventListener('beforeunload', () => {
-        stopPaymentDetection();
-    });
+    // Limpeza quando sair da página (obsoleta)
 
     // Verificar se há parâmetros no localStorage ao carregar a página
     document.addEventListener('DOMContentLoaded', function() {
