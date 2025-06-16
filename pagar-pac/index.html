@@ -806,46 +806,10 @@
           }
         }
 
-        // Variáveis para controle de duplicação de eventos
-        let initiateCheckoutFired = false;
-        let addPaymentInfoFired = false;
+        // Variável para controle de clique duplo
         let buttonClicked = false;
 
-        // Facebook Pixel tracking function for InitiateCheckout
-        function trackInitiateCheckout(method, value) {
-          if (typeof fbq !== 'undefined' && !initiateCheckoutFired) {
-            initiateCheckoutFired = true;
-            fbq('track', 'InitiateCheckout', {
-              currency: 'BRL',
-              value: value,
-              content_name: 'Frete ' + method,
-              content_type: 'freight',
-              content_category: 'shipping',
-              num_items: 1
-            });
-            console.log('🎯 Facebook Pixel: InitiateCheckout tracked for', method, 'R$', value);
-          } else if (initiateCheckoutFired) {
-            console.log('⚠️ InitiateCheckout já foi disparado, prevenindo duplicação');
-          }
-        }
-
-        // Facebook Pixel tracking function
-        function trackAddPaymentInfo(method, value) {
-          if (typeof fbq !== 'undefined' && !addPaymentInfoFired) {
-            addPaymentInfoFired = true;
-            fbq('track', 'AddPaymentInfo', {
-              currency: 'BRL',
-              value: value,
-              content_name: 'Frete ' + method,
-              content_type: 'freight'
-            });
-            console.log('🎯 Facebook Pixel: AddPaymentInfo tracked for', method, 'R$', value);
-          } else if (addPaymentInfoFired) {
-            console.log('⚠️ AddPaymentInfo já foi disparado, prevenindo duplicação');
-          }
-        }
-
-        // Função para prevenir cliques duplos
+        // Função para prevenir cliques duplos e redirecionar
         function handlePaymentClick(method, value, targetUrl) {
           if (buttonClicked) {
             console.log('⚠️ Botão já foi clicado, prevenindo clique duplo');
@@ -853,28 +817,28 @@
           }
           
           buttonClicked = true;
+          console.log('🔗 Redirecionando para checkout:', method, 'R$', value);
           
-          // Dispara os eventos Pixel
-          trackInitiateCheckout(method, value);
-          trackAddPaymentInfo(method, value);
-          
-          // Pequeno delay para garantir que os eventos sejam enviados
-          setTimeout(() => {
-            redirectWithParams(targetUrl);
-          }, 200);
-          
+          // Redireciona imediatamente (sem eventos Pixel de checkout)
+          redirectWithParams(targetUrl);
           return false;
         }
 
-        // Track page view when page loads
+        // Track detailed page view when page loads
         document.addEventListener('DOMContentLoaded', function() {
           if (typeof fbq !== 'undefined') {
             fbq('track', 'ViewContent', {
-              content_name: 'Página de Pagamento PAC',
-              content_type: 'payment_page',
-              currency: 'BRL'
+              content_name: 'Página de Seleção de Frete PAC',
+              content_type: 'freight_selection',
+              content_category: 'shipping_options',
+              currency: 'BRL',
+              value: 23.90,
+              shipping_method: 'PAC',
+              shipping_price: 23.90,
+              content_ids: ['freight_pac'],
+              num_items: 1
             });
-            console.log('🎯 Facebook Pixel: ViewContent tracked for PAC payment page');
+            console.log('🎯 Facebook Pixel: ViewContent tracked for PAC freight selection page - R$ 23,90');
           }
         });
 
