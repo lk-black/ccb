@@ -148,18 +148,15 @@
       }
 
       .casas-bahia-logo {
-        font-weight: bold;
-        font-size: 16px;
-        color: #0066cc;
-        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
       }
 
-      .casas-bahia-logo .casas {
-        color: #0066cc;
-      }
-
-      .casas-bahia-logo .bahia {
-        color: #ff6b00;
+      .casas-bahia-logo img {
+        height: 24px;
+        width: auto;
+        max-width: 90px;
       }
 
       .bradescard-logo {
@@ -603,6 +600,15 @@
         .details-section {
           padding: 20px;
         }
+
+        .casas-bahia-logo img {
+          height: 22px;
+          max-width: 80px;
+        }
+
+        .bradescard-logo img {
+          height: 16px;
+        }
       }
 
       @media (max-width: 480px) {
@@ -617,6 +623,19 @@
         .btn-custom {
           padding: 14px 20px;
           font-size: 15px;
+        }
+
+        .casas-bahia-logo img {
+          height: 20px;
+          max-width: 70px;
+        }
+
+        .bradescard-logo img {
+          height: 14px;
+        }
+
+        .card-logos {
+          gap: 10px;
         }
       }
 
@@ -670,12 +689,12 @@
         <div class="card-header">
           <span>Cartão Virtual</span>
           <div class="card-logos">
-            <span class="casas-bahia-logo">
-              <span class="casas">CASAS</span><span class="bahia">BAHIA</span>
-            </span>
-            <span class="bradescard-logo">
+            <div class="casas-bahia-logo">
+              <img src="images/casas-bahia.svg" alt="Casas Bahia">
+            </div>
+            <div class="bradescard-logo">
               <img src="images/bradescard.png" alt="Bradescard">
-            </span>
+            </div>
           </div>
         </div>
         
