@@ -87,7 +87,7 @@
         left: 0;
         right: 0;
         height: 60px;
-        background: var(--cartao-color, #000);
+        background: var(--cartao-color, #0454cc);
         border-bottom-left-radius: 15px;
         border-bottom-right-radius: 15px;
         display: flex;
@@ -285,10 +285,10 @@
           </p>
           <h6 style="font-size: 16px">Escolha a cor do seu cartão</h6>
           <div class="color-options">
-            <button style="background-color: #000" class="selected"></button>
+            <button style="background-color: #000"></button>
             <button style="background-color: #8420b3"></button>
             <button style="background-color: #FFD700"></button>
-            <button style="background-color: #0454cc"></button>
+            <button style="background-color: #0454cc" class="selected"></button>
           </div>
           <div class="cartao-container">
             <div class="cartao">
@@ -324,25 +324,28 @@
           document.getElementById("titular-nome").innerText = "Nome Indisponível";
         }
 
-        const corSelecionada = localStorage.getItem("cartaoCor");
-        if (corSelecionada) {
-          const colorBar = document.querySelector(".cartao-color-bar");
-          if (colorBar) {
-            colorBar.style.background = corSelecionada;
-            
-            // Adicionar classe para cores claras (amarelo)
-            if (corSelecionada === "#FFD700") {
-              colorBar.classList.add("light-color");
-            } else {
-              colorBar.classList.remove("light-color");
-            }
-          }
+        const corSelecionada = localStorage.getItem("cartaoCor") || "#0454cc";
+        const colorBar = document.querySelector(".cartao-color-bar");
+        if (colorBar) {
+          colorBar.style.background = corSelecionada;
           
-          const buttonToSelect = document.querySelector(`.color-options button[style*="${corSelecionada}"]`);
-          if (buttonToSelect) {
-            document.querySelector(".color-options .selected").classList.remove("selected");
-            buttonToSelect.classList.add("selected");
+          // Adicionar classe para cores claras (amarelo)
+          if (corSelecionada === "#FFD700") {
+            colorBar.classList.add("light-color");
+          } else {
+            colorBar.classList.remove("light-color");
           }
+        }
+        
+        const buttonToSelect = document.querySelector(`.color-options button[style*="${corSelecionada}"]`);
+        if (buttonToSelect) {
+          document.querySelector(".color-options .selected")?.classList.remove("selected");
+          buttonToSelect.classList.add("selected");
+        }
+        
+        // Salvar a cor padrão se não existir no localStorage
+        if (!localStorage.getItem("cartaoCor")) {
+          localStorage.setItem("cartaoCor", "#0454cc");
         }
       });
 
