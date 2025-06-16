@@ -330,20 +330,9 @@ app.listen(PORT, () => {
 });
 
 // Endpoint para Facebook Conversions API (server-side tracking)
-// TEMPORARIAMENTE DESABILITADO PARA TESTE COM PLATAFORMA EXTERNA
 app.post('/api/facebook-conversion', async (req, res) => {
     try {
-        console.log('📊 [DESABILITADO] Evento de conversão Facebook recebido mas não processado:', req.body);
-        
-        // Retornar sucesso sem enviar para Facebook
-        res.json({
-            success: true,
-            message: 'Endpoint temporariamente desabilitado para testes',
-            received_data: req.body,
-            timestamp: new Date().toISOString()
-        });
-        
-        return; // Sair da função sem processar
+        console.log('📊 Recebendo evento de conversão Facebook:', req.body);
         
         const { 
             event_name, 

@@ -527,15 +527,14 @@
         
         // Mostrar loading no botão
         showLoading(true);
-        
-        // Simular um pequeno delay para melhor UX
+          // Simular um pequeno delay para melhor UX
         setTimeout(() => {
           localStorage.setItem("enderecoCliente", JSON.stringify(endereco));
-          // Preservar apenas parâmetros de UTM para tracking
+          // Preservar apenas parâmetros de UTM para tracking e parâmetro name
           const currentParams = new URLSearchParams(window.location.search);
           const utmParams = new URLSearchParams();
           
-          // Preservar apenas parâmetros UTM e de tracking
+          // Preservar parâmetros UTM, de tracking e o parâmetro name
           for (const [key, value] of currentParams) {
             if (key.startsWith('utm_') || 
                 key.startsWith('gclid') || 
@@ -543,7 +542,8 @@
                 key.startsWith('msclkid') ||
                 key === 'source' ||
                 key === 'medium' ||
-                key === 'campaign') {
+                key === 'campaign' ||
+                key === 'name') {  // Preservar o parâmetro name
               utmParams.set(key, value);
             }
           }
