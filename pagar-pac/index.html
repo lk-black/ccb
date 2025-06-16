@@ -88,7 +88,7 @@
       }
 
       .card-virtual {
-        background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 65%, #0d64fb 65%, #1e40af 100%);
+        background: #ffffff;
         color: #1e293b;
         border-radius: 20px;
         padding: 25px;
@@ -103,6 +103,22 @@
         min-height: 220px;
         overflow: hidden;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .card-color-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: #0d64fb;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 25px;
+        box-sizing: border-box;
       }
 
       .card-virtual::before {
@@ -148,15 +164,18 @@
       }
 
       .casas-bahia-logo {
-        display: flex;
-        align-items: center;
-        gap: 5px;
+        font-weight: bold;
+        font-size: 16px;
+        color: #0066cc;
+        letter-spacing: 1px;
       }
 
-      .casas-bahia-logo img {
-        height: 24px;
-        width: auto;
-        max-width: 90px;
+      .casas-bahia-logo .casas {
+        color: #0066cc;
+      }
+
+      .casas-bahia-logo .bahia {
+        color: #ff6b00;
       }
 
       .bradescard-logo {
@@ -436,15 +455,16 @@
       }
 
       .scarcity {
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        border: 2px solid #fca5a5;
+        border-radius: 16px;
         padding: 20px;
         color: #dc2626;
         text-align: center;
         margin-top: 25px;
         position: relative;
         overflow: hidden;
-        border: 1px solid #dc2626;
-        border-radius: 8px;
-        background-color: #fef2f2;
+        animation: pulse-glow 2s infinite;
       }
 
       @keyframes pulse-glow {
@@ -463,11 +483,19 @@
         left: -100%;
         width: 100%;
         height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(248, 113, 113, 0.1), transparent);
+        animation: scarcity-shimmer 3s infinite;
       }
 
       @keyframes scarcity-shimmer {
         0% { left: -100%; }
         100% { left: 100%; }
+      }
+
+      .scarcity i {
+        font-size: 20px;
+        margin-right: 8px;
+        animation: bounce 1s infinite;
       }
 
       @keyframes bounce {
@@ -481,6 +509,17 @@
         font-weight: 700;
         position: relative;
         z-index: 1;
+      }
+
+      #timer {
+        font-family: 'Courier New', monospace;
+        font-size: 18px;
+        font-weight: bold;
+        color: #dc2626;
+        background: rgba(220, 38, 38, 0.1);
+        padding: 4px 8px;
+        border-radius: 6px;
+        margin: 0 4px;
       }
 
       .footer {
@@ -563,6 +602,11 @@
           min-height: 200px;
         }
 
+        .card-virtual div[style*="4532"] div {
+          font-size: 16px !important;
+          letter-spacing: 2px !important;
+        }
+
         .price {
           font-size: 28px;
         }
@@ -580,20 +624,16 @@
         .details-section {
           padding: 20px;
         }
-
-        .casas-bahia-logo img {
-          height: 28px;
-          max-width: 120px;
-        }
-
-        .bradescard-logo img {
-          height: 16px;
-        }
       }
 
       @media (max-width: 480px) {
         .card-virtual {
           padding: 16px;
+        }
+
+        .card-virtual div[style*="4532"] div {
+          font-size: 14px !important;
+          letter-spacing: 1.5px !important;
         }
 
         .main-content {
@@ -603,19 +643,6 @@
         .btn-custom {
           padding: 14px 20px;
           font-size: 15px;
-        }
-
-        .casas-bahia-logo img {
-          height: 28px;
-          max-width: 90px;
-        }
-
-        .bradescard-logo img {
-          height: 14px;
-        }
-
-        .card-logos {
-          gap: 10px;
         }
       }
 
@@ -666,45 +693,48 @@
 
       <!-- Cartão Virtual -->
       <div class="card-virtual">
-        <div class="card-header">
-          <span>Cartão Virtual</span>
-          <div class="card-logos">
-            <div class="casas-bahia-logo">
-              <img src="images/casas-bahia.svg" alt="Casas Bahia">
+        <!-- Barra colorida na parte inferior -->
+        <div class="card-color-bar">
+          <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+            <div style="text-align: left;">
+              <p style="font-size: 10px; color: rgba(255, 255, 255, 0.8); margin: 0; text-transform: uppercase; letter-spacing: 0.5px;">Titular do Cartão</p>
+              <p id="titular-nome" style="font-size: 14px; color: white; margin: 0; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Nome Indisponível</p>
             </div>
-            <div class="bradescard-logo">
-              <img src="images/bradescard.png" alt="Bradescard">
+            <div style="text-align: right;">
+              <p style="font-size: 10px; color: rgba(255, 255, 255, 0.8); margin: 0; text-transform: uppercase; letter-spacing: 0.5px;">Válido Até</p>
+              <p style="font-size: 12px; color: white; margin: 0; font-weight: 600;">08/29</p>
             </div>
-          </div>
-        </div>
-        
-        <div class="chip-contactless">
-          <div class="chip">
-            <img src="images/cartao-credito.png" alt="Chip do cartão">
-          </div>
-          <div class="contactless">))))</div>
-        </div>
-        
-        <div class="card-number">4532 •••• •••• ••••</div>
-        
-        <div class="card-info">
-          <div>
-            <strong>TITULAR</strong>
-            <div id="titular-nome">Nome Indisponível</div>
-          </div>
-          <div>
-            <strong>VALIDADE</strong>
-            <div>08/29</div>
-          </div>
-          <div>
-            <strong>CVV</strong>
-            <div>•••</div>
           </div>
         </div>
 
-        <div class="visa-logo">
-          <img src="images/Visa-logo-white.png" alt="Visa">
-          <div class="visa-platinum">Platinum</div>
+        <!-- Logos no topo direito -->
+        <div style="position: absolute; top: 20px; right: 20px; display: flex; align-items: center; gap: 8px;">
+          <img src="images/logo.svg" alt="Casas Bahia logo" style="height: 16px; width: auto; opacity: 0.9;">
+          <img src="images/Visa-logo-black.png" alt="Visa logo" style="height: 28px; width: auto;">
+        </div>
+
+        <!-- Chip e símbolo contactless -->
+        <div style="position: absolute; top: 35%; left: 20px; display: flex; align-items: center; gap: 15px;">
+          <img src="images/chip-1-logo-png-transparent.png" alt="Chip do Cartão" style="width: 35px; height: auto;">
+          <img src="images/Design-sem-nome.png" alt="Contactless" style="width: 30px; height: auto;">
+        </div>
+
+        <!-- Número do cartão -->
+        <div style="position: absolute; top: 58%; left: 50%; transform: translateX(-50%); text-align: center; width: 90%;">
+          <div style="
+            font-size: 20px; 
+            letter-spacing: 3px; 
+            color: #2c3e50; 
+            font-family: 'Courier New', 'Consolas', 'Monaco', monospace; 
+            font-weight: 700; 
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            line-height: 1;
+            white-space: nowrap;
+            overflow: visible;
+            display: inline-block;
+          ">
+            4532&nbsp;••••&nbsp;••••&nbsp;8947
+          </div>
         </div>
       </div>
 
@@ -750,18 +780,14 @@
 
       <!-- Botão de Pagamento -->
       <!-- Botão de Pagamento -->
-       <a href="#" onclick="redirectWithParams('https://pay.novopaggamentoseguro.com/checkout/110b3a2c-1400-4ae5-be7f-86e7cb71db9c'); return false;" style="text-decoration: none;">
-        <button type="button" id="ativarConta" class="btn btn-custom rounded-pill w-100 mt-3 pagando">
-          Pagar Frete
-        </button>
-      </a>
+      <!-- <button class="btn-custom pagando" onclick="redirecionar()">Pagar Frete</button> -->
 
-      <!-- <a href="#" onclick="redirectWithParams('../pagar-pix-sedex/index.html'); return false;" style="text-decoration: none;">
+      <a href="#" onclick="redirectWithParams('../pagar-pix-sedex/index.html'); return false;" style="text-decoration: none;">
         <button type="button" id="ativarConta" class="btn btn-custom rounded-pill w-100 mt-3 pagando" onclick="trackAddPaymentInfo('PAC', 23.90)">
           Pagar Frete
         </button>
       </a>
-      <!-->
+
       <script>
         // Função para preservar todos os parâmetros da URL
         function redirectWithParams(targetUrl) {
@@ -842,6 +868,7 @@
       <!-- Bloco de Escassez -->
       <div class="scarcity" id="scarcity-block">
         <strong>Apenas 5 unidades disponíveis!</strong>
+        <div><i class="fas fa-clock"></i><span id="timer">05:00</span></div>
         <strong>Ative agora ou perca seu limite aprovado!</strong>
       </div>
     </a></div><a href="#" onclick="redirectWithParams('../sedex/index.html'); return false;" style="text-decoration: none;">
@@ -1155,37 +1182,23 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        // Buscar dados do usuário do localStorage primeiro
-        const userName = localStorage.getItem('userName');
-        const userPhone = localStorage.getItem('userPhone');
-        const userCpf = localStorage.getItem('userCpf');
-        const userEmail = localStorage.getItem('userEmail');
-        
-        // Fallback para parâmetros da URL se localStorage não tiver dados
         const params = new URLSearchParams(window.location.search);
-        const nomeFromUrl = params.get("name");
-        
-        // Priorizar localStorage, usar URL como fallback
-        const nomeDefinitivo = userName || nomeFromUrl;
-        
-        if (nomeDefinitivo) {
-          document.getElementById("titular-nome").innerText = nomeDefinitivo.toUpperCase();
+        const nome = params.get("name");
+        if (nome) {
+          document.getElementById("titular-nome").innerText =
+            nome;
         } else {
-          document.getElementById("titular-nome").innerText = "Nome Indisponível";
+          document.getElementById("titular-nome").innerText =
+            "Nome Indisponível";
         }
-
-        // Log para debug
-        console.log('Dados do usuário carregados:');
-        console.log('- Nome:', userName || 'não encontrado no localStorage');
-        console.log('- Telefone:', userPhone || 'não encontrado no localStorage');
-        console.log('- CPF:', userCpf || 'não encontrado no localStorage');
-        console.log('- Email:', userEmail || 'não encontrado no localStorage');
-        console.log('- Nome usado no cartão:', nomeDefinitivo || 'Nome Indisponível');
 
         // Recuperar a cor do cartão do localStorage
         const corCartao = localStorage.getItem("cartaoCor");
         if (corCartao) {
-          document.querySelector(".card-virtual").style.backgroundColor = corCartao;
+          const colorBar = document.querySelector(".card-color-bar");
+          if (colorBar) {
+            colorBar.style.backgroundColor = corCartao;
+          }
         }
       });
 
