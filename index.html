@@ -1,0 +1,610 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+    <!-- Armazena utm em local storage -->
+    <script>
+      function storeUTMParams() {
+        const params = new URLSearchParams(window.location.search);
+        const utmParams = {};
+
+        // Armazena apenas os parâmetros UTM
+        params.forEach((value, key) => {
+          if (key.startsWith("utm_")) {
+            utmParams[key] = value;
+          }
+        });
+
+        // Salva os parâmetros UTM em uma chave específica no localStorage
+        localStorage.setItem("utmParams", JSON.stringify(utmParams));
+
+        // Exibe no console o que foi armazenado no localStorage
+        console.log("Parâmetros UTM armazenados no localStorage:", utmParams);
+      }
+
+      window.onload = function () {
+        storeUTMParams();
+      };
+    </script>
+
+    <script>
+      window.pixelId = "6851f2d95d9684943c481e5b";
+      var a = document.createElement("script");
+      a.setAttribute("async", "");
+      a.setAttribute("defer", "");
+      a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+      document.head.appendChild(a);
+    </script>
+
+    <script
+      src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+      data-utmify-prevent-xcod-sck
+      data-utmify-prevent-subids
+      async
+      defer
+    ></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartão BlueBird - Solicite sem consulta ao SPC</title>
+    <link href="css/remixicon.min.css" rel="stylesheet">
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        overflow-x: hidden;
+        background: #f6f6f6;
+      }
+
+      .header {
+        background: #ffffff;
+        padding: 1.2rem 0;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      }
+
+      .logo {
+        width: 160px;
+        height: auto;
+        transition: transform 0.3s ease;
+      }
+
+      .logo:hover {
+        transform: scale(1.05);
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #0d64fb 0%, #0856d6 50%, #0d64fb 100%);
+        color: rgb(0, 0, 0);
+        padding: 4rem 1rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        pointer-events: none;
+      }
+
+      .hero h1 {
+        font-size: clamp(1.8rem, 5vw, 2.5rem);
+        font-weight: 700;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero p {
+        font-size: clamp(1rem, 3vw, 1.25rem);
+        margin-bottom: 2rem;
+        opacity: 0.95;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        z-index: 1;
+      }
+
+      .highlight-badge {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(15px);
+        padding: 0.8rem 1.8rem;
+        border-radius: 50px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 1;
+        transition: all 0.3s ease;
+      }
+
+      .highlight-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .highlight-badge i {
+        color: #020202;
+      }
+
+      .security-badges {
+        display: flex;
+        justify-content: center;
+        gap: 1.2rem;
+        margin: 2.5rem 0;
+        flex-wrap: wrap;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(15px);
+        position: relative;
+        z-index: 1;
+      }
+
+      .security-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: rgba(255, 255, 255, 0.95);
+        color: rgb(0, 0, 0);
+        padding: 0.7rem 1.2rem;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .security-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        background: white;
+      }
+
+      .cta-button {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        color: #0d64fb;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        position: relative;
+        z-index: 1;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        color: #0856d6;
+      }
+
+      .steps-section {
+        padding: 4rem 1rem;
+        background: white;
+        text-align: center;
+      }
+
+      .steps-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 3rem;
+      }
+
+      .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      .step-card {
+        text-align: center;
+        padding: 2.5rem 2rem;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        position: relative;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .step-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        border-color: #0d64fb;
+      }
+
+      .step-number {
+        background: linear-gradient(135deg, #0d64fb 0%, #0856d6 100%);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.1rem;
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        box-shadow: 0 4px 12px rgba(13, 100, 251, 0.3);
+      }
+
+      .step-icon {
+        font-size: 2.5rem;
+        color: #0d64fb;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .step-card:hover .step-icon {
+        transform: scale(1.1);
+        color: #0856d6;
+      }
+
+      .step-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #111827;
+      }
+
+      .step-description {
+        color: #6b7280;
+        font-size: 0.875rem;
+        line-height: 1.5;
+      }
+
+      .benefits {
+        padding: 4rem 1rem;
+        background: #f6f6f6;
+      }
+
+      .benefits-grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        padding: 2rem 1rem;
+      }
+
+      .benefit-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        padding: 2rem 1.5rem;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .benefit-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(13, 100, 251, 0.1), transparent);
+        transition: left 0.6s ease;
+      }
+
+      .benefit-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        border-color: #0d64fb;
+      }
+
+      .benefit-card:hover::before {
+        left: 100%;
+      }
+
+      .benefit-icon {
+        font-size: 2.5rem;
+        color: #0d64fb;
+        margin-bottom: 1.5rem;
+        display: inline-block;
+        background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+        padding: 1.2rem;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(13, 100, 251, 0.15);
+      }
+
+      .benefit-card:hover .benefit-icon {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 6px 18px rgba(13, 100, 251, 0.25);
+      }
+
+      .benefit-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #111827;
+      }
+
+      .benefit-description {
+        color: #6b7280;
+        line-height: 1.6;
+        font-size: 0.875rem;
+      }
+
+      .footer {
+        background: #1a1a1a;
+        color: #f5f5f5;
+        text-align: center;
+        padding: 2rem 1rem;
+        border-bottom: solid 3px #0d64fb;
+        font-size: 0.875rem;
+      }
+
+      @media (max-width: 768px) {
+        .benefits-grid {
+          grid-template-columns: 1fr;
+          padding: 1rem 0;
+        }
+
+        .security-badges {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .security-badge {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .hero {
+          padding: 2rem 1rem;
+        }
+
+        .cta-button {
+          width: 90%;
+          text-align: center;
+        }
+
+        .steps-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  <script async="" defer="" src="js/pixel.js"></script></head>
+
+  <body style="user-select: none;">
+    
+    <header class="header">
+      <img src="images/logo.svg" alt="Shopee Logo" class="logo">
+    </header>
+
+    <section class="hero">
+      <div class="highlight-badge">
+        <i style="color: white" class="ri-shield-check-line"></i>
+        <span style="color: white">Sem consulta ao SPC/Serasa</span>
+      </div>
+
+      <h2 style="color: #f0f0f0">
+        Cartão Casas Bahia com limite<br>pré-aprovado de até R$ 5.000
+      </h2>
+      <br>
+      <p style="color: white">
+        Processo 100% digital, sem burocracia e sem precisar sair de casa
+      </p>
+
+      <div class="security-badges">
+        <div class="security-badge">
+          <i class="ri-shield-check-line"></i>
+          Site Seguro
+        </div>
+        <div class="security-badge">
+          <i class="ri-lock-line"></i>
+          Dados Protegidos
+        </div>
+        <div class="security-badge">
+          <i class="ri-bank-card-line"></i>
+          Aprovação Garantida
+        </div>
+      </div>
+
+      <style>
+        @keyframes pulse {
+          0% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.1);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+
+        .cta-button {
+          background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+          color: #0d64fb;
+          padding: 1.4rem 2.8rem; /* Increased padding for larger size */
+          border-radius: 12px;
+          font-weight: 700;
+          font-size: 1.3rem; /* Increased font size */
+          text-decoration: none;
+          display: inline-block;
+          transition: all 0.3s ease;
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+          animation: pulse 2s infinite; /* Added pulse animation */
+          border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .cta-button:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+          background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+          color: #0856d6;
+        }
+      </style>
+
+      <a class="cta-button" href="/quizz/index.html">QUERO SOLICITAR MEU CARTÃO</a>
+    </section>
+
+    <section class="steps-section">
+      <h2 class="steps-title">Como funciona?</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <i class="ri-questionnaire-line step-icon"></i>
+          <h3 class="step-title">Responda o Quiz</h3>
+          <p class="step-description">
+            Apenas 4 perguntas rápidas para analisarmos seu perfil
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <i class="ri-timer-flash-line step-icon"></i>
+          <h3 class="step-title">Análise Instantânea</h3>
+          <p class="step-description">
+            Resultado em segundos, sem consulta ao SPC/Serasa
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <i class="ri-bank-card-line step-icon"></i>
+          <h3 class="step-title">Receba seu Cartão</h3>
+          <p class="step-description">
+            Cartão virtual na hora e físico em até 7 dias úteis
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="benefits">
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <i class="ri-money-dollar-circle-line benefit-icon"></i>
+          <h3 class="benefit-title">Zero Anuidade</h3>
+          <p class="benefit-description">
+            Economize mais de R$ 500 por ano em anuidades
+          </p>
+        </div>
+
+        <div class="benefit-card">
+          <i class="ri-bank-card-line benefit-icon"></i>
+          <h3 class="benefit-title">Limite Flexível</h3>
+          <p class="benefit-description">
+            Aumente seu limite conforme usa o cartão
+          </p>
+        </div>
+
+        <div class="benefit-card">
+          <i class="ri-gift-line benefit-icon"></i>
+          <h3 class="benefit-title">Cashback Garantido</h3>
+          <p class="benefit-description">
+            Receba até 5% de volta em todas as suas compras
+          </p>
+        </div>
+
+        <div class="benefit-card">
+          <i class="ri-shield-star-line benefit-icon"></i>
+          <h3 class="benefit-title">Benefícios Exclusivos</h3>
+          <p class="benefit-description">
+            Descontos especiais em lojas parceiras
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      Copyright © 2025 Casas Bahia. CNPJ: 35.635.824/0001-12<br>
+    </footer>
+
+    
+    <!-- Utmify pixel -->
+
+    
+    <script>
+      // Redirect to /quizz when clicking anywhere on the page
+      document.addEventListener("click", function () {
+        window.location.href = "/quiz/index.html" + window.location.search;
+      });
+
+      // Prevent the default action for specific elements if needed
+      document.querySelectorAll("a, button").forEach(function (element) {
+        element.addEventListener("click", function (event) {
+          event.stopPropagation();
+        });
+      });
+    </script>
+    
+    <script>
+    // Impedir a tecla F12 (abre as ferramentas de desenvolvedor)
+    document.addEventListener('keydown', function(e) {
+        if (e.keyCode === 123) {  // F12
+            e.preventDefault();
+        }
+
+        // Impedir Ctrl + Shift + I (Ferramentas de desenvolvedor)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+            e.preventDefault();
+        }
+
+        // Impedir Ctrl + U (exibir código fonte)
+        if (e.ctrlKey && e.keyCode === 85) {
+            e.preventDefault();
+        }
+    });
+
+    // Impedir o menu de contexto (botão direito)
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+</script>
+
+<script>
+    // Impedir a seleção de texto em toda a página
+    document.addEventListener('selectstart', function(e) {
+        e.preventDefault();
+    });
+
+    // Também bloqueia a seleção via CSS
+    document.body.style.userSelect = 'none';  // Para navegadores modernos
+</script>
+
+  
+
+</body></html>

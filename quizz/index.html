@@ -1,10 +1,9 @@
-<html lang="pt-BR" data-lt-installed="true"><head>
+    <html lang="pt-BR" data-lt-installed="true"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Descubra o cartão de crédito ideal para você em poucos minutos.">
     <meta name="keywords" content="cartão de crédito, limite alto, crédito imediato, sem anuidade">
-    <meta name="author" content="YES CARD Serviços Financeiros">
-    <title>Quiz Cartão de Crédito</title>
+    <meta name="author" content="YES CARD Serviços Financeiros">    <title>Quiz Cartão de Crédito</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
@@ -17,7 +16,7 @@
       a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
       document.head.appendChild(a);
     </script>
-
+    
     <script
       src="https://cdn.utmify.com.br/scripts/utms/latest.js"
       data-utmify-prevent-xcod-sck
@@ -25,6 +24,7 @@
       async
       defer
     ></script>
+    
     <style>
       :root {
         --primary-color: #000000;
@@ -210,25 +210,171 @@
 
     <!-- Header -->
     <div class="header">
-      <img src="../images/logo.svg" alt="YES Card">
+      <img src="images/logo.svg" alt="YES Card">
     </div>
-    <main class="flex-1 px-4 py-2">
-    <div class="flex flex-col">
-      <main>
-        <div class="max-h-min">
-          <div class="px-0.5 pb-[0.6rem]">
-            <div class="bg-white border border-gray-300 rounded-md w-full h-[calc(100vh-80px)] overflow-hidden">
-              <div class="px-4 pt-4 pb-0 text-center max-w-md mx-auto text-black">
-              </div>
-<script type="module">
-  import Typebot from 'https://cdn.jsdelivr.net/npm/@typebot.io/js@0.3.27/dist/web.js';
 
-  Typebot.initStandard({
-    typebot: "my-typebot-lce94kx",
-    apiHost: "https://app.lkdevzz.uk",
-  });
-</script>
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Seção 1 -->
+      <div id="pagOne">
+        <h5>O que é mais importante para você em um cartão de crédito?</h5>
+        <br>
+        <div class="btn-grid">
+          <div class="btn-card" onclick="mostrarPagina('pagTwo')">
+            <img src="images/money-bag.png" alt="Ícone Limite alto">
+            <span>Limite alto</span>
+          </div>
+          <div class="btn-card" onclick="mostrarPagina('pagTwo')">
+            <img src="images/rocket.png" alt="Ícone Crédito imediato">
+            <span>Crédito imediato</span>
+          </div>
+          <div class="btn-card" onclick="mostrarPagina('pagTwo')">
+            <img src="images/no-entry.png" alt="Ícone Não consultar SPC/Serasa">
+            <span>Não consultar SPC/Serasa</span>
+          </div>
+          <div class="btn-card" onclick="mostrarPagina('pagTwo')">
+            <img src="images/calendar.png" alt="Ícone Sem anuidade">
+            <span>Sem anuidade</span>
+          </div>
+        </div>
+      </div>
 
-<typebot-standard style="width: 100%; height: 600px; "></typebot-standard>
-</body>
-</html>
+      <!-- Seções restantes permanecem inalteradas -->
+      <div id="pagTwo" style="display: none">
+        <h5>Em qual grupo você se encaixa?</h5>
+        <br>
+        <button class="btn-simple" onclick="mostrarPagina('pagThree')">
+          Empreendedor
+        </button>
+        <button class="btn-simple" onclick="mostrarPagina('pagThree')">
+          Carteira assinada
+        </button>
+        <button class="btn-simple" onclick="mostrarPagina('pagThree')">
+          Desempregado
+        </button>
+        <button class="btn-simple" onclick="mostrarPagina('pagThree')">
+          Aposentado
+        </button>
+        <button class="btn-simple" onclick="mostrarPagina('pagThree')">
+          Servidor público
+        </button>
+        <button class="btn-simple" onclick="mostrarPagina('pagThree')">
+          Estudante
+        </button>
+        <button class="btn-simple" onclick="mostrarPagina('pagThree')">
+          Autônomo
+        </button>
+      </div>
+
+      <div id="pagThree" style="display: none">
+        <h5>Qual é a sua Renda Mensal?</h5>
+        <br>
+        <button class="btn-simple" onclick="mostrarPagina('pagFour')">
+          Até R$ 1.000
+        </button>
+        <button class="btn-simple" onclick="mostrarPagina('pagFour')">
+          Entre R$ 1.000 e R$ 2.000
+        </button>
+        <button class="btn-simple" onclick="mostrarPagina('pagFour')">
+          Entre R$ 2.000 e R$ 4.000
+        </button>
+        <button class="btn-simple" onclick="mostrarPagina('pagFour')">
+          Acima de R$ 4.000
+        </button>
+      </div>
+
+      <div id="pagFour" style="display: none">
+        <h5>Você está negativado?</h5>
+        <br>
+        <button class="btn-simple" onclick="mostrarPagina('conclusao')">
+          Sim!
+        </button>
+        <button class="btn-simple" onclick="mostrarPagina('conclusao')">
+          Não!
+        </button>
+      </div>
+
+      <!-- Conclusão -->
+      <div id="conclusao" style="display: none; text-align: center">
+        <div style="margin-bottom: 20px">
+          <!-- Imagem de confirmação -->
+          <div style="
+              display: inline-block;
+              background-color: #d4f9e5;
+              border-radius: 50%;
+              width: 60px;
+              height: 60px;
+              text-align: center;
+            ">
+            <img src="images/ok--v1.png" alt="Ícone de confirmação" style="width: 40px; height: 40px; margin: 10px auto">
+          </div>
+        </div>
+        <h5 style="color: #27ae60; font-weight: bold">
+          Temos um cartão perfeito para você!
+        </h5>
+        <br>
+        <p>Conclua seu cadastro e faça seu cartão de crédito agora!</p>
+        <br>
+        <button class="btn-simple" onclick="{PassarUTMS()}" style="
+            background: #0d64fb;
+            color: rgb(255, 255, 255);
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            padding: 12px 20px;
+            width: 100%;
+            max-width: 200px;
+          ">
+          Continuar
+        </button>
+      </div>
+    </div>
+
+    <script>
+      function PassarUTMS(){
+        window.location.href='/termos/index.html' + window.location.search
+      }
+    </script>
+
+    <!-- Footer -->
+    <div class="footer">
+      Copyright © 2025 Casas Bahia. Todos os direitos reservados.<br>
+
+      Política de Privacidade | Termos de Uso Vendas e Reembolsos | Legal Mapa
+      do Site
+    </div>
+
+    <!-- Scripts -->
+    <script>
+      function storeUTMParams() {
+        const params = new URLSearchParams(window.location.search);
+        const utmParams = {};
+
+        // Armazena apenas os parâmetros UTM
+        params.forEach((value, key) => {
+          if (key.startsWith("utm_")) {
+            utmParams[key] = value;
+          }
+        });
+
+        // Salva os parâmetros UTM em uma chave específica no localStorage
+        localStorage.setItem("utmParams", JSON.stringify(utmParams));
+
+        // Exibe no console o que foi armazenado no localStorage
+        console.log("Parâmetros UTM armazenados no localStorage:", utmParams);
+      }
+
+      window.onload = function () {
+        storeUTMParams();
+      };
+    </script>
+
+    <script>
+      function mostrarPagina(paginaId) {
+        document.querySelectorAll(".main-content > div").forEach((section) => {
+          section.style.display = "none";
+        });
+        document.getElementById(paginaId).style.display = "block";
+      }
+    </script>
+</body></html>
