@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>.:: WHATSPY :..</title>
+    <title>.:: Opine PRO :..</title>
     <style>
         * {
             margin: 0;
@@ -28,11 +28,10 @@
 
         .header {
             margin-bottom: 20px;
-            color:#DC201F;
         }
 
         .logo {
-            width: 100px;
+            width: 190px;
         }
 
         h1 {
@@ -68,17 +67,12 @@
             font-weight: bold;
         }
 
-        .price1 {
-            color: #E71A23;
-            font-weight: bold;
-        }
-
         .pay-button {
             background: #06B32E;
-            color: white;
+            color: black;
             border: none;
             padding: 15px 0px;
-            font-size: 14px; /* Decreased font size */
+            font-size: 1em; /* Decreased font size */
             border-radius: 25px;
             cursor: pointer;
             transition: background 0.3s ease;
@@ -92,7 +86,7 @@
 
         .faq h2 {
             font-size: 1.5em;
-            margin: 40px 0 10px; /* Added margin-top */;
+            margin: 40px 0 10px; /* Added margin-top */
         }
 
         .faq p {
@@ -113,34 +107,40 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="images/pngtree-rejected-icon-design-rounded-shape-png-image_3988333-removebg-preview.png" alt="Love Pix Logo" class="logo">
-            <h2>Pagamento Recusado</h2>
+            <img src="images/V9tqvQh003Kb.png" alt="Love Pix Logo" class="logo">
+            <h1>PARABÉNS</h1>
         </div>
-        
-<body>
-    Algo deu errado e não conseguimos processa o seu pedido. Pedimos desculpas pelo transtorno, o valor pago anteriormente será estornado em <strong>Até 24h.</strong><br><br> Para reparar os danos sofridos por essa falha em nosso sistema de pagamentos você receberá o um desconto exclusivo no pagamento da sua licença
-    
-</body>
-</html>
-
+        <div class="progress-bar">
+            <div class="progress" id="progress" style="width: 11%;">11%</div>
+        </div>
+        <p class="message">
+            Sua vaga está garantida! Para acessar o aplicativo, é necessário pagar uma taxa de transferência de <span class="price">R$12,71</span> que nos ajuda a manter nossos servidores ativos.
         </p>
         <p class="note">
-            <BR><strong>De</strong> <span class= "price1">R$ 14,90</span> <strong>agora por</strong> <span class= "price">R$ 9,90</span>
+            Após o pagamento, o link para download será enviado automaticamente via Whatsapp e e-mail.
         </p>
-        <button class="pay-button" onclick="redirectToGoogle()">APROVEITAR DESCONTO EXCLUSIVO</button>
-        
+        <button class="pay-button" onclick="redirectToGoogle()">PAGAR A TAXA E ACESSAR O APP</button>
+        <div class="faq">
+            <h2>Dúvidas Frequentes</h2>
+            <p>
+                <strong>Por que devo pagar essa taxa?</strong> Essa taxa é necessária após a transferência de saldo para cobrir os custos operacionais e a manutenção de nossos servidores.
+            </p>
+            <p class="warning">
+                Caso não consiga pagar a taxa hoje, você perderá sua vaga. <span class="no-refund">NÃO Reembolsável</span>
+            </p>
+        </div>
     </div>
 
     <script>
         function redirectToGoogle() {
-            window.location.href = 'https://go.disruptybr.com.br/mbmrxujuij';
+            window.location.href = 'https://go.disruptybr.com.br/xzca9c8lro';
         }
 
         let progressElement = document.getElementById('progress');
         let progress = 1;
 
         function updateProgress() {
-            if (progress <= 93) {
+            if (progress <= 94) {
                 progressElement.style.width = progress + '%';
                 progressElement.textContent = progress + '%';
                 progress++;
