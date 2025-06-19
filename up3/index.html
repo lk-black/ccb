@@ -18,7 +18,7 @@
     ></script>
 
     <script>
-        localStorage.setItem("upsell", "up2");
+        localStorage.setItem("upsell", "up3");
     </script>
     
     <meta charset="UTF-8">
@@ -174,14 +174,6 @@
                             if (nomeCartaoElement) {
                                 nomeCartaoElement.textContent = nomeParaMostrar;
                             }
-                        }
-
-                        // Track page view
-                        if (typeof trackFacebookEvent === 'function') {
-                            trackFacebookEvent('PageView', {
-                                content_name: 'Upsell 1 - Ativação Cartão',
-                                content_category: 'upsell'
-                            });
                         }
                     });
                 </script>
