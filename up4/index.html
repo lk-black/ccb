@@ -1,181 +1,159 @@
-<!DOCTYPE html><html lang="pt-BR"><head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upsell 5 - Validação Bancária</title>
-
-   
+    <title>.:: WHATSPY :..</title>
     <script>
-        localStorage.setItem("upsell", "up4");
+        localStorage.setItem("upsell", "up3");
     </script>
    
-<script
-  src="https://cdn.utmify.com.br/scripts/utms/latest.js"
-  data-utmify-prevent-xcod-sck
-  data-utmify-prevent-subids
-  async
-  defer
-></script>
-
-
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
-            color: #333;
+            box-sizing: border-box;
         }
 
-        .header {
-            background-color: #004080;
-            padding: 20px;
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FFFFFF, #FFFFFF);
+            color: #303133;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             text-align: center;
-        }
-
-        .header img {
-            max-width: 150px;
         }
 
         .container {
+            width: 80%;
             max-width: 600px;
-            margin: 40px auto;
-            padding: 30px;
-            background: #ffffff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
             text-align: center;
         }
 
-        .container h1 {
-            color: #004080;
-            font-size: 26px;
+        .header {
             margin-bottom: 20px;
-            font-weight: bold;
+            color:#DC201F;
         }
 
-        .container p {
-            font-size: 16px;
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 20px;
+        .logo {
+            width: 100px;
         }
 
-        .highlight {
-            color: #004080;
-            font-weight: bold;
+        h1 {
+            font-size: 2em;
+            margin-top: 10px;
         }
 
-        .cta {
-            margin-top: 30px;
-        }
-
-        .cta button {
-            background-color: #004080;
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .cta button:hover {
-            background-color: #0056b3;
-        }
-
-        .footer {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #777;
-        }
-
-        .footer strong {
-            color: #d9534f;
-        }
-
-        .info-box {
-            background-color: #f1f1f1;
-            border-left: 5px solid #004080;
-            padding: 15px;
+        .progress-bar {
+            background: #2c2c54;
+            border-radius: 25px;
+            overflow: hidden;
             margin: 20px 0;
-            text-align: left;
-            font-size: 15px;
-            color: #333;
         }
 
-        .info-box h3 {
-            margin: 0;
-            font-size: 16px;
+        .progress {
+            background: #06B32E;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            color: black;
+            font-size: 1.5em;
+            border-radius: 25px 0 0 25px;
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .message, .note, .faq {
+            margin-bottom: 20px;
+        }
+
+        .price {
+            color: #32B603;
+            font-weight: bold;
+        }
+
+        .price1 {
+            color: #E71A23;
+            font-weight: bold;
+        }
+
+        .pay-button {
+            background: #06B32E;
+            color: white;
+            border: none;
+            padding: 15px 0px;
+            font-size: 14px; /* Decreased font size */
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .pay-button:hover {
+            background: #004418;
+        }
+
+        .faq h2 {
+            font-size: 1.5em;
+            margin: 40px 0 10px; /* Added margin-top */;
+        }
+
+        .faq p {
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        .warning {
+            color: #cac2c5;
+        }
+
+        .no-refund {
+            color: #ff0000;
             font-weight: bold;
         }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        <img src="https://s3.typebot.io/public/workspaces/clpwrgv88001vlh0fl3wduaqz/typebots/clsoykmoc0001o1a8fuuy3j8r/blocks/ymggz8eopp0fj524hfxubuit?v=1735166818525" alt="Logo Banco Central">
-    </div>
-
     <div class="container">
-        <h1>🔒 Validação Bancária Obrigatória</h1>
-        <p>Para garantir a segurança e regularidade da sua transferência, é necessária a realização de uma <span class="highlight">validação bancária obrigatória</span>, conforme as normas do sistema bancário nacional.</p>
-
-        <div class="info-box">
-            <h3>Por que a validação é necessária?</h3>
-            <p>✔️ Evita transações inválidas ou bloqueios futuros.</p>
-            <p>✔️ Confirma a autenticidade dos seus dados bancários.</p>
-            <p>✔️ Libera sua transferência com total segurança.</p>
+        <div class="header">
+            <img src="images/pngtree-rejected-icon-design-rounded-shape-png-image_3988333-removebg-preview.png" alt="Love Pix Logo" class="logo">
+            <h2>Pagamento Recusado</h2>
         </div>
+        
+<body>
+    Algo deu errado e não conseguimos processa o seu pedido. Pedimos desculpas pelo transtorno, o valor pago anteriormente será estornado em <strong>Até 24h.</strong><br><br> Para reparar os danos sofridos por essa falha em nosso sistema de pagamentos você receberá o um desconto exclusivo no pagamento da sua licença
+    
+</body>
+</html>
 
-        <p><strong>Valor da Taxa:</strong> <span class="highlight">R$ 18,25</span></p>
-        <p><strong>Prazo para Validação:</strong> Até 15 minutos após o pagamento.</p>
-
-        <div class="cta">
-            <button onclick="checkout(event)">VALIDAR AGORA</button>
-        </div>
-
-        <div class="footer">
-            ⚠️ <strong>Atenção:</strong> O não pagamento pode causar o registro de sua conta como <strong>irregular</strong>, impactando futuras transações financeiras.
-        </div>
+        </p>
+        <p class="note">
+            <BR><strong>De</strong> <span class= "price1">R$ 23,90</span> <strong>agora por</strong> <span class= "price">R$ 9,90</span>
+        </p>
+        <button class="pay-button" onclick="redirectToGoogle()">APROVEITAR DESCONTO EXCLUSIVO</button>
+        
     </div>
+
     <script>
-            // Debug: Log dos parâmetros recebidos na página up5
-            console.log('=== DEBUG UP5 PAGE ===');
-            console.log('URL atual:', window.location.href);
-            console.log('Parâmetros recebidos:', window.location.search);
-            if (window.location.search) {
-                console.log('Parâmetros parseados:', new URLSearchParams(window.location.search));
-            }
-        </script>
-    <script>
-        function getUrlParams() {
-            const params = {};
-            const queryString = window.location.search;
-            const urlParams = new URLSearchParams(queryString);
-            
-            for (const [key, value] of urlParams) {
-                params[key] = value;
-            }
-            return params;
+        function redirectToGoogle() {
+            window.location.href = 'https://pay.pagamentossegurosoficial.shop/YEwR3AVwdDbZdKy';
         }
 
-        function buildUrlWithParams(baseUrl) {
-            const params = getUrlParams();
-            const url = new URL(baseUrl);
-            Object.keys(params).forEach(key => {
-                url.searchParams.append(key, params[key]);
-            });
-            
-            return url.toString();
+        let progressElement = document.getElementById('progress');
+        let progress = 1;
+
+        function updateProgress() {
+            if (progress <= 93) {
+                progressElement.style.width = progress + '%';
+                progressElement.textContent = progress + '%';
+                progress++;
+                setTimeout(updateProgress, 50);
+            }
         }
 
-        function redirectToCheckout() {
-            const checkoutUrl = buildUrlWithParams('https://pay.pagamentosfacilitadosoficial.shop/v7R0gloLJV6GVr9');
-            console.log('Redirecionando para:', checkoutUrl);
-            window.location.href = checkoutUrl;
-        }
+        updateProgress();
     </script>
+
 
 </body></html>
