@@ -20,72 +20,209 @@
             margin: 0;
             padding: 0;
             font-family: 'Sora', sans-serif;
-            background-color: #f2f2f2;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            line-height: 1.6;
         }
+        
         .header {
-           display: flex;
-    align-items: center;
-    padding: 10px;
-    background-color: white;
-    flex-direction: column;
+            display: flex;
+            align-items: center;
+            padding: 15px 10px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            flex-direction: column;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
+        
         .logo {
-            width: 125px;
-            padding: 10px;
+            width: 135px;
+            padding: 8px;
+            transition: transform 0.3s ease;
         }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
         .content {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
+            max-width: 100%;
+            margin: 0;
+            padding: 15px;
         }
+        
+        .alert {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 16px;
+            margin: 15px auto;
+            max-width: 480px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
+        }
+        
         .score-container {
             background: #fff;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 12px;
             margin-bottom: 20px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
         }
+        
         .score-number {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
             color: #333;
         }
+        
         .score-bar {
             display: flex;
-            margin: 10px 0;
+            margin: 12px 0;
         }
+        
         .bar-segment {
-            height: 8px;
-            border-radius: 4px;
+            height: 10px;
+            border-radius: 5px;
             margin-right: 2px;
         }
+        
         .bar-red {
             background-color: #ff1a1a;
             width: 20%;
         }
+        
         .bar-yellow {
             background-color: #ffcc00;
             width: 30%;
         }
+        
         .bar-green {
             background-color: #00cc00;
             width: 50%;
         }
+        
         .credit-info {
             background: #fff;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 12px;
             margin-top: 20px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
         }
+        
         .payment-button {
-            background-color: #3483fa;
+            background: linear-gradient(135deg, #0056d3 0%, #003ba3 100%);
             color: white;
-            padding: 12px;
-            border-radius: 6px;
+            padding: 16px 20px;
+            border-radius: 12px;
             border: none;
             width: 100%;
-            font-size: 16px;
-            margin-top: 15px;
+            font-size: 17px;
+            font-weight: 700;
+            margin-top: 20px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 86, 211, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .payment-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 86, 211, 0.4);
+        }
+        
+        .payment-button:active {
+            transform: translateY(0);
+        }
+        
+        .urgency-badge {
+            background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+            border-left: 4px solid #00c42a;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        
+        .social-proof {
+            background: rgba(0, 196, 42, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 15px 0;
+            border: 1px solid rgba(0, 196, 42, 0.2);
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 12px 0;
+            padding: 8px;
+            background: rgba(0, 196, 42, 0.05);
+            border-radius: 8px;
+        }
+        
+        .benefit-item i {
+            color: #00c42a;
+            margin-right: 10px;
+            margin-top: 2px;
+            font-size: 16px;
+        }
+        
+        /* Mobile-first responsive design */
+        @media (max-width: 768px) {
+            .alert {
+                margin: 10px;
+                padding: 16px;
+                border-radius: 12px;
+            }
+            
+            .score-number {
+                font-size: 24px;
+            }
+            
+            .payment-button {
+                font-size: 16px;
+                padding: 14px 18px;
+            }
+            
+            .content {
+                padding: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo {
+                width: 120px;
+            }
+            
+            .alert {
+                margin: 8px;
+                padding: 14px;
+            }
+            
+            .score-container, .credit-info {
+                padding: 16px;
+            }
         }
     </style>
 </head>
@@ -93,15 +230,23 @@
     <div class="header">
         <img src="images/logo.svg" alt="Logo Mercado Livre" class="logo">
     </div>
-        <div class="alert" style="background: #f2f2f2; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-            <div style="padding: 10px;">
+        <div class="alert">
+            <div class="urgency-badge">
+                ⚠️ Ação Necessária
+            </div>
+            
+            <div style="padding: 5px 0;">
                 <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                    <i class="fas fa-exclamation-circle" style="color: #f04449; font-size: 20px; margin-right: 10px;"></i>
-                    <h3 style="color: #f04449; margin: 0; font-size: 14px;">Um problema necessita da sua atenção!</h3>
+                    <i class="fas fa-exclamation-triangle" style="color: #f04449; font-size: 22px; margin-right: 12px;"></i>
+                    <h3 style="color: #f04449; margin: 0; font-size: 16px; font-weight: 700;">Seu CPF precisa de atenção URGENTE!</h3>
                 </div>
-                <p style="color: #666; font-size: 14px; margin: 0 0 20px 0; line-height: 1.4;">
-                    Constatamos que o seu cpf possui um score baixo no SPC Serasa. Mas não se preocupe, nós estamos aqui para ajudar você a mudar isso agora. Você está a um passo de mudar sua situação financeira e conquistar mais segurança para o futuro!
+                <p style="color: #444; font-size: 15px; margin: 0 0 20px 0; line-height: 1.5;">
+                    <strong>DESCOBRIMOS:</strong> Seu CPF tem score baixo no SPC/Serasa, mas temos a <strong>SOLUÇÃO PERFEITA</strong> para você reverter isso agora mesmo! 
                 </p>
+                
+                <div class="highlight-box">
+                    <strong style="color: #00c42a;">✅ Oportunidade ÚNICA:</strong> Com apenas R$ 14,90 você protege suas finanças E ainda melhora seu score para conseguir créditos maiores no futuro!
+                </div>
             </div>
 
 
@@ -160,36 +305,61 @@
             </div>
 
             <div class="info-box" style="background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 30px;">
-                <h2 style="font-size: 16px; color: #333; margin-bottom: 15px;">Por que devo contratar o Seguro Prestamista?</h2>
+                <h2 style="font-size: 18px; color: #333; margin-bottom: 15px; text-align: center;">🛡️ Por que MILHARES já contrataram o Seguro Prestamista?</h2>
                 
-                <p style="color: #666; font-size: 14px; line-height: 1.5; margin-bottom: 15px;">
-                    Você ganha mais chances de conquistar crédito no futuro, mostrando responsabilidade financeira.
-                </p>
+                <div class="social-proof">
+                    <strong style="color: #00c42a;">🔥 MAIS DE 20 MIL CLIENTES JÁ PROTEGEM SUAS FINANÇAS!</strong>
+                </div>
+                
+                <div class="benefit-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span style="color: #444; font-size: 14px; line-height: 1.5;"><strong>MELHORA SEU SCORE:</strong> Demonstra responsabilidade financeira e aumenta suas chances de conseguir crédito no futuro</span>
+                </div>
 
-                <p style="color: #666; font-size: 14px; line-height: 1.5; margin-bottom: 15px;">
-                    Garante mais tranquilidade para você e sua família, por apenas R$14,90!
-                </p>
+                <div class="benefit-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span style="color: #444; font-size: 14px; line-height: 1.5;"><strong>PROTEÇÃO TOTAL:</strong> Garante tranquilidade para você e sua família em situações imprevistas</span>
+                </div>
 
-                <p style="color: #666; font-size: 14px; line-height: 1.5; margin-bottom: 15px;">
-                    O Seguro Prestamista garante a quitação total ou parcial da fatura do cartão de crédito, caso o segurado enfrente falência, acidente, desemprego involuntário ou doença grave que o torne total ou temporariamente incapaz de trabalhar. Sem qualquer burocracia!
-                </p>
+                <div class="benefit-item">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span style="color: #444; font-size: 14px; line-height: 1.5;"><strong>COBERTURA COMPLETA:</strong> Quita sua fatura em casos de desemprego, acidente, doença grave ou falência - SEM BUROCRACIA!</span>
+                </div>
 
-                <p style="color: #666; font-size: 14px; line-height: 1.5; margin-bottom: 15px;">
-                    Se não usar o seguro, o valor será devolvido diretamente no pagamento do cartão.
-                </p>
+                <div class="benefit-item">
+                    <i class="fas fa-undo"></i>
+                    <span style="color: #444; font-size: 14px; line-height: 1.5;"><strong>GARANTIA TOTAL:</strong> Se não usar o seguro, o valor é devolvido diretamente no pagamento do cartão</span>
+                </div>
 
-                <p style="color: #656565; font-size: 14px; font-weight: bold;">
-                    Mais de 20 mil clientes já protegem suas finanças com o Seguro Prestamista, com ele você terá mais chances de ter excelentes limites em qualquer banco. Faça parte você também!
-                </p>
+                <div class="highlight-box" style="margin-top: 15px;">
+                    <strong style="color: #00c42a; font-size: 15px;">💡 ESTRATÉGIA INTELIGENTE:</strong> Por apenas R$ 14,90 você se protege E ainda constrói um histórico que os bancos ADORAM ver - clientes responsáveis que se protegem ganham limites muito maiores!
+                </div>
             </div>
 
-            <div class="info-box" style="background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 30px; text-align: center;">
-                <h2 style="font-size: 18px; color: #333; margin-bottom: 5px; text-align: center;">Contrate o seguro <i class="fa-brands fa-pix" style="color: #00c42a;"></i></h2>
-                <p style="color: #666; font-size: 12.5px; margin-bottom: 15px; text-align: center;">O pagamento será confirmado imediatamente</p>
-                <div style="font-size: 28px; font-weight: bold; color: #00c42a; margin-bottom: 15px; text-align: center;">R$ 14,90</div>
-                <button onclick="redirectToPayment()" style="background-color: rgb(0, 29, 205); font-weight: bold; color:white; font-size: 16px; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; width: 90%; margin: 0 auto; display: block;">Quero me proteger agora!</button>
-                <div style="margin-top: 10px; color: #28a745; font-size: 14px; text-align: center;">
-                    <i class="fas fa-shield-alt" style="margin-right: 5px;"></i>Ambiente seguro
+            <div class="info-box" style="background: linear-gradient(135deg, #fff 0%, #f8fff8 100%); padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,196,42,0.15); margin-top: 25px; text-align: center; border: 2px solid #00c42a;">
+                <div class="urgency-badge" style="background: #ff4757; margin-bottom: 15px;">
+                    ⏰ OFERTA POR TEMPO LIMITADO
+                </div>
+                
+                <h2 style="font-size: 20px; color: #333; margin-bottom: 8px; text-align: center;">🔒 PROTEJA SEU FUTURO FINANCEIRO</h2>
+                <p style="color: #666; font-size: 14px; margin-bottom: 20px; text-align: center;">Confirmação imediata via <i class="fa-brands fa-pix" style="color: #00c42a;"></i> PIX</p>
+                
+                <div style="background: linear-gradient(135deg, #e8f5e8 0%, #f0fff0 100%); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="font-size: 16px; color: #666; margin-bottom: 5px;">Investimento inteligente:</div>
+                    <div style="font-size: 32px; font-weight: bold; color: #00c42a; margin-bottom: 5px;">R$ 14,90</div>
+                    <div style="font-size: 13px; color: #888;">Valor único • Proteção completa</div>
+                </div>
+                
+                <button onclick="redirectToPayment()" style="background: linear-gradient(135deg, #0056d3 0%, #003ba3 100%); font-weight: 700; color: white; font-size: 17px; padding: 16px 20px; border: none; border-radius: 12px; cursor: pointer; width: 100%; margin: 0 auto; display: block; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(0, 86, 211, 0.3); transition: all 0.3s ease;">
+                    🛡️ QUERO ME PROTEGER AGORA!
+                </button>
+                
+                <div style="margin-top: 15px; color: #28a745; font-size: 14px; text-align: center;">
+                    <i class="fas fa-shield-alt" style="margin-right: 8px;"></i><strong>Ambiente 100% seguro</strong>
+                </div>
+                
+                <div style="margin-top: 10px; color: #666; font-size: 12px; text-align: center;">
+                    ✅ Sem taxas ocultas • ✅ Cancelamento gratuito • ✅ Suporte 24h
                 </div>
             </div>
         </div>
