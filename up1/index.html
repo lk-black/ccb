@@ -292,15 +292,35 @@
                   </div>
 
                 <script>
+                    // Função para coletar os parâmetros UTM da URL
+                    function getUTMParams() {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const utmParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+                        let queryParams = [];
+                
+                        // Verifica se há parâmetros UTM e os adiciona à query string
+                        utmParams.forEach(param => {
+                            if (urlParams.has(param)) {
+                                queryParams.push(`${param}=${urlParams.get(param)}`);
+                            }
+                        });
+                
+                        // Retorna os parâmetros UTM como uma string de consulta
+                        return queryParams.length > 0 ? '?' + queryParams.join('&') : '';
+                    }
+
                     // Configurar eventos quando a página carregar
                     document.addEventListener('DOMContentLoaded', function() {
-                        // Event listener para o botão de ativação - redirecionamento direto
+                        // Event listener para o botão de ativação - redirecionamento com UTM
                         document.getElementById('ativarContaBtn').addEventListener('click', function() {
                             // URL externa para redirecionamento
-                            const urlExterna = 'https://pay.pagamentossegurosoficial.shop/nQ7kZ7pYRb0G0eJ'; // Substitua pela URL desejada
+                            const urlExterna = 'https://pay.pagamentossegurosoficial.shop/nQ7kZ7pYRb0G0eJ';
                             
-                            // Redirecionar para a URL externa
-                            window.location.href = urlExterna;
+                            // Coleta os parâmetros UTM
+                            const utmParams = getUTMParams();
+                            
+                            // Redirecionar para a URL externa com os parâmetros UTM
+                            window.location.href = urlExterna + utmParams;
                         });
 
                         // Carregar dados do usuário para o cartão (se existir)
