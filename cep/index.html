@@ -533,31 +533,29 @@
           }
           return;
         }
-        
-        // Mostrar loading no botão
+          // Mostrar loading no botão
         showLoading(true);
           // Simular um pequeno delay para melhor UX
         setTimeout(() => {
           localStorage.setItem("enderecoCliente", JSON.stringify(endereco));
-          // Preservar apenas parâmetros de UTM para tracking e parâmetro name
-          const currentParams = new URLSearchParams(window.location.search);
-          const utmParams = new URLSearchParams();
           
-          // Preservar parâmetros UTM, de tracking e o parâmetro name
-          for (const [key, value] of currentParams) {
-            if (key.startsWith('utm_') || 
-                key.startsWith('gclid') || 
-                key.startsWith('fbclid') || 
-                key.startsWith('msclkid') ||
-                key === 'source' ||
-                key === 'medium' ||
-                key === 'campaign' ||
-                key === 'name') {  // Preservar o parâmetro name
-              utmParams.set(key, value);
+          // Função para preservar todos os parâmetros da URL
+          function buildUrlWithAllParams(targetUrl) {
+            try {
+              const currentParams = new URLSearchParams(window.location.search);
+              if (currentParams.toString()) {
+                const separator = targetUrl.includes('?') ? '&' : '?';
+                return targetUrl + separator + currentParams.toString();
+              }
+              return targetUrl;
+            } catch (error) {
+              console.warn('Erro ao preservar parâmetros da URL:', error);
+              return targetUrl + (window.location.search || '');
             }
           }
-            const utmString = utmParams.toString();
-          const targetUrl = "../drop/index.html" + (utmString ? "?" + utmString : "");
+          
+          // Redirecionar preservando todos os parâmetros
+          const targetUrl = buildUrlWithAllParams("../drop/index.html");
           window.location.href = targetUrl;
         }, 500);
       }

