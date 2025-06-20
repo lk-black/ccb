@@ -614,27 +614,23 @@
     </div>
 
     <script>
-      function escolherEntrega() {
-        // Preservar parâmetros UTM e name
-        const currentParams = new URLSearchParams(window.location.search);
-        const utmParams = new URLSearchParams();
+      function buildUrlWithAllParams(baseUrl) {
+        const currentUrl = new URL(window.location);
+        const currentParams = currentUrl.searchParams;
         
-        // Preservar parâmetros de tracking e name
+        const targetUrl = new URL(baseUrl, window.location);
+        
+        // Preservar TODOS os parâmetros da URL atual
         for (const [key, value] of currentParams) {
-          if (key.startsWith('utm_') || 
-              key.startsWith('gclid') || 
-              key.startsWith('fbclid') || 
-              key.startsWith('msclkid') ||
-              key === 'source' ||
-              key === 'medium' ||
-              key === 'campaign' ||
-              key === 'name') {
-            utmParams.set(key, value);
-          }
+          targetUrl.searchParams.set(key, value);
         }
         
-        const utmString = utmParams.toString();
-        const targetUrl = "../sedex/index.html" + (utmString ? "?" + utmString : "");
+        return targetUrl.toString();
+      }
+
+      function escolherEntrega() {
+        // Usar a função que preserva TODOS os parâmetros
+        const targetUrl = buildUrlWithAllParams("../sedex/index.html");
         window.location.href = targetUrl;
       }
 

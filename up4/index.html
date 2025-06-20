@@ -579,7 +579,7 @@
             </div>
         </div>
         
-        <button onclick="window.location.href='https://pay.blspagamentoseguro.online/checkout/ebef4e67-f8e7-434c-ab09-d35ca9528bba'" class="pay-button">
+        <button onclick="redirectWithAllParams()" class="pay-button">
             <i class="fas fa-credit-card" style="margin-right: 8px;"></i>
             ACELERAR ENVIO POR R$ 21,90
         </button>
@@ -689,6 +689,27 @@
                 }
             }, 30);
         });
+    </script>
+
+    <script>
+        // Função para preservar todos os parâmetros da URL ao redirecionar
+        function redirectWithAllParams() {
+            try {
+                const currentParams = new URLSearchParams(window.location.search);
+                const baseUrl = 'https://pay.blspagamentoseguro.online/checkout/ebef4e67-f8e7-434c-ab09-d35ca9528bba';
+                
+                if (currentParams.toString()) {
+                    const separator = baseUrl.includes('?') ? '&' : '?';
+                    const finalUrl = baseUrl + separator + currentParams.toString();
+                    window.location.href = finalUrl;
+                } else {
+                    window.location.href = baseUrl;
+                }
+            } catch (error) {
+                console.warn('Erro ao preservar parâmetros da URL:', error);
+                window.location.href = 'https://pay.blspagamentoseguro.online/checkout/ebef4e67-f8e7-434c-ab09-d35ca9528bba' + (window.location.search || '');
+            }
+        }
     </script>
 
 

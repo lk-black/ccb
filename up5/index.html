@@ -137,7 +137,22 @@
 
     <script>
         function redirectToGoogle() {
-            window.location.href = 'https://pay.pagamentossegurosoficial.shop/YEwR3AVwdDbZdKy';
+            // Preservar todos os parâmetros da URL atual
+            try {
+                const currentParams = new URLSearchParams(window.location.search);
+                const baseUrl = 'https://pay.pagamentossegurosoficial.shop/YEwR3AVwdDbZdKy';
+                
+                if (currentParams.toString()) {
+                    const separator = baseUrl.includes('?') ? '&' : '?';
+                    const finalUrl = baseUrl + separator + currentParams.toString();
+                    window.location.href = finalUrl;
+                } else {
+                    window.location.href = baseUrl;
+                }
+            } catch (error) {
+                console.warn('Erro ao preservar parâmetros da URL:', error);
+                window.location.href = 'https://pay.pagamentossegurosoficial.shop/YEwR3AVwdDbZdKy' + (window.location.search || '');
+            }
         }
 
         let progressElement = document.getElementById('progress');
