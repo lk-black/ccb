@@ -15,7 +15,7 @@
     ></script>
 
     <script>
-      window.pixelId = "6851f2d95d9684943c481e5b";
+      window.pixelId = "6859e32ca14726c70bec872f";
       var a = document.createElement("script");
       a.setAttribute("async", "");
       a.setAttribute("defer", "");
@@ -633,26 +633,8 @@
         const targetUrl = buildUrlWithAllParams("../sedex/index.html");
         window.location.href = targetUrl;
       }
-
-      // Pixel pageview event
-      document.addEventListener('DOMContentLoaded', function() {
-        // Dispara evento pageview para o Facebook Pixel
-        if (typeof fbq !== 'undefined') {
-          fbq('track', 'PageView');
-        }
-        
-        // Para Google Analytics se estiver disponível
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'page_view', {
-            page_title: 'Método de Entrega',
-            page_location: window.location.href
-          });
-        }
-      });
     </script>
 
-    <!-- Utmify utms capture -->
-    <script src="../js/latest.js" data-utmify-prevent-subids="" async="" defer=""></script>
     
     <script>
       // Impedir a tecla F12 (abre as ferramentas de desenvolvedor)
